@@ -1,0 +1,625 @@
+syntax = "proto3";
+
+package pbtest;
+
+option go_package = "gs/pbtest";
+
+import "orm.option.proto";
+
+// ==================== 玩家数据 ====================
+// key: rid
+message Player {
+  option (orm.table) = true;
+  option (orm.node_type) = "game";
+  int64 id = 1[
+    (orm.primary_key) = true
+  ];
+  string name = 2[
+    (orm.index) = true
+  ];
+  int32 level = 30[(orm.index) = true];
+  RoleBaseInfo base_info = 3;
+  ItemInfo item_info = 4;
+  AfkEarnings afk_earnings = 5;
+  BattleLevelInfo battle_level_info = 6;
+  EquipmentInfo equipment_info = 7;
+  SkillInfo skill_info = 8;
+  GemInfo gem_info = 9;
+  FuncOpen func_open = 10;
+  ShopGoodsInfo shop_goods_info = 11;
+  PaymentOrderInfo payment_order_info = 12;
+  TaskInfo task_info = 13;
+  MailInfo mail_info = 14;
+  UavInfo uav_info = 15;
+  WeaponInfo weapon_info = 16;
+  LogInfo log_info = 17;
+  FeedbackLogInfo feedback_log_info = 18;
+  FashionInfo fashion_info = 19;
+  BadgeInfo badge_Info = 20;
+  MonsterCollect monster_collect = 21;
+  RoleOpRecord role_op_record = 22;
+  RenovationLaboratory renovation_laboratory = 23;
+  BattlePass battle_pass = 24;
+  MttCbtTicketReward mtt_cbt_ticket_reward = 25;
+  ActivityInfo activity_info = 26;
+  AntiCheatingInfo anti_cheating_info = 27;
+}
+
+// ==================== 基础定义 ====================
+message Item {
+  int32 config_id = 1;
+  int32 type = 2;
+  int32 subtype = 3;
+  int64 num = 4;
+}
+
+message RewardItem {
+  int32 cid = 1; // 物品配置id
+  int32 type = 2; // 1=道具 2=货币 3=掉落
+  int64 num = 3;
+}
+
+message RoleItemChangeDto {
+  int32 cid = 1;           // 物品配置id
+  int64 role_id = 2;       // 所属角色id
+  int64 num = 3;           // 数量变化
+  int32 type = 4;          // 类型
+  bool inc = 5;            // true=增加，false=减少
+  int64 before = 6;        // 变化前数量
+  int64 after = 7;         // 变化后数量
+  EquipSnapshot equip_snapshot = 8;
+}
+
+// ==================== 装备系统 ====================
+message EquipAttr {
+  int32 attr_cid = 1;
+  int32 attr_coe_cid = 2;
+  int32 attr_type = 3;
+  int64 created_at = 4;
+  int64 updated_at = 5;
+}
+
+message EquipAttrSnapshot {
+  int32 cid = 1;
+  float value = 2;
+  int32 e_type = 3;
+}
+
+message EquipSnapshot {
+  int64 id = 1;
+  int32 forge_cid = 3;
+  repeated EquipAttrSnapshot attrs = 4;
+}
+
+message EnhanceInfo {
+  repeated int32 enhance_cid = 1;
+}
+
+message Equipment {
+  int64 id = 1;            // 装备唯一id
+  bool has_wore = 2;
+  int32 config_id = 3;
+  int32 forge_cid = 4;
+  bool has_locked = 5;
+  int64 created_at = 6;
+  repeated EquipAttr equip_attr = 7;
+}
+
+message EquipmentInfo {
+  map<int64, Equipment> equipment = 1; // key: 装备唯一id
+  EnhanceInfo enhance_info = 2;
+}
+
+// ==================== 宝石系统 ====================
+message GemSlotList {
+  repeated int32 gem_cid_list = 1; // 下标表示槽位 [0,4]
+}
+
+message GemPresetInfos {
+  repeated GemSlotList slot_list = 1; // 每页最多同装备部位数
+}
+
+message GemSlot {
+  int32 preset = 1;
+  repeated GemPresetInfos gem_infos = 2;
+}
+
+message GemLock {
+  int32 config_id = 1;
+  int64 created_at = 2;
+}
+
+message GemInfo {
+  GemSlot gem_slot = 1;
+  repeated GemLock gem_lock = 2;
+}
+
+// ==================== 时装系统 ====================
+message Fashion {
+  bool has_wore = 1;         // 是否穿戴
+  int32 config_type = 2;     // 配置类型
+  int32 star_level = 3;      // 星级
+}
+
+message FashionSlotSkillList {
+  repeated int32 skill_ids = 1;
+}
+
+message FashionSkillTabInfo {
+  repeated FashionSlotSkillList slot_list = 1;
+}
+
+message FashionSkillTabInfos {
+  repeated FashionSkillTabInfo skill_tab_infos = 1;
+}
+
+message FashionSkillSlot {
+  int32 preset = 1;
+  FashionSkillTabInfos fashion_skill_infos = 2;
+}
+
+message FashionInfo {
+  map<int32, Fashion> fashion = 1;
+  FashionSkillSlot fashion_skill_slot = 2;
+}
+
+// ==================== 技能系统 ====================
+message Skill {
+  int32 config_id = 1;
+  int32 type = 2;
+}
+
+message ActiveSkill {
+  int32 skill_cid = 1;
+  int32 level_cid = 2;
+  int32 star_cid = 3;
+}
+
+message ActSkillInfos {
+  repeated int32 skill_info = 1;
+}
+
+message ActiveSkillSlot {
+  int32 preset = 1;
+  repeated ActSkillInfos act_skill_infos = 2;
+}
+
+message SkillInfo {
+  repeated Skill skill = 1;
+  repeated ActiveSkill active_skill = 2;
+  ActiveSkillSlot active_skill_slot = 3;
+}
+
+// ==================== 战斗系统 ====================
+message Combating {
+  int32 cid = 1;
+  string combat_uid = 2;
+  string info = 3;
+  int64 created_at = 4;
+}
+
+message CombatLevel {
+  int32 cid = 1;
+  int32 score = 2;
+  int32 best_time = 3;
+  int32 best_defense = 4;
+  int32 best_lv = 5;
+  int32 best_wave = 6;
+  int64 created_at = 7;
+  int64 updated_at = 8;
+}
+
+message CombatReward {
+  int32 cid = 1;
+  repeated int32 got_score_list = 2; // 已领取score列表
+}
+
+message CombatSweep {
+  int32 cid = 1;
+  bool with_privilege = 2;
+  int64 created_at = 3;
+}
+
+message CombatLog {
+  string combat_uid = 1;
+  int32 max_combat_level = 2;
+  string equip_info = 3;
+  string inlaying_gems = 4;
+  string spirit_info = 5;
+  int32 combat_score = 6;
+  int32 combat_cid = 7;
+  repeated RewardItem rewards = 8;
+  repeated int32 skill_choices = 9;
+  repeated Enemy killed_enemies = 10;
+
+  message Enemy {
+    int32 cid = 1;    // 怪物配置id
+    int64 num = 2;    // 击杀数量
+  }
+  int32 defend_time = 11;
+  int32 defend_percentage = 12;
+  bool has_double_rewards = 13;
+  int32 spirit_fire_count = 14;
+  string info = 15;
+  int64 created_at = 16;
+}
+
+message CombatLevelFirstCompleteRewardRecord {
+  repeated int32 cid = 1; // 已领取的奖励记录
+}
+
+message BattleLevelInfo {
+  Combating combating = 1;
+  map<int32, CombatLevel> combat_level = 2;        // key: cid
+  map<int32, CombatReward> combat_reward = 3;      // key: cid
+  repeated CombatSweep combat_sweep = 4;
+  map<string, CombatLog> combat_log = 5;
+  CombatLevelFirstCompleteRewardRecord combat_level_first_complete_reward_record = 6;
+}
+
+// ==================== 任务 & 成就 ====================
+message Task {
+  int32 type = 1;
+  int32 subgroup = 2;
+  int32 progress = 3;
+  repeated int32 reward_slice = 4;
+  int64 last_update = 5;
+}
+
+message TaskInfo {
+  repeated Task task = 1;
+}
+
+// ==================== 商城 & 支付 ====================
+message PaymentOrder {
+  int64 order_id = 1;
+  int32 gift_cid = 2;
+  string param = 3;
+  string channel = 4;
+  int32 status = 5;
+  string err_msg = 6;
+  int32 scene = 7;
+  int64 amount = 8;
+  repeated RoleItemChangeDto rewards = 9;
+  int64 created_at = 10;
+  int64 finish_at = 11;
+}
+
+message PaymentOrderInfo {
+  map<int64, PaymentOrder> payment_order = 1;
+}
+
+message ShopGoodsPurchaseLog {
+  int32 config_id = 1;
+  int32 num = 2;
+  int32 recharge_order_id = 3;
+  bool has_storage = 4;
+  int64 created_at = 5;
+}
+
+message StorageGoods {
+  int32 config_id = 1;
+  int32 num = 2;
+  int64 pre_storage_time = 3;
+}
+
+message DiamondShopGoodsPurchaseLog {
+  int32 config_id = 1;
+  int64 recharge_order_id = 2;
+  int64 created_at = 3;
+}
+
+message GiftPurchaseLog {
+  int32 config_id = 1;
+  int32 gift_type = 2;
+  int32 recharge_order_id = 3;
+  repeated bool reward_status = 4;
+  int64 created_at = 5;
+}
+
+message ShopGoodsInfo {
+  repeated ShopGoodsPurchaseLog shop_goods_purchase_log = 1;
+  map<int32, StorageGoods> storage_goods = 2;
+  repeated DiamondShopGoodsPurchaseLog diamond_shop_goods_purchase_log = 3;
+  repeated GiftPurchaseLog gift_purchase_log = 4;
+}
+
+// ==================== 抽奖 & 活动 ====================
+message DrawGachaLog {
+  int32 config_id = 1;
+  int64 count = 2;
+  int64 minimum_guarantee_loop_plan1_count = 3;
+  int64 current_loop_plan1_count = 4;
+  int64 minimum_guarantee_loop_plan2_count = 5;
+  int64 current_loop_plan2_count = 6;
+  int64 once_limit_minimum_guarantee_loop_plan = 7;
+  int32 once_limit_get_count = 8;
+  bool is_init = 9;
+  int64 created_at = 10;
+}
+
+message LotteryHoroscope {
+  int64 uuid = 1;
+  message DrawnList {
+    repeated int32 reward_list = 1;
+  }
+  repeated DrawnList been_drawn_list = 2;
+  int32 turn_count = 3;
+  int32 act_id = 4;
+  int32 level = 5;
+}
+
+message LuckyDraw {
+  int64 uuid = 1;
+  int32 act_id = 2;
+  int32 level = 3;
+  int32 luck_value = 4;
+  int64 last_free_time = 5;
+  int32 draw_count = 6;
+  repeated int32 draw_count_reward_records = 7;
+}
+
+message GradedFund {
+  int32 level = 1;
+  map<int32, int32> GotStatus = 2; // 已领取状态
+  int32 unlock_flag = 3;
+}
+
+message LevelGift {
+  map<int32, int32> purchase_record = 1;
+  int32 max_stage = 2;
+}
+
+message DailyRechargeRewardGotStatus {
+  int32 current_day_no = 1;
+  int32 current_diamond_num = 2;
+  repeated int32 accumulative_days_got_list = 3; // 已领取的累计天数值
+  map<int32, int32> diamond_level_get_status = 4;
+  int64 current_day_time = 5;
+}
+
+message DailyRecharge {
+  int64 uuid = 1; // 活动唯一id
+  map<int32, DailyRechargeRewardGotStatus>  reward_status = 2;
+}
+
+message CumulativeRecharge {
+  int32   current_recharge_num = 1;
+  repeated int32 got_list = 2;
+}
+
+message ActivityInfo {
+  LotteryHoroscope lottery_horoscope = 1;
+  LuckyDraw lucky_draw = 2;
+  GradedFund graded_fund = 3;
+  DailyRecharge daily_recharge = 4;
+  LevelGift level_gift = 5;
+  CumulativeRecharge cumulative_recharge = 6;
+}
+
+// ==================== 邮件系统 ====================
+enum EMailStaus {
+  MailStaus_None = 0;
+  MailStatusDraft = 1;
+  MailStatusSend = 2;
+}
+
+enum EMailType {
+  EMailType_None = 0;
+  MailTypeRole = 1;
+  MailTypeSystem = 2;
+  MailTypeSystemTemplate = 3;
+}
+
+message Mail {
+  int64 id = 1;
+  int32 cid = 2;
+  string title = 3;
+  string sender = 4;
+  string content = 5;
+  repeated RewardItem attachments = 6;
+  EMailStaus status = 7;
+  EMailType types = 8;
+  int64 sending_timestamp = 9;
+  int64 last_send = 10;
+  int64 from = 11;
+  int64 expired_time = 12;
+  int64 delete_time = 13;
+  int64 created_at = 14;
+  string extend = 15;
+}
+
+message MailLog {
+  int64 mail_id = 1;
+  bool has_att = 2;
+  int32 status = 3;
+  int64 origin_time = 4;
+}
+
+message MailInfo {
+  map<int64, Mail> mail = 1;
+  map<int64, MailLog> mail_log = 2;
+}
+
+// ==================== 功能开关 & 收集系统 ====================
+message FuncOpen {
+  map<int32, int64> unlock_list = 1; // 解锁列表
+}
+
+message MonsterCollectItem {
+  int32 id = 1;
+  int64 collect_time = 2;
+  bool is_got = 3;
+  int64 got_time = 4;
+}
+
+message MonsterCollect {
+  repeated MonsterCollectItem collect_list = 1;
+}
+
+message RoleOpRecord {
+  int32 change_count = 1;
+}
+
+// ==================== 战令 & VIP ====================
+message BattlePass {
+  int32 level = 1;
+  int32 exp = 2;
+  int32 grade = 3; // 战令级别
+  map<int32, int32> got_status = 4; // 已领取状态
+  int64 uuid = 5;
+}
+
+message VipChargeLog {
+  int32 config_id = 1;
+  int64 expire_time = 2;
+  int64 mail_reward = 3;
+  int64 buy_time = 4;
+  string extra_periodic = 5;
+  int64 created_at = 6;
+}
+
+message LogInfo {
+  map<string, QuestionnaireRewardLog> questionnaire_reward_log = 1;
+  map<int32, DrawGachaLog> draw_gacha_log = 2;
+  map<int32, VipChargeLog> vip_charge_log = 3;
+  map<int32, AdViewLog> ad_view_log = 4;
+  repeated RedeemCodeLog redeem_code_log = 5;
+}
+
+// ==================== 问卷 & 反馈 ====================
+message QuestionnaireRewardLog {
+  string quiz_id = 1;
+  int32 status = 2; // 0:未完成 1:可领取 2：已领取
+  repeated RoleItemChangeDto rewards = 3;
+  int64 created_at = 4;
+}
+
+message FeedbackLog {
+  string content = 1;
+  repeated RoleItemChangeDto rewards = 2;
+}
+
+message FeedbackLogInfo {
+  repeated FeedbackLog feedback_log = 1;
+}
+
+// ==================== 无人机 (UAV) ====================
+message Uav {
+  int32 config_type = 1;
+  int32 config_id = 2;
+}
+
+message UavFormation {
+  map<int32, int32> formation = 1;
+  bool is_edit = 2;
+}
+
+message UavSlotItem {
+  int32 preset_id = 1;
+  int32 slot_id = 2;
+  int32 pos_id = 3;
+  int32 skill_cid = 4;
+  int32 skill_type = 5;
+}
+
+message UavSlots {
+  int32 preset = 1;
+  map<int32, UavSlotItem> slots = 2;
+}
+
+message UavInfo {
+  map<int32, Uav> uav = 1;
+  UavFormation uav_formation = 2;
+  UavSlots uav_slots = 3;
+}
+
+// ==================== 武器皮肤 ====================
+message WeaponSkinWear {
+  int64 wear_id = 1;
+}
+
+message WeaponSkin {
+  int32 config_id = 1;
+}
+
+message WeaponInfo {
+  WeaponSkinWear weapon_skin_wear = 1;
+  map<int32, WeaponSkin> weapon_skin = 2;
+}
+
+// ==================== 其他系统 ====================
+message AfkEarnings {
+  int32 combat_cid = 1;
+  int64 pass_time = 2;
+  int64 last_received_time = 3;
+  map<int32, double> last_left_item = 4;
+}
+
+message BadgeRedPoint {
+  string key = 1;
+  int64 expire = 2;
+}
+
+message BadgeInfo {
+  repeated BadgeRedPoint red_point_list = 1;
+}
+
+message RenovationLaboratory {
+  repeated int32 unlocked_skill_id = 1;
+}
+
+message MttCbtTicketReward {
+  int32 ticket_num = 1;
+  int64 created_at = 2;
+}
+
+message RedeemCodeLog {
+  int32 config_id = 1;
+  int64 created_at = 2;
+}
+
+message AdViewLog {
+  int32 config_id = 1;
+  string req = 2;
+  int64 created_at = 3;
+}
+
+message CombatAntiCheating {
+  int32 cid = 1;
+  int32 anti_type = 2;
+  int64 cost_time = 3;
+  int64 power = 4;
+  int64 allow_max_damage = 5;
+  int64 client_max_damage = 6;
+  int64 cid_allow_max_power = 7;
+  int64 occur_tm = 8;
+}
+
+message AntiCheatingInfo {
+  repeated CombatAntiCheating anti_cheating_list = 1;
+}
+
+// ==================== 角色 & 基础信息 ====================
+message RoleBaseInfo {
+  uint64 rid = 1;
+  string server_id = 2;
+  int64 account_id = 3;
+  int32 social_id = 4;
+  string init_server_id = 5;
+  string account = 6;
+  string nick_name = 8;
+  string avatar = 9;
+  int64 level = 10;
+  int64 last_login_time = 11;
+  int64 last_logout_time = 12;
+  int64 power = 13;
+  int32 sex = 14;
+  int64 created_at = 15;
+  int64 updated_at = 16;
+}
+
+message ItemInfo {
+  map<int32, Item> items = 100; // key: 道具id
+}
+

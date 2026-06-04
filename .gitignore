@@ -1,0 +1,5 @@
+/orm/drivers/logs/
+/orm/logs/
+/examples/gs/logic/logs/
+.idea
+*.log

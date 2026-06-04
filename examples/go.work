@@ -1,0 +1,9 @@
+go 1.26.3
+
+use gs
+
+replace github.com/wxdqing/go-orm => ../
+
+replace github.com/wxdqing/protoc-gen-go-orm => ../../protoc-gen-go-orm
+
+replace git.wxdqing.com/sprout/logger.git => ../../../sprout/sprout/logger

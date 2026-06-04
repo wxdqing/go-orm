@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package pbtest;
+
+option go_package = "gs/pbtest";
+
+import "orm.option.proto";
+
+// ==================== 玩家数据 ====================
+message VersionedPlayer {
+  option (orm.table) = true;
+  option (orm.node_type) = "game";
+  int64 id = 1[
+    (orm.primary_key) = true
+  ];
+  string name = 2;
+  int32 level = 3;
+  string avatar = 4;
+  int64 version = 28;
+}
