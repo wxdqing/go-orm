@@ -55,7 +55,7 @@ func (g *gormBase) Save(ctx context.Context, tb proto.Message) error {
 	}
 	vp, isVp := dbObj.(orm.VersionProvider)
 	if !isVp {
-		return sess.Save(dbObj).Error
+		return gormSaveRecord(sess, dbObj)
 	}
 	err = sess.Transaction(func(tx *gorm.DB) error {
 		pkMap := dbObj.(orm.PkProvider).ToPrimaryKeyMap()
@@ -67,7 +67,7 @@ func (g *gormBase) Save(ctx context.Context, tb proto.Message) error {
 		if err := tx.Model(currentDbObj).Where(pkMap).First(currentDbObj).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				vp.SetVersion(vp.GetVersion() + 1)
-				return tx.Model(dbObj).Save(dbObj).Error
+				return gormSaveRecord(tx, dbObj)
 			}
 			return err
 		}
@@ -81,7 +81,7 @@ func (g *gormBase) Save(ctx context.Context, tb proto.Message) error {
 		}
 
 		vp.SetVersion(requestVersion + 1)
-		return tx.Model(dbObj).Save(dbObj).Error
+		return gormSaveRecord(tx, dbObj)
 	})
 
 	if err == nil {
