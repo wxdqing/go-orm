@@ -107,6 +107,7 @@ func (m *Mongo) Get(ctx context.Context, value proto.Message) error {
 	if err != nil {
 		return err
 	}
+	proto.Reset(value)
 	return proto.Unmarshal(doc.Payload, value)
 }
 

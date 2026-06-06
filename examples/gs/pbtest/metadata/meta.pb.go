@@ -2,8 +2,8 @@
 // versions:
 //  protoc-gen-orm v0.1.0
 //  protoc           v7.34.1
-// source: tables.proto
-// time 2026-06-04
+// source: fields_player.proto
+// time 2026-06-06
 
 package metadata
 
@@ -21,38 +21,68 @@ var NodeTables = make(map[string]map[string][]proto.Message)
 
 func init() { // mysql database tables
 	Tables["mysql"] = []proto.Message{
+		&mysql.FieldsPlayer{},
+		&mysql.GameRole{},
+		&mysql.Lister{},
 		&mysql.Player{},
 		&mysql.VersionedPlayer{},
 	}
 	NodeTables["mysql"] = make(map[string][]proto.Message)
+	NodeTables["mysql"]["game"] = append(NodeTables["mysql"]["game"], &mysql.FieldsPlayer{})
+	NodeTables["mysql"]["game"] = append(NodeTables["mysql"]["game"], &mysql.GameRole{})
+	NodeTables["mysql"]["social"] = append(NodeTables["mysql"]["social"], &mysql.Lister{})
 	NodeTables["mysql"]["game"] = append(NodeTables["mysql"]["game"], &mysql.Player{})
 	NodeTables["mysql"]["game"] = append(NodeTables["mysql"]["game"], &mysql.VersionedPlayer{}) // tcaplus database tables
 	Tables["tcaplus"] = []proto.Message{
+		&tcaplus.FieldsPlayer{},
+		&tcaplus.GameRole{},
+		&tcaplus.Lister{},
 		&tcaplus.Player{},
 		&tcaplus.VersionedPlayer{},
 	}
 	NodeTables["tcaplus"] = make(map[string][]proto.Message)
+	NodeTables["tcaplus"]["game"] = append(NodeTables["tcaplus"]["game"], &tcaplus.FieldsPlayer{})
+	NodeTables["tcaplus"]["game"] = append(NodeTables["tcaplus"]["game"], &tcaplus.GameRole{})
+	NodeTables["tcaplus"]["social"] = append(NodeTables["tcaplus"]["social"], &tcaplus.Lister{})
 	NodeTables["tcaplus"]["game"] = append(NodeTables["tcaplus"]["game"], &tcaplus.Player{})
 	NodeTables["tcaplus"]["game"] = append(NodeTables["tcaplus"]["game"], &tcaplus.VersionedPlayer{}) // pgsql database tables
 	Tables["pgsql"] = []proto.Message{
+		&pgsql.FieldsPlayer{},
+		&pgsql.GameRole{},
+		&pgsql.Lister{},
 		&pgsql.Player{},
 		&pgsql.VersionedPlayer{},
 	}
 	NodeTables["pgsql"] = make(map[string][]proto.Message)
+	NodeTables["pgsql"]["game"] = append(NodeTables["pgsql"]["game"], &pgsql.FieldsPlayer{})
+	NodeTables["pgsql"]["game"] = append(NodeTables["pgsql"]["game"], &pgsql.GameRole{})
+	NodeTables["pgsql"]["social"] = append(NodeTables["pgsql"]["social"], &pgsql.Lister{})
 	NodeTables["pgsql"]["game"] = append(NodeTables["pgsql"]["game"], &pgsql.Player{})
 	NodeTables["pgsql"]["game"] = append(NodeTables["pgsql"]["game"], &pgsql.VersionedPlayer{}) // redis database tables
 	Tables["redis"] = []proto.Message{
+		&redis.FieldsPlayer{},
+		&redis.GameRole{},
+		&redis.Lister{},
 		&redis.Player{},
 		&redis.VersionedPlayer{},
 	}
 	NodeTables["redis"] = make(map[string][]proto.Message)
+	NodeTables["redis"]["game"] = append(NodeTables["redis"]["game"], &redis.FieldsPlayer{})
+	NodeTables["redis"]["game"] = append(NodeTables["redis"]["game"], &redis.GameRole{})
+	NodeTables["redis"]["social"] = append(NodeTables["redis"]["social"], &redis.Lister{})
 	NodeTables["redis"]["game"] = append(NodeTables["redis"]["game"], &redis.Player{})
 	NodeTables["redis"]["game"] = append(NodeTables["redis"]["game"], &redis.VersionedPlayer{}) // mongo database tables
 	Tables["mongo"] = []proto.Message{
+		&mongo.FieldsPlayer{},
+		&mongo.GameRole{},
+		&mongo.Lister{},
 		&mongo.Player{},
 		&mongo.VersionedPlayer{},
 	}
 	NodeTables["mongo"] = make(map[string][]proto.Message)
+	NodeTables["mongo"]["game"] = append(NodeTables["mongo"]["game"], &mongo.FieldsPlayer{})
+	NodeTables["mongo"]["game"] = append(NodeTables["mongo"]["game"], &mongo.GameRole{})
+	NodeTables["mongo"]["social"] = append(NodeTables["mongo"]["social"], &mongo.Lister{})
 	NodeTables["mongo"]["game"] = append(NodeTables["mongo"]["game"], &mongo.Player{})
 	NodeTables["mongo"]["game"] = append(NodeTables["mongo"]["game"], &mongo.VersionedPlayer{})
 }

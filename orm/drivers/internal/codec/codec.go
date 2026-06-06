@@ -39,6 +39,10 @@ func EncodeRecord(ctx context.Context, dbObj proto.Message, value proto.Message)
 }
 
 func DecodeRecord(ctx context.Context, dbObj proto.Message, value proto.Message) error {
+	// 写回业务 proto 前先 Reset：PK/条件阶段仍用调用方传入对象，仅结果赋值时清空再解码。
+	if value != nil {
+		proto.Reset(value)
+	}
 	if dec, ok := dbObj.(recordDecoder); ok {
 		return dec.DecodeToContext(EnsureCtx(ctx), value)
 	}

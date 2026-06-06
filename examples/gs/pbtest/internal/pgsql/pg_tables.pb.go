@@ -30,9 +30,9 @@ const (
 // PostgreSQL表结构定义
 type Player struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" gorm:"index:idx_player_name;column:id"`            //{ "index":"index:idx_player_name;column:id",   "origin":"id" }
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty" gorm:"index:idx_player_name;column:name"`       //{ "index":"index:idx_player_name;column:name",   "origin":"name" }
-	Level         int32                  `protobuf:"varint,30,opt,name=level,proto3" json:"level,omitempty" gorm:"index:idx_player_level;column:level"` //{ "index":"index:idx_player_level;column:level",   "origin":"level" }
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primary_key;column:id;autoIncrement:false;index:idx_player_name"` //{ "pk":"primary_key;column:id;autoIncrement:false", "index":"index:idx_player_name;column:id", "origin":"id" }
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty" gorm:"index:idx_player_name;column:name"`                            //{ "index":"index:idx_player_name;column:name", "origin":"name" }
+	Level         int32                  `protobuf:"varint,30,opt,name=level,proto3" json:"level,omitempty" gorm:"index:idx_player_level;column:level"`                      //{ "index":"index:idx_player_level;column:level", "origin":"level" }
 	Data          []byte                 `protobuf:"bytes,999,opt,name=data,proto3" json:"data,omitempty" gorm:"column:data;type:bytea"`
 	CreatedAt     int64                  `protobuf:"varint,1000,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;autoCreateTime;<-:create"`
 	UpdatedAt     int64                  `protobuf:"varint,1001,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;autoUpdateTime"`
@@ -112,6 +112,5458 @@ func (x *Player) GetUpdatedAt() int64 {
 	return 0
 }
 
+// PostgreSQL表结构定义
+type Item struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ConfigId      int32                  `protobuf:"varint,1,opt,name=config_id,json=configId,proto3" json:"config_id,omitempty"` //{ "origin":"config_id" }
+	Type          int32                  `protobuf:"varint,2,opt,name=type,proto3" json:"type,omitempty"`                         //{ "origin":"type" }
+	Subtype       int32                  `protobuf:"varint,3,opt,name=subtype,proto3" json:"subtype,omitempty"`                   //{ "origin":"subtype" }
+	Num           int64                  `protobuf:"varint,4,opt,name=num,proto3" json:"num,omitempty"`                           //{ "origin":"num" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Item) Reset() {
+	*x = Item{}
+	mi := &file_pg_tables_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Item) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Item) ProtoMessage() {}
+
+func (x *Item) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Item.ProtoReflect.Descriptor instead.
+func (*Item) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *Item) GetConfigId() int32 {
+	if x != nil {
+		return x.ConfigId
+	}
+	return 0
+}
+
+func (x *Item) GetType() int32 {
+	if x != nil {
+		return x.Type
+	}
+	return 0
+}
+
+func (x *Item) GetSubtype() int32 {
+	if x != nil {
+		return x.Subtype
+	}
+	return 0
+}
+
+func (x *Item) GetNum() int64 {
+	if x != nil {
+		return x.Num
+	}
+	return 0
+}
+
+// RewardItem
+// PostgreSQL表结构定义
+type RewardItem struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Cid           int32                  `protobuf:"varint,1,opt,name=cid,proto3" json:"cid,omitempty"`   //{ "origin":"cid" }
+	Type          int32                  `protobuf:"varint,2,opt,name=type,proto3" json:"type,omitempty"` //{ "origin":"type" }
+	Num           int64                  `protobuf:"varint,3,opt,name=num,proto3" json:"num,omitempty"`   //{ "origin":"num" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RewardItem) Reset() {
+	*x = RewardItem{}
+	mi := &file_pg_tables_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RewardItem) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RewardItem) ProtoMessage() {}
+
+func (x *RewardItem) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RewardItem.ProtoReflect.Descriptor instead.
+func (*RewardItem) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *RewardItem) GetCid() int32 {
+	if x != nil {
+		return x.Cid
+	}
+	return 0
+}
+
+func (x *RewardItem) GetType() int32 {
+	if x != nil {
+		return x.Type
+	}
+	return 0
+}
+
+func (x *RewardItem) GetNum() int64 {
+	if x != nil {
+		return x.Num
+	}
+	return 0
+}
+
+// RoleItemChangeDto
+// PostgreSQL表结构定义
+type RoleItemChangeDto struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Cid           int32                  `protobuf:"varint,1,opt,name=cid,proto3" json:"cid,omitempty"`                                                                                                 //{ "origin":"cid" }
+	RoleId        int64                  `protobuf:"varint,2,opt,name=role_id,json=roleId,proto3" json:"role_id,omitempty"`                                                                             //{ "origin":"role_id" }
+	Num           int64                  `protobuf:"varint,3,opt,name=num,proto3" json:"num,omitempty"`                                                                                                 //{ "origin":"num" }
+	Type          int32                  `protobuf:"varint,4,opt,name=type,proto3" json:"type,omitempty"`                                                                                               //{ "origin":"type" }
+	Inc           bool                   `protobuf:"varint,5,opt,name=inc,proto3" json:"inc,omitempty"`                                                                                                 //{ "origin":"inc" }
+	Before        int64                  `protobuf:"varint,6,opt,name=before,proto3" json:"before,omitempty"`                                                                                           //{ "origin":"before" }
+	After         int64                  `protobuf:"varint,7,opt,name=after,proto3" json:"after,omitempty"`                                                                                             //{ "origin":"after" }
+	EquipSnapshot []byte                 `protobuf:"bytes,8,opt,name=equip_snapshot,json=equipSnapshot,proto3" json:"equip_snapshot,omitempty" gorm:"type:jsonb;column:equip_snapshot;serializer:json"` //{ "json":"type:jsonb;column:equip_snapshot;serializer:json", "origin":"equip_snapshot" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RoleItemChangeDto) Reset() {
+	*x = RoleItemChangeDto{}
+	mi := &file_pg_tables_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RoleItemChangeDto) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RoleItemChangeDto) ProtoMessage() {}
+
+func (x *RoleItemChangeDto) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RoleItemChangeDto.ProtoReflect.Descriptor instead.
+func (*RoleItemChangeDto) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *RoleItemChangeDto) GetCid() int32 {
+	if x != nil {
+		return x.Cid
+	}
+	return 0
+}
+
+func (x *RoleItemChangeDto) GetRoleId() int64 {
+	if x != nil {
+		return x.RoleId
+	}
+	return 0
+}
+
+func (x *RoleItemChangeDto) GetNum() int64 {
+	if x != nil {
+		return x.Num
+	}
+	return 0
+}
+
+func (x *RoleItemChangeDto) GetType() int32 {
+	if x != nil {
+		return x.Type
+	}
+	return 0
+}
+
+func (x *RoleItemChangeDto) GetInc() bool {
+	if x != nil {
+		return x.Inc
+	}
+	return false
+}
+
+func (x *RoleItemChangeDto) GetBefore() int64 {
+	if x != nil {
+		return x.Before
+	}
+	return 0
+}
+
+func (x *RoleItemChangeDto) GetAfter() int64 {
+	if x != nil {
+		return x.After
+	}
+	return 0
+}
+
+func (x *RoleItemChangeDto) GetEquipSnapshot() []byte {
+	if x != nil {
+		return x.EquipSnapshot
+	}
+	return nil
+}
+
+// PostgreSQL表结构定义
+type EquipAttr struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AttrCid       int32                  `protobuf:"varint,1,opt,name=attr_cid,json=attrCid,proto3" json:"attr_cid,omitempty"`            //{ "origin":"attr_cid" }
+	AttrCoeCid    int32                  `protobuf:"varint,2,opt,name=attr_coe_cid,json=attrCoeCid,proto3" json:"attr_coe_cid,omitempty"` //{ "origin":"attr_coe_cid" }
+	AttrType      int32                  `protobuf:"varint,3,opt,name=attr_type,json=attrType,proto3" json:"attr_type,omitempty"`         //{ "origin":"attr_type" }
+	CreatedAt     int64                  `protobuf:"varint,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`      //{ "origin":"created_at" }
+	UpdatedAt     int64                  `protobuf:"varint,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`      //{ "origin":"updated_at" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EquipAttr) Reset() {
+	*x = EquipAttr{}
+	mi := &file_pg_tables_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EquipAttr) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EquipAttr) ProtoMessage() {}
+
+func (x *EquipAttr) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EquipAttr.ProtoReflect.Descriptor instead.
+func (*EquipAttr) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *EquipAttr) GetAttrCid() int32 {
+	if x != nil {
+		return x.AttrCid
+	}
+	return 0
+}
+
+func (x *EquipAttr) GetAttrCoeCid() int32 {
+	if x != nil {
+		return x.AttrCoeCid
+	}
+	return 0
+}
+
+func (x *EquipAttr) GetAttrType() int32 {
+	if x != nil {
+		return x.AttrType
+	}
+	return 0
+}
+
+func (x *EquipAttr) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+func (x *EquipAttr) GetUpdatedAt() int64 {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return 0
+}
+
+// EquipAttrSnapshot
+// PostgreSQL表结构定义
+type EquipAttrSnapshot struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Cid           int32                  `protobuf:"varint,1,opt,name=cid,proto3" json:"cid,omitempty"`                  //{ "origin":"cid" }
+	Value         float32                `protobuf:"fixed32,2,opt,name=value,proto3" json:"value,omitempty"`             //{ "origin":"value" }
+	EType         int32                  `protobuf:"varint,3,opt,name=e_type,json=eType,proto3" json:"e_type,omitempty"` //{ "origin":"e_type" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EquipAttrSnapshot) Reset() {
+	*x = EquipAttrSnapshot{}
+	mi := &file_pg_tables_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EquipAttrSnapshot) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EquipAttrSnapshot) ProtoMessage() {}
+
+func (x *EquipAttrSnapshot) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EquipAttrSnapshot.ProtoReflect.Descriptor instead.
+func (*EquipAttrSnapshot) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *EquipAttrSnapshot) GetCid() int32 {
+	if x != nil {
+		return x.Cid
+	}
+	return 0
+}
+
+func (x *EquipAttrSnapshot) GetValue() float32 {
+	if x != nil {
+		return x.Value
+	}
+	return 0
+}
+
+func (x *EquipAttrSnapshot) GetEType() int32 {
+	if x != nil {
+		return x.EType
+	}
+	return 0
+}
+
+// EquipSnapshot
+// PostgreSQL表结构定义
+type EquipSnapshot struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                                                     //{ "origin":"id" }
+	ForgeCid      int32                  `protobuf:"varint,3,opt,name=forge_cid,json=forgeCid,proto3" json:"forge_cid,omitempty"`                         //{ "origin":"forge_cid" }
+	Attrs         []byte                 `protobuf:"bytes,4,opt,name=attrs,proto3" json:"attrs,omitempty" gorm:"type:jsonb;column:attrs;serializer:json"` //{ "json":"type:jsonb;column:attrs;serializer:json", "origin":"attrs" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EquipSnapshot) Reset() {
+	*x = EquipSnapshot{}
+	mi := &file_pg_tables_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EquipSnapshot) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EquipSnapshot) ProtoMessage() {}
+
+func (x *EquipSnapshot) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EquipSnapshot.ProtoReflect.Descriptor instead.
+func (*EquipSnapshot) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *EquipSnapshot) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *EquipSnapshot) GetForgeCid() int32 {
+	if x != nil {
+		return x.ForgeCid
+	}
+	return 0
+}
+
+func (x *EquipSnapshot) GetAttrs() []byte {
+	if x != nil {
+		return x.Attrs
+	}
+	return nil
+}
+
+// EnhanceInfo
+// PostgreSQL表结构定义
+type EnhanceInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	EnhanceCid    []byte                 `protobuf:"bytes,1,opt,name=enhance_cid,json=enhanceCid,proto3" json:"enhance_cid,omitempty" gorm:"type:jsonb;column:enhance_cid;serializer:json"` //{ "json":"type:jsonb;column:enhance_cid;serializer:json", "origin":"enhance_cid" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EnhanceInfo) Reset() {
+	*x = EnhanceInfo{}
+	mi := &file_pg_tables_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EnhanceInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EnhanceInfo) ProtoMessage() {}
+
+func (x *EnhanceInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EnhanceInfo.ProtoReflect.Descriptor instead.
+func (*EnhanceInfo) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *EnhanceInfo) GetEnhanceCid() []byte {
+	if x != nil {
+		return x.EnhanceCid
+	}
+	return nil
+}
+
+// Equipment
+// PostgreSQL表结构定义
+type Equipment struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                                                                                   //{ "origin":"id" }
+	HasWore       bool                   `protobuf:"varint,2,opt,name=has_wore,json=hasWore,proto3" json:"has_wore,omitempty"`                                                          //{ "origin":"has_wore" }
+	ConfigId      int32                  `protobuf:"varint,3,opt,name=config_id,json=configId,proto3" json:"config_id,omitempty"`                                                       //{ "origin":"config_id" }
+	ForgeCid      int32                  `protobuf:"varint,4,opt,name=forge_cid,json=forgeCid,proto3" json:"forge_cid,omitempty"`                                                       //{ "origin":"forge_cid" }
+	HasLocked     bool                   `protobuf:"varint,5,opt,name=has_locked,json=hasLocked,proto3" json:"has_locked,omitempty"`                                                    //{ "origin":"has_locked" }
+	CreatedAt     int64                  `protobuf:"varint,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                                                    //{ "origin":"created_at" }
+	EquipAttr     []byte                 `protobuf:"bytes,7,opt,name=equip_attr,json=equipAttr,proto3" json:"equip_attr,omitempty" gorm:"type:jsonb;column:equip_attr;serializer:json"` //{ "json":"type:jsonb;column:equip_attr;serializer:json", "origin":"equip_attr" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Equipment) Reset() {
+	*x = Equipment{}
+	mi := &file_pg_tables_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Equipment) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Equipment) ProtoMessage() {}
+
+func (x *Equipment) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Equipment.ProtoReflect.Descriptor instead.
+func (*Equipment) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *Equipment) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Equipment) GetHasWore() bool {
+	if x != nil {
+		return x.HasWore
+	}
+	return false
+}
+
+func (x *Equipment) GetConfigId() int32 {
+	if x != nil {
+		return x.ConfigId
+	}
+	return 0
+}
+
+func (x *Equipment) GetForgeCid() int32 {
+	if x != nil {
+		return x.ForgeCid
+	}
+	return 0
+}
+
+func (x *Equipment) GetHasLocked() bool {
+	if x != nil {
+		return x.HasLocked
+	}
+	return false
+}
+
+func (x *Equipment) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+func (x *Equipment) GetEquipAttr() []byte {
+	if x != nil {
+		return x.EquipAttr
+	}
+	return nil
+}
+
+// EquipmentInfo
+// PostgreSQL表结构定义
+type EquipmentInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Equipment     []byte                 `protobuf:"bytes,1,opt,name=equipment,proto3" json:"equipment,omitempty" gorm:"type:jsonb;column:equipment;serializer:json"`                           //{ "json":"type:jsonb;column:equipment;serializer:json", "origin":"equipment" }
+	EnhanceInfo   []byte                 `protobuf:"bytes,2,opt,name=enhance_info,json=enhanceInfo,proto3" json:"enhance_info,omitempty" gorm:"type:jsonb;column:enhance_info;serializer:json"` //{ "json":"type:jsonb;column:enhance_info;serializer:json", "origin":"enhance_info" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EquipmentInfo) Reset() {
+	*x = EquipmentInfo{}
+	mi := &file_pg_tables_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EquipmentInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EquipmentInfo) ProtoMessage() {}
+
+func (x *EquipmentInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EquipmentInfo.ProtoReflect.Descriptor instead.
+func (*EquipmentInfo) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *EquipmentInfo) GetEquipment() []byte {
+	if x != nil {
+		return x.Equipment
+	}
+	return nil
+}
+
+func (x *EquipmentInfo) GetEnhanceInfo() []byte {
+	if x != nil {
+		return x.EnhanceInfo
+	}
+	return nil
+}
+
+// PostgreSQL表结构定义
+type GemSlotList struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	GemCidList    []byte                 `protobuf:"bytes,1,opt,name=gem_cid_list,json=gemCidList,proto3" json:"gem_cid_list,omitempty" gorm:"type:jsonb;column:gem_cid_list;serializer:json"` //{ "json":"type:jsonb;column:gem_cid_list;serializer:json", "origin":"gem_cid_list" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GemSlotList) Reset() {
+	*x = GemSlotList{}
+	mi := &file_pg_tables_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GemSlotList) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GemSlotList) ProtoMessage() {}
+
+func (x *GemSlotList) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GemSlotList.ProtoReflect.Descriptor instead.
+func (*GemSlotList) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *GemSlotList) GetGemCidList() []byte {
+	if x != nil {
+		return x.GemCidList
+	}
+	return nil
+}
+
+// GemPresetInfos
+// PostgreSQL表结构定义
+type GemPresetInfos struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SlotList      []byte                 `protobuf:"bytes,1,opt,name=slot_list,json=slotList,proto3" json:"slot_list,omitempty" gorm:"type:jsonb;column:slot_list;serializer:json"` //{ "json":"type:jsonb;column:slot_list;serializer:json", "origin":"slot_list" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GemPresetInfos) Reset() {
+	*x = GemPresetInfos{}
+	mi := &file_pg_tables_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GemPresetInfos) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GemPresetInfos) ProtoMessage() {}
+
+func (x *GemPresetInfos) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GemPresetInfos.ProtoReflect.Descriptor instead.
+func (*GemPresetInfos) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *GemPresetInfos) GetSlotList() []byte {
+	if x != nil {
+		return x.SlotList
+	}
+	return nil
+}
+
+// GemSlot
+// PostgreSQL表结构定义
+type GemSlot struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Preset        int32                  `protobuf:"varint,1,opt,name=preset,proto3" json:"preset,omitempty"`                                                                       //{ "origin":"preset" }
+	GemInfos      []byte                 `protobuf:"bytes,2,opt,name=gem_infos,json=gemInfos,proto3" json:"gem_infos,omitempty" gorm:"type:jsonb;column:gem_infos;serializer:json"` //{ "json":"type:jsonb;column:gem_infos;serializer:json", "origin":"gem_infos" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GemSlot) Reset() {
+	*x = GemSlot{}
+	mi := &file_pg_tables_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GemSlot) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GemSlot) ProtoMessage() {}
+
+func (x *GemSlot) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GemSlot.ProtoReflect.Descriptor instead.
+func (*GemSlot) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *GemSlot) GetPreset() int32 {
+	if x != nil {
+		return x.Preset
+	}
+	return 0
+}
+
+func (x *GemSlot) GetGemInfos() []byte {
+	if x != nil {
+		return x.GemInfos
+	}
+	return nil
+}
+
+// GemLock
+// PostgreSQL表结构定义
+type GemLock struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ConfigId      int32                  `protobuf:"varint,1,opt,name=config_id,json=configId,proto3" json:"config_id,omitempty"`    //{ "origin":"config_id" }
+	CreatedAt     int64                  `protobuf:"varint,2,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"` //{ "origin":"created_at" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GemLock) Reset() {
+	*x = GemLock{}
+	mi := &file_pg_tables_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GemLock) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GemLock) ProtoMessage() {}
+
+func (x *GemLock) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GemLock.ProtoReflect.Descriptor instead.
+func (*GemLock) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *GemLock) GetConfigId() int32 {
+	if x != nil {
+		return x.ConfigId
+	}
+	return 0
+}
+
+func (x *GemLock) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+// GemInfo
+// PostgreSQL表结构定义
+type GemInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	GemSlot       []byte                 `protobuf:"bytes,1,opt,name=gem_slot,json=gemSlot,proto3" json:"gem_slot,omitempty" gorm:"type:jsonb;column:gem_slot;serializer:json"` //{ "json":"type:jsonb;column:gem_slot;serializer:json", "origin":"gem_slot" }
+	GemLock       []byte                 `protobuf:"bytes,2,opt,name=gem_lock,json=gemLock,proto3" json:"gem_lock,omitempty" gorm:"type:jsonb;column:gem_lock;serializer:json"` //{ "json":"type:jsonb;column:gem_lock;serializer:json", "origin":"gem_lock" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GemInfo) Reset() {
+	*x = GemInfo{}
+	mi := &file_pg_tables_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GemInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GemInfo) ProtoMessage() {}
+
+func (x *GemInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GemInfo.ProtoReflect.Descriptor instead.
+func (*GemInfo) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *GemInfo) GetGemSlot() []byte {
+	if x != nil {
+		return x.GemSlot
+	}
+	return nil
+}
+
+func (x *GemInfo) GetGemLock() []byte {
+	if x != nil {
+		return x.GemLock
+	}
+	return nil
+}
+
+// PostgreSQL表结构定义
+type Fashion struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	HasWore       bool                   `protobuf:"varint,1,opt,name=has_wore,json=hasWore,proto3" json:"has_wore,omitempty"`          //{ "origin":"has_wore" }
+	ConfigType    int32                  `protobuf:"varint,2,opt,name=config_type,json=configType,proto3" json:"config_type,omitempty"` //{ "origin":"config_type" }
+	StarLevel     int32                  `protobuf:"varint,3,opt,name=star_level,json=starLevel,proto3" json:"star_level,omitempty"`    //{ "origin":"star_level" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Fashion) Reset() {
+	*x = Fashion{}
+	mi := &file_pg_tables_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Fashion) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Fashion) ProtoMessage() {}
+
+func (x *Fashion) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Fashion.ProtoReflect.Descriptor instead.
+func (*Fashion) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *Fashion) GetHasWore() bool {
+	if x != nil {
+		return x.HasWore
+	}
+	return false
+}
+
+func (x *Fashion) GetConfigType() int32 {
+	if x != nil {
+		return x.ConfigType
+	}
+	return 0
+}
+
+func (x *Fashion) GetStarLevel() int32 {
+	if x != nil {
+		return x.StarLevel
+	}
+	return 0
+}
+
+// FashionSlotSkillList
+// PostgreSQL表结构定义
+type FashionSlotSkillList struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SkillIds      []byte                 `protobuf:"bytes,1,opt,name=skill_ids,json=skillIds,proto3" json:"skill_ids,omitempty" gorm:"type:jsonb;column:skill_ids;serializer:json"` //{ "json":"type:jsonb;column:skill_ids;serializer:json", "origin":"skill_ids" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FashionSlotSkillList) Reset() {
+	*x = FashionSlotSkillList{}
+	mi := &file_pg_tables_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FashionSlotSkillList) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FashionSlotSkillList) ProtoMessage() {}
+
+func (x *FashionSlotSkillList) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FashionSlotSkillList.ProtoReflect.Descriptor instead.
+func (*FashionSlotSkillList) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *FashionSlotSkillList) GetSkillIds() []byte {
+	if x != nil {
+		return x.SkillIds
+	}
+	return nil
+}
+
+// FashionSkillTabInfo
+// PostgreSQL表结构定义
+type FashionSkillTabInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SlotList      []byte                 `protobuf:"bytes,1,opt,name=slot_list,json=slotList,proto3" json:"slot_list,omitempty" gorm:"type:jsonb;column:slot_list;serializer:json"` //{ "json":"type:jsonb;column:slot_list;serializer:json", "origin":"slot_list" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FashionSkillTabInfo) Reset() {
+	*x = FashionSkillTabInfo{}
+	mi := &file_pg_tables_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FashionSkillTabInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FashionSkillTabInfo) ProtoMessage() {}
+
+func (x *FashionSkillTabInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FashionSkillTabInfo.ProtoReflect.Descriptor instead.
+func (*FashionSkillTabInfo) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *FashionSkillTabInfo) GetSlotList() []byte {
+	if x != nil {
+		return x.SlotList
+	}
+	return nil
+}
+
+// FashionSkillTabInfos
+// PostgreSQL表结构定义
+type FashionSkillTabInfos struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SkillTabInfos []byte                 `protobuf:"bytes,1,opt,name=skill_tab_infos,json=skillTabInfos,proto3" json:"skill_tab_infos,omitempty" gorm:"type:jsonb;column:skill_tab_infos;serializer:json"` //{ "json":"type:jsonb;column:skill_tab_infos;serializer:json", "origin":"skill_tab_infos" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FashionSkillTabInfos) Reset() {
+	*x = FashionSkillTabInfos{}
+	mi := &file_pg_tables_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FashionSkillTabInfos) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FashionSkillTabInfos) ProtoMessage() {}
+
+func (x *FashionSkillTabInfos) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FashionSkillTabInfos.ProtoReflect.Descriptor instead.
+func (*FashionSkillTabInfos) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *FashionSkillTabInfos) GetSkillTabInfos() []byte {
+	if x != nil {
+		return x.SkillTabInfos
+	}
+	return nil
+}
+
+// FashionSkillSlot
+// PostgreSQL表结构定义
+type FashionSkillSlot struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	Preset            int32                  `protobuf:"varint,1,opt,name=preset,proto3" json:"preset,omitempty"`                                                                                                              //{ "origin":"preset" }
+	FashionSkillInfos []byte                 `protobuf:"bytes,2,opt,name=fashion_skill_infos,json=fashionSkillInfos,proto3" json:"fashion_skill_infos,omitempty" gorm:"type:jsonb;column:fashion_skill_infos;serializer:json"` //{ "json":"type:jsonb;column:fashion_skill_infos;serializer:json", "origin":"fashion_skill_infos" }
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *FashionSkillSlot) Reset() {
+	*x = FashionSkillSlot{}
+	mi := &file_pg_tables_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FashionSkillSlot) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FashionSkillSlot) ProtoMessage() {}
+
+func (x *FashionSkillSlot) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FashionSkillSlot.ProtoReflect.Descriptor instead.
+func (*FashionSkillSlot) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *FashionSkillSlot) GetPreset() int32 {
+	if x != nil {
+		return x.Preset
+	}
+	return 0
+}
+
+func (x *FashionSkillSlot) GetFashionSkillInfos() []byte {
+	if x != nil {
+		return x.FashionSkillInfos
+	}
+	return nil
+}
+
+// FashionInfo
+// PostgreSQL表结构定义
+type FashionInfo struct {
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	Fashion          []byte                 `protobuf:"bytes,1,opt,name=fashion,proto3" json:"fashion,omitempty" gorm:"type:jsonb;column:fashion;serializer:json"`                                                        //{ "json":"type:jsonb;column:fashion;serializer:json", "origin":"fashion" }
+	FashionSkillSlot []byte                 `protobuf:"bytes,2,opt,name=fashion_skill_slot,json=fashionSkillSlot,proto3" json:"fashion_skill_slot,omitempty" gorm:"type:jsonb;column:fashion_skill_slot;serializer:json"` //{ "json":"type:jsonb;column:fashion_skill_slot;serializer:json", "origin":"fashion_skill_slot" }
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *FashionInfo) Reset() {
+	*x = FashionInfo{}
+	mi := &file_pg_tables_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FashionInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FashionInfo) ProtoMessage() {}
+
+func (x *FashionInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FashionInfo.ProtoReflect.Descriptor instead.
+func (*FashionInfo) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *FashionInfo) GetFashion() []byte {
+	if x != nil {
+		return x.Fashion
+	}
+	return nil
+}
+
+func (x *FashionInfo) GetFashionSkillSlot() []byte {
+	if x != nil {
+		return x.FashionSkillSlot
+	}
+	return nil
+}
+
+// PostgreSQL表结构定义
+type Skill struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ConfigId      int32                  `protobuf:"varint,1,opt,name=config_id,json=configId,proto3" json:"config_id,omitempty"` //{ "origin":"config_id" }
+	Type          int32                  `protobuf:"varint,2,opt,name=type,proto3" json:"type,omitempty"`                         //{ "origin":"type" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Skill) Reset() {
+	*x = Skill{}
+	mi := &file_pg_tables_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Skill) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Skill) ProtoMessage() {}
+
+func (x *Skill) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Skill.ProtoReflect.Descriptor instead.
+func (*Skill) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *Skill) GetConfigId() int32 {
+	if x != nil {
+		return x.ConfigId
+	}
+	return 0
+}
+
+func (x *Skill) GetType() int32 {
+	if x != nil {
+		return x.Type
+	}
+	return 0
+}
+
+// ActiveSkill
+// PostgreSQL表结构定义
+type ActiveSkill struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SkillCid      int32                  `protobuf:"varint,1,opt,name=skill_cid,json=skillCid,proto3" json:"skill_cid,omitempty"` //{ "origin":"skill_cid" }
+	LevelCid      int32                  `protobuf:"varint,2,opt,name=level_cid,json=levelCid,proto3" json:"level_cid,omitempty"` //{ "origin":"level_cid" }
+	StarCid       int32                  `protobuf:"varint,3,opt,name=star_cid,json=starCid,proto3" json:"star_cid,omitempty"`    //{ "origin":"star_cid" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ActiveSkill) Reset() {
+	*x = ActiveSkill{}
+	mi := &file_pg_tables_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ActiveSkill) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ActiveSkill) ProtoMessage() {}
+
+func (x *ActiveSkill) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ActiveSkill.ProtoReflect.Descriptor instead.
+func (*ActiveSkill) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *ActiveSkill) GetSkillCid() int32 {
+	if x != nil {
+		return x.SkillCid
+	}
+	return 0
+}
+
+func (x *ActiveSkill) GetLevelCid() int32 {
+	if x != nil {
+		return x.LevelCid
+	}
+	return 0
+}
+
+func (x *ActiveSkill) GetStarCid() int32 {
+	if x != nil {
+		return x.StarCid
+	}
+	return 0
+}
+
+// ActSkillInfos
+// PostgreSQL表结构定义
+type ActSkillInfos struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SkillInfo     []byte                 `protobuf:"bytes,1,opt,name=skill_info,json=skillInfo,proto3" json:"skill_info,omitempty" gorm:"type:jsonb;column:skill_info;serializer:json"` //{ "json":"type:jsonb;column:skill_info;serializer:json", "origin":"skill_info" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ActSkillInfos) Reset() {
+	*x = ActSkillInfos{}
+	mi := &file_pg_tables_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ActSkillInfos) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ActSkillInfos) ProtoMessage() {}
+
+func (x *ActSkillInfos) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ActSkillInfos.ProtoReflect.Descriptor instead.
+func (*ActSkillInfos) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *ActSkillInfos) GetSkillInfo() []byte {
+	if x != nil {
+		return x.SkillInfo
+	}
+	return nil
+}
+
+// ActiveSkillSlot
+// PostgreSQL表结构定义
+type ActiveSkillSlot struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Preset        int32                  `protobuf:"varint,1,opt,name=preset,proto3" json:"preset,omitempty"`                                                                                              //{ "origin":"preset" }
+	ActSkillInfos []byte                 `protobuf:"bytes,2,opt,name=act_skill_infos,json=actSkillInfos,proto3" json:"act_skill_infos,omitempty" gorm:"type:jsonb;column:act_skill_infos;serializer:json"` //{ "json":"type:jsonb;column:act_skill_infos;serializer:json", "origin":"act_skill_infos" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ActiveSkillSlot) Reset() {
+	*x = ActiveSkillSlot{}
+	mi := &file_pg_tables_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ActiveSkillSlot) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ActiveSkillSlot) ProtoMessage() {}
+
+func (x *ActiveSkillSlot) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ActiveSkillSlot.ProtoReflect.Descriptor instead.
+func (*ActiveSkillSlot) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *ActiveSkillSlot) GetPreset() int32 {
+	if x != nil {
+		return x.Preset
+	}
+	return 0
+}
+
+func (x *ActiveSkillSlot) GetActSkillInfos() []byte {
+	if x != nil {
+		return x.ActSkillInfos
+	}
+	return nil
+}
+
+// SkillInfo
+// PostgreSQL表结构定义
+type SkillInfo struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Skill           []byte                 `protobuf:"bytes,1,opt,name=skill,proto3" json:"skill,omitempty" gorm:"type:jsonb;column:skill;serializer:json"`                                                          //{ "json":"type:jsonb;column:skill;serializer:json", "origin":"skill" }
+	ActiveSkill     []byte                 `protobuf:"bytes,2,opt,name=active_skill,json=activeSkill,proto3" json:"active_skill,omitempty" gorm:"type:jsonb;column:active_skill;serializer:json"`                    //{ "json":"type:jsonb;column:active_skill;serializer:json", "origin":"active_skill" }
+	ActiveSkillSlot []byte                 `protobuf:"bytes,3,opt,name=active_skill_slot,json=activeSkillSlot,proto3" json:"active_skill_slot,omitempty" gorm:"type:jsonb;column:active_skill_slot;serializer:json"` //{ "json":"type:jsonb;column:active_skill_slot;serializer:json", "origin":"active_skill_slot" }
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *SkillInfo) Reset() {
+	*x = SkillInfo{}
+	mi := &file_pg_tables_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SkillInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SkillInfo) ProtoMessage() {}
+
+func (x *SkillInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SkillInfo.ProtoReflect.Descriptor instead.
+func (*SkillInfo) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *SkillInfo) GetSkill() []byte {
+	if x != nil {
+		return x.Skill
+	}
+	return nil
+}
+
+func (x *SkillInfo) GetActiveSkill() []byte {
+	if x != nil {
+		return x.ActiveSkill
+	}
+	return nil
+}
+
+func (x *SkillInfo) GetActiveSkillSlot() []byte {
+	if x != nil {
+		return x.ActiveSkillSlot
+	}
+	return nil
+}
+
+// PostgreSQL表结构定义
+type Combating struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Cid           int32                  `protobuf:"varint,1,opt,name=cid,proto3" json:"cid,omitempty"`                              //{ "origin":"cid" }
+	CombatUid     string                 `protobuf:"bytes,2,opt,name=combat_uid,json=combatUid,proto3" json:"combat_uid,omitempty"`  //{ "origin":"combat_uid" }
+	Info          string                 `protobuf:"bytes,3,opt,name=info,proto3" json:"info,omitempty"`                             //{ "origin":"info" }
+	CreatedAt     int64                  `protobuf:"varint,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"` //{ "origin":"created_at" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Combating) Reset() {
+	*x = Combating{}
+	mi := &file_pg_tables_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Combating) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Combating) ProtoMessage() {}
+
+func (x *Combating) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Combating.ProtoReflect.Descriptor instead.
+func (*Combating) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *Combating) GetCid() int32 {
+	if x != nil {
+		return x.Cid
+	}
+	return 0
+}
+
+func (x *Combating) GetCombatUid() string {
+	if x != nil {
+		return x.CombatUid
+	}
+	return ""
+}
+
+func (x *Combating) GetInfo() string {
+	if x != nil {
+		return x.Info
+	}
+	return ""
+}
+
+func (x *Combating) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+// CombatLevel
+// PostgreSQL表结构定义
+type CombatLevel struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Cid           int32                  `protobuf:"varint,1,opt,name=cid,proto3" json:"cid,omitempty"`                                    //{ "origin":"cid" }
+	Score         int32                  `protobuf:"varint,2,opt,name=score,proto3" json:"score,omitempty"`                                //{ "origin":"score" }
+	BestTime      int32                  `protobuf:"varint,3,opt,name=best_time,json=bestTime,proto3" json:"best_time,omitempty"`          //{ "origin":"best_time" }
+	BestDefense   int32                  `protobuf:"varint,4,opt,name=best_defense,json=bestDefense,proto3" json:"best_defense,omitempty"` //{ "origin":"best_defense" }
+	BestLv        int32                  `protobuf:"varint,5,opt,name=best_lv,json=bestLv,proto3" json:"best_lv,omitempty"`                //{ "origin":"best_lv" }
+	BestWave      int32                  `protobuf:"varint,6,opt,name=best_wave,json=bestWave,proto3" json:"best_wave,omitempty"`          //{ "origin":"best_wave" }
+	CreatedAt     int64                  `protobuf:"varint,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`       //{ "origin":"created_at" }
+	UpdatedAt     int64                  `protobuf:"varint,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`       //{ "origin":"updated_at" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CombatLevel) Reset() {
+	*x = CombatLevel{}
+	mi := &file_pg_tables_proto_msgTypes[27]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CombatLevel) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CombatLevel) ProtoMessage() {}
+
+func (x *CombatLevel) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[27]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CombatLevel.ProtoReflect.Descriptor instead.
+func (*CombatLevel) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *CombatLevel) GetCid() int32 {
+	if x != nil {
+		return x.Cid
+	}
+	return 0
+}
+
+func (x *CombatLevel) GetScore() int32 {
+	if x != nil {
+		return x.Score
+	}
+	return 0
+}
+
+func (x *CombatLevel) GetBestTime() int32 {
+	if x != nil {
+		return x.BestTime
+	}
+	return 0
+}
+
+func (x *CombatLevel) GetBestDefense() int32 {
+	if x != nil {
+		return x.BestDefense
+	}
+	return 0
+}
+
+func (x *CombatLevel) GetBestLv() int32 {
+	if x != nil {
+		return x.BestLv
+	}
+	return 0
+}
+
+func (x *CombatLevel) GetBestWave() int32 {
+	if x != nil {
+		return x.BestWave
+	}
+	return 0
+}
+
+func (x *CombatLevel) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+func (x *CombatLevel) GetUpdatedAt() int64 {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return 0
+}
+
+// CombatReward
+// PostgreSQL表结构定义
+type CombatReward struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Cid           int32                  `protobuf:"varint,1,opt,name=cid,proto3" json:"cid,omitempty"`                                                                                                //{ "origin":"cid" }
+	GotScoreList  []byte                 `protobuf:"bytes,2,opt,name=got_score_list,json=gotScoreList,proto3" json:"got_score_list,omitempty" gorm:"type:jsonb;column:got_score_list;serializer:json"` //{ "json":"type:jsonb;column:got_score_list;serializer:json", "origin":"got_score_list" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CombatReward) Reset() {
+	*x = CombatReward{}
+	mi := &file_pg_tables_proto_msgTypes[28]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CombatReward) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CombatReward) ProtoMessage() {}
+
+func (x *CombatReward) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[28]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CombatReward.ProtoReflect.Descriptor instead.
+func (*CombatReward) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *CombatReward) GetCid() int32 {
+	if x != nil {
+		return x.Cid
+	}
+	return 0
+}
+
+func (x *CombatReward) GetGotScoreList() []byte {
+	if x != nil {
+		return x.GotScoreList
+	}
+	return nil
+}
+
+// CombatSweep
+// PostgreSQL表结构定义
+type CombatSweep struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Cid           int32                  `protobuf:"varint,1,opt,name=cid,proto3" json:"cid,omitempty"`                                          //{ "origin":"cid" }
+	WithPrivilege bool                   `protobuf:"varint,2,opt,name=with_privilege,json=withPrivilege,proto3" json:"with_privilege,omitempty"` //{ "origin":"with_privilege" }
+	CreatedAt     int64                  `protobuf:"varint,3,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`             //{ "origin":"created_at" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CombatSweep) Reset() {
+	*x = CombatSweep{}
+	mi := &file_pg_tables_proto_msgTypes[29]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CombatSweep) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CombatSweep) ProtoMessage() {}
+
+func (x *CombatSweep) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[29]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CombatSweep.ProtoReflect.Descriptor instead.
+func (*CombatSweep) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *CombatSweep) GetCid() int32 {
+	if x != nil {
+		return x.Cid
+	}
+	return 0
+}
+
+func (x *CombatSweep) GetWithPrivilege() bool {
+	if x != nil {
+		return x.WithPrivilege
+	}
+	return false
+}
+
+func (x *CombatSweep) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+// CombatLog
+// PostgreSQL表结构定义
+type CombatLog struct {
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	CombatUid        string                 `protobuf:"bytes,1,opt,name=combat_uid,json=combatUid,proto3" json:"combat_uid,omitempty"`                                                                      //{ "origin":"combat_uid" }
+	MaxCombatLevel   int32                  `protobuf:"varint,2,opt,name=max_combat_level,json=maxCombatLevel,proto3" json:"max_combat_level,omitempty"`                                                    //{ "origin":"max_combat_level" }
+	EquipInfo        string                 `protobuf:"bytes,3,opt,name=equip_info,json=equipInfo,proto3" json:"equip_info,omitempty"`                                                                      //{ "origin":"equip_info" }
+	InlayingGems     string                 `protobuf:"bytes,4,opt,name=inlaying_gems,json=inlayingGems,proto3" json:"inlaying_gems,omitempty"`                                                             //{ "origin":"inlaying_gems" }
+	SpiritInfo       string                 `protobuf:"bytes,5,opt,name=spirit_info,json=spiritInfo,proto3" json:"spirit_info,omitempty"`                                                                   //{ "origin":"spirit_info" }
+	CombatScore      int32                  `protobuf:"varint,6,opt,name=combat_score,json=combatScore,proto3" json:"combat_score,omitempty"`                                                               //{ "origin":"combat_score" }
+	CombatCid        int32                  `protobuf:"varint,7,opt,name=combat_cid,json=combatCid,proto3" json:"combat_cid,omitempty"`                                                                     //{ "origin":"combat_cid" }
+	Rewards          []byte                 `protobuf:"bytes,8,opt,name=rewards,proto3" json:"rewards,omitempty" gorm:"type:jsonb;column:rewards;serializer:json"`                                          //{ "json":"type:jsonb;column:rewards;serializer:json", "origin":"rewards" }
+	SkillChoices     []byte                 `protobuf:"bytes,9,opt,name=skill_choices,json=skillChoices,proto3" json:"skill_choices,omitempty" gorm:"type:jsonb;column:skill_choices;serializer:json"`      //{ "json":"type:jsonb;column:skill_choices;serializer:json", "origin":"skill_choices" }
+	KilledEnemies    []byte                 `protobuf:"bytes,10,opt,name=killed_enemies,json=killedEnemies,proto3" json:"killed_enemies,omitempty" gorm:"type:jsonb;column:killed_enemies;serializer:json"` //{ "json":"type:jsonb;column:killed_enemies;serializer:json", "origin":"killed_enemies" }
+	DefendTime       int32                  `protobuf:"varint,11,opt,name=defend_time,json=defendTime,proto3" json:"defend_time,omitempty"`                                                                 //{ "origin":"defend_time" }
+	DefendPercentage int32                  `protobuf:"varint,12,opt,name=defend_percentage,json=defendPercentage,proto3" json:"defend_percentage,omitempty"`                                               //{ "origin":"defend_percentage" }
+	HasDoubleRewards bool                   `protobuf:"varint,13,opt,name=has_double_rewards,json=hasDoubleRewards,proto3" json:"has_double_rewards,omitempty"`                                             //{ "origin":"has_double_rewards" }
+	SpiritFireCount  int32                  `protobuf:"varint,14,opt,name=spirit_fire_count,json=spiritFireCount,proto3" json:"spirit_fire_count,omitempty"`                                                //{ "origin":"spirit_fire_count" }
+	Info             string                 `protobuf:"bytes,15,opt,name=info,proto3" json:"info,omitempty"`                                                                                                //{ "origin":"info" }
+	CreatedAt        int64                  `protobuf:"varint,16,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                                                                    //{ "origin":"created_at" }
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *CombatLog) Reset() {
+	*x = CombatLog{}
+	mi := &file_pg_tables_proto_msgTypes[30]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CombatLog) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CombatLog) ProtoMessage() {}
+
+func (x *CombatLog) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[30]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CombatLog.ProtoReflect.Descriptor instead.
+func (*CombatLog) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{30}
+}
+
+func (x *CombatLog) GetCombatUid() string {
+	if x != nil {
+		return x.CombatUid
+	}
+	return ""
+}
+
+func (x *CombatLog) GetMaxCombatLevel() int32 {
+	if x != nil {
+		return x.MaxCombatLevel
+	}
+	return 0
+}
+
+func (x *CombatLog) GetEquipInfo() string {
+	if x != nil {
+		return x.EquipInfo
+	}
+	return ""
+}
+
+func (x *CombatLog) GetInlayingGems() string {
+	if x != nil {
+		return x.InlayingGems
+	}
+	return ""
+}
+
+func (x *CombatLog) GetSpiritInfo() string {
+	if x != nil {
+		return x.SpiritInfo
+	}
+	return ""
+}
+
+func (x *CombatLog) GetCombatScore() int32 {
+	if x != nil {
+		return x.CombatScore
+	}
+	return 0
+}
+
+func (x *CombatLog) GetCombatCid() int32 {
+	if x != nil {
+		return x.CombatCid
+	}
+	return 0
+}
+
+func (x *CombatLog) GetRewards() []byte {
+	if x != nil {
+		return x.Rewards
+	}
+	return nil
+}
+
+func (x *CombatLog) GetSkillChoices() []byte {
+	if x != nil {
+		return x.SkillChoices
+	}
+	return nil
+}
+
+func (x *CombatLog) GetKilledEnemies() []byte {
+	if x != nil {
+		return x.KilledEnemies
+	}
+	return nil
+}
+
+func (x *CombatLog) GetDefendTime() int32 {
+	if x != nil {
+		return x.DefendTime
+	}
+	return 0
+}
+
+func (x *CombatLog) GetDefendPercentage() int32 {
+	if x != nil {
+		return x.DefendPercentage
+	}
+	return 0
+}
+
+func (x *CombatLog) GetHasDoubleRewards() bool {
+	if x != nil {
+		return x.HasDoubleRewards
+	}
+	return false
+}
+
+func (x *CombatLog) GetSpiritFireCount() int32 {
+	if x != nil {
+		return x.SpiritFireCount
+	}
+	return 0
+}
+
+func (x *CombatLog) GetInfo() string {
+	if x != nil {
+		return x.Info
+	}
+	return ""
+}
+
+func (x *CombatLog) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+// CombatLevelFirstCompleteRewardRecord
+// PostgreSQL表结构定义
+type CombatLevelFirstCompleteRewardRecord struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Cid           []byte                 `protobuf:"bytes,1,opt,name=cid,proto3" json:"cid,omitempty" gorm:"type:jsonb;column:cid;serializer:json"` //{ "json":"type:jsonb;column:cid;serializer:json", "origin":"cid" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CombatLevelFirstCompleteRewardRecord) Reset() {
+	*x = CombatLevelFirstCompleteRewardRecord{}
+	mi := &file_pg_tables_proto_msgTypes[31]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CombatLevelFirstCompleteRewardRecord) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CombatLevelFirstCompleteRewardRecord) ProtoMessage() {}
+
+func (x *CombatLevelFirstCompleteRewardRecord) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[31]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CombatLevelFirstCompleteRewardRecord.ProtoReflect.Descriptor instead.
+func (*CombatLevelFirstCompleteRewardRecord) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{31}
+}
+
+func (x *CombatLevelFirstCompleteRewardRecord) GetCid() []byte {
+	if x != nil {
+		return x.Cid
+	}
+	return nil
+}
+
+// BattleLevelInfo
+// PostgreSQL表结构定义
+type BattleLevelInfo struct {
+	state                                protoimpl.MessageState `protogen:"open.v1"`
+	Combating                            []byte                 `protobuf:"bytes,1,opt,name=combating,proto3" json:"combating,omitempty" gorm:"type:jsonb;column:combating;serializer:json"`                                                                                                                                           //{ "json":"type:jsonb;column:combating;serializer:json", "origin":"combating" }
+	CombatLevel                          []byte                 `protobuf:"bytes,2,opt,name=combat_level,json=combatLevel,proto3" json:"combat_level,omitempty" gorm:"type:jsonb;column:combat_level;serializer:json"`                                                                                                                 //{ "json":"type:jsonb;column:combat_level;serializer:json", "origin":"combat_level" }
+	CombatReward                         []byte                 `protobuf:"bytes,3,opt,name=combat_reward,json=combatReward,proto3" json:"combat_reward,omitempty" gorm:"type:jsonb;column:combat_reward;serializer:json"`                                                                                                             //{ "json":"type:jsonb;column:combat_reward;serializer:json", "origin":"combat_reward" }
+	CombatSweep                          []byte                 `protobuf:"bytes,4,opt,name=combat_sweep,json=combatSweep,proto3" json:"combat_sweep,omitempty" gorm:"type:jsonb;column:combat_sweep;serializer:json"`                                                                                                                 //{ "json":"type:jsonb;column:combat_sweep;serializer:json", "origin":"combat_sweep" }
+	CombatLog                            []byte                 `protobuf:"bytes,5,opt,name=combat_log,json=combatLog,proto3" json:"combat_log,omitempty" gorm:"type:jsonb;column:combat_log;serializer:json"`                                                                                                                         //{ "json":"type:jsonb;column:combat_log;serializer:json", "origin":"combat_log" }
+	CombatLevelFirstCompleteRewardRecord []byte                 `protobuf:"bytes,6,opt,name=combat_level_first_complete_reward_record,json=combatLevelFirstCompleteRewardRecord,proto3" json:"combat_level_first_complete_reward_record,omitempty" gorm:"type:jsonb;column:combat_level_first_complete_reward_record;serializer:json"` //{ "json":"type:jsonb;column:combat_level_first_complete_reward_record;serializer:json", "origin":"combat_level_first_complete_reward_record" }
+	unknownFields                        protoimpl.UnknownFields
+	sizeCache                            protoimpl.SizeCache
+}
+
+func (x *BattleLevelInfo) Reset() {
+	*x = BattleLevelInfo{}
+	mi := &file_pg_tables_proto_msgTypes[32]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BattleLevelInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BattleLevelInfo) ProtoMessage() {}
+
+func (x *BattleLevelInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[32]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BattleLevelInfo.ProtoReflect.Descriptor instead.
+func (*BattleLevelInfo) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{32}
+}
+
+func (x *BattleLevelInfo) GetCombating() []byte {
+	if x != nil {
+		return x.Combating
+	}
+	return nil
+}
+
+func (x *BattleLevelInfo) GetCombatLevel() []byte {
+	if x != nil {
+		return x.CombatLevel
+	}
+	return nil
+}
+
+func (x *BattleLevelInfo) GetCombatReward() []byte {
+	if x != nil {
+		return x.CombatReward
+	}
+	return nil
+}
+
+func (x *BattleLevelInfo) GetCombatSweep() []byte {
+	if x != nil {
+		return x.CombatSweep
+	}
+	return nil
+}
+
+func (x *BattleLevelInfo) GetCombatLog() []byte {
+	if x != nil {
+		return x.CombatLog
+	}
+	return nil
+}
+
+func (x *BattleLevelInfo) GetCombatLevelFirstCompleteRewardRecord() []byte {
+	if x != nil {
+		return x.CombatLevelFirstCompleteRewardRecord
+	}
+	return nil
+}
+
+// PostgreSQL表结构定义
+type Task struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Type          int32                  `protobuf:"varint,1,opt,name=type,proto3" json:"type,omitempty"`                                                                                       //{ "origin":"type" }
+	Subgroup      int32                  `protobuf:"varint,2,opt,name=subgroup,proto3" json:"subgroup,omitempty"`                                                                               //{ "origin":"subgroup" }
+	Progress      int32                  `protobuf:"varint,3,opt,name=progress,proto3" json:"progress,omitempty"`                                                                               //{ "origin":"progress" }
+	RewardSlice   []byte                 `protobuf:"bytes,4,opt,name=reward_slice,json=rewardSlice,proto3" json:"reward_slice,omitempty" gorm:"type:jsonb;column:reward_slice;serializer:json"` //{ "json":"type:jsonb;column:reward_slice;serializer:json", "origin":"reward_slice" }
+	LastUpdate    int64                  `protobuf:"varint,5,opt,name=last_update,json=lastUpdate,proto3" json:"last_update,omitempty"`                                                         //{ "origin":"last_update" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Task) Reset() {
+	*x = Task{}
+	mi := &file_pg_tables_proto_msgTypes[33]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Task) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Task) ProtoMessage() {}
+
+func (x *Task) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[33]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Task.ProtoReflect.Descriptor instead.
+func (*Task) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{33}
+}
+
+func (x *Task) GetType() int32 {
+	if x != nil {
+		return x.Type
+	}
+	return 0
+}
+
+func (x *Task) GetSubgroup() int32 {
+	if x != nil {
+		return x.Subgroup
+	}
+	return 0
+}
+
+func (x *Task) GetProgress() int32 {
+	if x != nil {
+		return x.Progress
+	}
+	return 0
+}
+
+func (x *Task) GetRewardSlice() []byte {
+	if x != nil {
+		return x.RewardSlice
+	}
+	return nil
+}
+
+func (x *Task) GetLastUpdate() int64 {
+	if x != nil {
+		return x.LastUpdate
+	}
+	return 0
+}
+
+// TaskInfo
+// PostgreSQL表结构定义
+type TaskInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Task          []byte                 `protobuf:"bytes,1,opt,name=task,proto3" json:"task,omitempty" gorm:"type:jsonb;column:task;serializer:json"` //{ "json":"type:jsonb;column:task;serializer:json", "origin":"task" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TaskInfo) Reset() {
+	*x = TaskInfo{}
+	mi := &file_pg_tables_proto_msgTypes[34]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TaskInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TaskInfo) ProtoMessage() {}
+
+func (x *TaskInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[34]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TaskInfo.ProtoReflect.Descriptor instead.
+func (*TaskInfo) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{34}
+}
+
+func (x *TaskInfo) GetTask() []byte {
+	if x != nil {
+		return x.Task
+	}
+	return nil
+}
+
+// PostgreSQL表结构定义
+type PaymentOrder struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	OrderId       int64                  `protobuf:"varint,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`                                  //{ "origin":"order_id" }
+	GiftCid       int32                  `protobuf:"varint,2,opt,name=gift_cid,json=giftCid,proto3" json:"gift_cid,omitempty"`                                  //{ "origin":"gift_cid" }
+	Param         string                 `protobuf:"bytes,3,opt,name=param,proto3" json:"param,omitempty"`                                                      //{ "origin":"param" }
+	Channel       string                 `protobuf:"bytes,4,opt,name=channel,proto3" json:"channel,omitempty"`                                                  //{ "origin":"channel" }
+	Status        int32                  `protobuf:"varint,5,opt,name=status,proto3" json:"status,omitempty"`                                                   //{ "origin":"status" }
+	ErrMsg        string                 `protobuf:"bytes,6,opt,name=err_msg,json=errMsg,proto3" json:"err_msg,omitempty"`                                      //{ "origin":"err_msg" }
+	Scene         int32                  `protobuf:"varint,7,opt,name=scene,proto3" json:"scene,omitempty"`                                                     //{ "origin":"scene" }
+	Amount        int64                  `protobuf:"varint,8,opt,name=amount,proto3" json:"amount,omitempty"`                                                   //{ "origin":"amount" }
+	Rewards       []byte                 `protobuf:"bytes,9,opt,name=rewards,proto3" json:"rewards,omitempty" gorm:"type:jsonb;column:rewards;serializer:json"` //{ "json":"type:jsonb;column:rewards;serializer:json", "origin":"rewards" }
+	CreatedAt     int64                  `protobuf:"varint,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                           //{ "origin":"created_at" }
+	FinishAt      int64                  `protobuf:"varint,11,opt,name=finish_at,json=finishAt,proto3" json:"finish_at,omitempty"`                              //{ "origin":"finish_at" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PaymentOrder) Reset() {
+	*x = PaymentOrder{}
+	mi := &file_pg_tables_proto_msgTypes[35]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PaymentOrder) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PaymentOrder) ProtoMessage() {}
+
+func (x *PaymentOrder) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[35]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PaymentOrder.ProtoReflect.Descriptor instead.
+func (*PaymentOrder) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{35}
+}
+
+func (x *PaymentOrder) GetOrderId() int64 {
+	if x != nil {
+		return x.OrderId
+	}
+	return 0
+}
+
+func (x *PaymentOrder) GetGiftCid() int32 {
+	if x != nil {
+		return x.GiftCid
+	}
+	return 0
+}
+
+func (x *PaymentOrder) GetParam() string {
+	if x != nil {
+		return x.Param
+	}
+	return ""
+}
+
+func (x *PaymentOrder) GetChannel() string {
+	if x != nil {
+		return x.Channel
+	}
+	return ""
+}
+
+func (x *PaymentOrder) GetStatus() int32 {
+	if x != nil {
+		return x.Status
+	}
+	return 0
+}
+
+func (x *PaymentOrder) GetErrMsg() string {
+	if x != nil {
+		return x.ErrMsg
+	}
+	return ""
+}
+
+func (x *PaymentOrder) GetScene() int32 {
+	if x != nil {
+		return x.Scene
+	}
+	return 0
+}
+
+func (x *PaymentOrder) GetAmount() int64 {
+	if x != nil {
+		return x.Amount
+	}
+	return 0
+}
+
+func (x *PaymentOrder) GetRewards() []byte {
+	if x != nil {
+		return x.Rewards
+	}
+	return nil
+}
+
+func (x *PaymentOrder) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+func (x *PaymentOrder) GetFinishAt() int64 {
+	if x != nil {
+		return x.FinishAt
+	}
+	return 0
+}
+
+// PaymentOrderInfo
+// PostgreSQL表结构定义
+type PaymentOrderInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PaymentOrder  []byte                 `protobuf:"bytes,1,opt,name=payment_order,json=paymentOrder,proto3" json:"payment_order,omitempty" gorm:"type:jsonb;column:payment_order;serializer:json"` //{ "json":"type:jsonb;column:payment_order;serializer:json", "origin":"payment_order" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PaymentOrderInfo) Reset() {
+	*x = PaymentOrderInfo{}
+	mi := &file_pg_tables_proto_msgTypes[36]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PaymentOrderInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PaymentOrderInfo) ProtoMessage() {}
+
+func (x *PaymentOrderInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[36]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PaymentOrderInfo.ProtoReflect.Descriptor instead.
+func (*PaymentOrderInfo) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{36}
+}
+
+func (x *PaymentOrderInfo) GetPaymentOrder() []byte {
+	if x != nil {
+		return x.PaymentOrder
+	}
+	return nil
+}
+
+// ShopGoodsPurchaseLog
+// PostgreSQL表结构定义
+type ShopGoodsPurchaseLog struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	ConfigId        int32                  `protobuf:"varint,1,opt,name=config_id,json=configId,proto3" json:"config_id,omitempty"`                        //{ "origin":"config_id" }
+	Num             int32                  `protobuf:"varint,2,opt,name=num,proto3" json:"num,omitempty"`                                                  //{ "origin":"num" }
+	RechargeOrderId int32                  `protobuf:"varint,3,opt,name=recharge_order_id,json=rechargeOrderId,proto3" json:"recharge_order_id,omitempty"` //{ "origin":"recharge_order_id" }
+	HasStorage      bool                   `protobuf:"varint,4,opt,name=has_storage,json=hasStorage,proto3" json:"has_storage,omitempty"`                  //{ "origin":"has_storage" }
+	CreatedAt       int64                  `protobuf:"varint,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                     //{ "origin":"created_at" }
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *ShopGoodsPurchaseLog) Reset() {
+	*x = ShopGoodsPurchaseLog{}
+	mi := &file_pg_tables_proto_msgTypes[37]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ShopGoodsPurchaseLog) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ShopGoodsPurchaseLog) ProtoMessage() {}
+
+func (x *ShopGoodsPurchaseLog) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[37]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ShopGoodsPurchaseLog.ProtoReflect.Descriptor instead.
+func (*ShopGoodsPurchaseLog) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{37}
+}
+
+func (x *ShopGoodsPurchaseLog) GetConfigId() int32 {
+	if x != nil {
+		return x.ConfigId
+	}
+	return 0
+}
+
+func (x *ShopGoodsPurchaseLog) GetNum() int32 {
+	if x != nil {
+		return x.Num
+	}
+	return 0
+}
+
+func (x *ShopGoodsPurchaseLog) GetRechargeOrderId() int32 {
+	if x != nil {
+		return x.RechargeOrderId
+	}
+	return 0
+}
+
+func (x *ShopGoodsPurchaseLog) GetHasStorage() bool {
+	if x != nil {
+		return x.HasStorage
+	}
+	return false
+}
+
+func (x *ShopGoodsPurchaseLog) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+// StorageGoods
+// PostgreSQL表结构定义
+type StorageGoods struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	ConfigId       int32                  `protobuf:"varint,1,opt,name=config_id,json=configId,proto3" json:"config_id,omitempty"`                     //{ "origin":"config_id" }
+	Num            int32                  `protobuf:"varint,2,opt,name=num,proto3" json:"num,omitempty"`                                               //{ "origin":"num" }
+	PreStorageTime int64                  `protobuf:"varint,3,opt,name=pre_storage_time,json=preStorageTime,proto3" json:"pre_storage_time,omitempty"` //{ "origin":"pre_storage_time" }
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *StorageGoods) Reset() {
+	*x = StorageGoods{}
+	mi := &file_pg_tables_proto_msgTypes[38]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StorageGoods) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StorageGoods) ProtoMessage() {}
+
+func (x *StorageGoods) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[38]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StorageGoods.ProtoReflect.Descriptor instead.
+func (*StorageGoods) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{38}
+}
+
+func (x *StorageGoods) GetConfigId() int32 {
+	if x != nil {
+		return x.ConfigId
+	}
+	return 0
+}
+
+func (x *StorageGoods) GetNum() int32 {
+	if x != nil {
+		return x.Num
+	}
+	return 0
+}
+
+func (x *StorageGoods) GetPreStorageTime() int64 {
+	if x != nil {
+		return x.PreStorageTime
+	}
+	return 0
+}
+
+// DiamondShopGoodsPurchaseLog
+// PostgreSQL表结构定义
+type DiamondShopGoodsPurchaseLog struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	ConfigId        int32                  `protobuf:"varint,1,opt,name=config_id,json=configId,proto3" json:"config_id,omitempty"`                        //{ "origin":"config_id" }
+	RechargeOrderId int64                  `protobuf:"varint,2,opt,name=recharge_order_id,json=rechargeOrderId,proto3" json:"recharge_order_id,omitempty"` //{ "origin":"recharge_order_id" }
+	CreatedAt       int64                  `protobuf:"varint,3,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                     //{ "origin":"created_at" }
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *DiamondShopGoodsPurchaseLog) Reset() {
+	*x = DiamondShopGoodsPurchaseLog{}
+	mi := &file_pg_tables_proto_msgTypes[39]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DiamondShopGoodsPurchaseLog) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DiamondShopGoodsPurchaseLog) ProtoMessage() {}
+
+func (x *DiamondShopGoodsPurchaseLog) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[39]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DiamondShopGoodsPurchaseLog.ProtoReflect.Descriptor instead.
+func (*DiamondShopGoodsPurchaseLog) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{39}
+}
+
+func (x *DiamondShopGoodsPurchaseLog) GetConfigId() int32 {
+	if x != nil {
+		return x.ConfigId
+	}
+	return 0
+}
+
+func (x *DiamondShopGoodsPurchaseLog) GetRechargeOrderId() int64 {
+	if x != nil {
+		return x.RechargeOrderId
+	}
+	return 0
+}
+
+func (x *DiamondShopGoodsPurchaseLog) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+// GiftPurchaseLog
+// PostgreSQL表结构定义
+type GiftPurchaseLog struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	ConfigId        int32                  `protobuf:"varint,1,opt,name=config_id,json=configId,proto3" json:"config_id,omitempty"`                                                                   //{ "origin":"config_id" }
+	GiftType        int32                  `protobuf:"varint,2,opt,name=gift_type,json=giftType,proto3" json:"gift_type,omitempty"`                                                                   //{ "origin":"gift_type" }
+	RechargeOrderId int32                  `protobuf:"varint,3,opt,name=recharge_order_id,json=rechargeOrderId,proto3" json:"recharge_order_id,omitempty"`                                            //{ "origin":"recharge_order_id" }
+	RewardStatus    []byte                 `protobuf:"bytes,4,opt,name=reward_status,json=rewardStatus,proto3" json:"reward_status,omitempty" gorm:"type:jsonb;column:reward_status;serializer:json"` //{ "json":"type:jsonb;column:reward_status;serializer:json", "origin":"reward_status" }
+	CreatedAt       int64                  `protobuf:"varint,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                                                                //{ "origin":"created_at" }
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *GiftPurchaseLog) Reset() {
+	*x = GiftPurchaseLog{}
+	mi := &file_pg_tables_proto_msgTypes[40]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GiftPurchaseLog) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GiftPurchaseLog) ProtoMessage() {}
+
+func (x *GiftPurchaseLog) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[40]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GiftPurchaseLog.ProtoReflect.Descriptor instead.
+func (*GiftPurchaseLog) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{40}
+}
+
+func (x *GiftPurchaseLog) GetConfigId() int32 {
+	if x != nil {
+		return x.ConfigId
+	}
+	return 0
+}
+
+func (x *GiftPurchaseLog) GetGiftType() int32 {
+	if x != nil {
+		return x.GiftType
+	}
+	return 0
+}
+
+func (x *GiftPurchaseLog) GetRechargeOrderId() int32 {
+	if x != nil {
+		return x.RechargeOrderId
+	}
+	return 0
+}
+
+func (x *GiftPurchaseLog) GetRewardStatus() []byte {
+	if x != nil {
+		return x.RewardStatus
+	}
+	return nil
+}
+
+func (x *GiftPurchaseLog) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+// ShopGoodsInfo
+// PostgreSQL表结构定义
+type ShopGoodsInfo struct {
+	state                       protoimpl.MessageState `protogen:"open.v1"`
+	ShopGoodsPurchaseLog        []byte                 `protobuf:"bytes,1,opt,name=shop_goods_purchase_log,json=shopGoodsPurchaseLog,proto3" json:"shop_goods_purchase_log,omitempty" gorm:"type:jsonb;column:shop_goods_purchase_log;serializer:json"`                                //{ "json":"type:jsonb;column:shop_goods_purchase_log;serializer:json", "origin":"shop_goods_purchase_log" }
+	StorageGoods                []byte                 `protobuf:"bytes,2,opt,name=storage_goods,json=storageGoods,proto3" json:"storage_goods,omitempty" gorm:"type:jsonb;column:storage_goods;serializer:json"`                                                                      //{ "json":"type:jsonb;column:storage_goods;serializer:json", "origin":"storage_goods" }
+	DiamondShopGoodsPurchaseLog []byte                 `protobuf:"bytes,3,opt,name=diamond_shop_goods_purchase_log,json=diamondShopGoodsPurchaseLog,proto3" json:"diamond_shop_goods_purchase_log,omitempty" gorm:"type:jsonb;column:diamond_shop_goods_purchase_log;serializer:json"` //{ "json":"type:jsonb;column:diamond_shop_goods_purchase_log;serializer:json", "origin":"diamond_shop_goods_purchase_log" }
+	GiftPurchaseLog             []byte                 `protobuf:"bytes,4,opt,name=gift_purchase_log,json=giftPurchaseLog,proto3" json:"gift_purchase_log,omitempty" gorm:"type:jsonb;column:gift_purchase_log;serializer:json"`                                                       //{ "json":"type:jsonb;column:gift_purchase_log;serializer:json", "origin":"gift_purchase_log" }
+	unknownFields               protoimpl.UnknownFields
+	sizeCache                   protoimpl.SizeCache
+}
+
+func (x *ShopGoodsInfo) Reset() {
+	*x = ShopGoodsInfo{}
+	mi := &file_pg_tables_proto_msgTypes[41]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ShopGoodsInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ShopGoodsInfo) ProtoMessage() {}
+
+func (x *ShopGoodsInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[41]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ShopGoodsInfo.ProtoReflect.Descriptor instead.
+func (*ShopGoodsInfo) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{41}
+}
+
+func (x *ShopGoodsInfo) GetShopGoodsPurchaseLog() []byte {
+	if x != nil {
+		return x.ShopGoodsPurchaseLog
+	}
+	return nil
+}
+
+func (x *ShopGoodsInfo) GetStorageGoods() []byte {
+	if x != nil {
+		return x.StorageGoods
+	}
+	return nil
+}
+
+func (x *ShopGoodsInfo) GetDiamondShopGoodsPurchaseLog() []byte {
+	if x != nil {
+		return x.DiamondShopGoodsPurchaseLog
+	}
+	return nil
+}
+
+func (x *ShopGoodsInfo) GetGiftPurchaseLog() []byte {
+	if x != nil {
+		return x.GiftPurchaseLog
+	}
+	return nil
+}
+
+// PostgreSQL表结构定义
+type DrawGachaLog struct {
+	state                             protoimpl.MessageState `protogen:"open.v1"`
+	ConfigId                          int32                  `protobuf:"varint,1,opt,name=config_id,json=configId,proto3" json:"config_id,omitempty"`                                                                                    //{ "origin":"config_id" }
+	Count                             int64                  `protobuf:"varint,2,opt,name=count,proto3" json:"count,omitempty"`                                                                                                          //{ "origin":"count" }
+	MinimumGuaranteeLoopPlan1Count    int64                  `protobuf:"varint,3,opt,name=minimum_guarantee_loop_plan1_count,json=minimumGuaranteeLoopPlan1Count,proto3" json:"minimum_guarantee_loop_plan1_count,omitempty"`            //{ "origin":"minimum_guarantee_loop_plan1_count" }
+	CurrentLoopPlan1Count             int64                  `protobuf:"varint,4,opt,name=current_loop_plan1_count,json=currentLoopPlan1Count,proto3" json:"current_loop_plan1_count,omitempty"`                                         //{ "origin":"current_loop_plan1_count" }
+	MinimumGuaranteeLoopPlan2Count    int64                  `protobuf:"varint,5,opt,name=minimum_guarantee_loop_plan2_count,json=minimumGuaranteeLoopPlan2Count,proto3" json:"minimum_guarantee_loop_plan2_count,omitempty"`            //{ "origin":"minimum_guarantee_loop_plan2_count" }
+	CurrentLoopPlan2Count             int64                  `protobuf:"varint,6,opt,name=current_loop_plan2_count,json=currentLoopPlan2Count,proto3" json:"current_loop_plan2_count,omitempty"`                                         //{ "origin":"current_loop_plan2_count" }
+	OnceLimitMinimumGuaranteeLoopPlan int64                  `protobuf:"varint,7,opt,name=once_limit_minimum_guarantee_loop_plan,json=onceLimitMinimumGuaranteeLoopPlan,proto3" json:"once_limit_minimum_guarantee_loop_plan,omitempty"` //{ "origin":"once_limit_minimum_guarantee_loop_plan" }
+	OnceLimitGetCount                 int32                  `protobuf:"varint,8,opt,name=once_limit_get_count,json=onceLimitGetCount,proto3" json:"once_limit_get_count,omitempty"`                                                     //{ "origin":"once_limit_get_count" }
+	IsInit                            bool                   `protobuf:"varint,9,opt,name=is_init,json=isInit,proto3" json:"is_init,omitempty"`                                                                                          //{ "origin":"is_init" }
+	CreatedAt                         int64                  `protobuf:"varint,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                                                                                //{ "origin":"created_at" }
+	unknownFields                     protoimpl.UnknownFields
+	sizeCache                         protoimpl.SizeCache
+}
+
+func (x *DrawGachaLog) Reset() {
+	*x = DrawGachaLog{}
+	mi := &file_pg_tables_proto_msgTypes[42]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DrawGachaLog) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DrawGachaLog) ProtoMessage() {}
+
+func (x *DrawGachaLog) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[42]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DrawGachaLog.ProtoReflect.Descriptor instead.
+func (*DrawGachaLog) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{42}
+}
+
+func (x *DrawGachaLog) GetConfigId() int32 {
+	if x != nil {
+		return x.ConfigId
+	}
+	return 0
+}
+
+func (x *DrawGachaLog) GetCount() int64 {
+	if x != nil {
+		return x.Count
+	}
+	return 0
+}
+
+func (x *DrawGachaLog) GetMinimumGuaranteeLoopPlan1Count() int64 {
+	if x != nil {
+		return x.MinimumGuaranteeLoopPlan1Count
+	}
+	return 0
+}
+
+func (x *DrawGachaLog) GetCurrentLoopPlan1Count() int64 {
+	if x != nil {
+		return x.CurrentLoopPlan1Count
+	}
+	return 0
+}
+
+func (x *DrawGachaLog) GetMinimumGuaranteeLoopPlan2Count() int64 {
+	if x != nil {
+		return x.MinimumGuaranteeLoopPlan2Count
+	}
+	return 0
+}
+
+func (x *DrawGachaLog) GetCurrentLoopPlan2Count() int64 {
+	if x != nil {
+		return x.CurrentLoopPlan2Count
+	}
+	return 0
+}
+
+func (x *DrawGachaLog) GetOnceLimitMinimumGuaranteeLoopPlan() int64 {
+	if x != nil {
+		return x.OnceLimitMinimumGuaranteeLoopPlan
+	}
+	return 0
+}
+
+func (x *DrawGachaLog) GetOnceLimitGetCount() int32 {
+	if x != nil {
+		return x.OnceLimitGetCount
+	}
+	return 0
+}
+
+func (x *DrawGachaLog) GetIsInit() bool {
+	if x != nil {
+		return x.IsInit
+	}
+	return false
+}
+
+func (x *DrawGachaLog) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+// LotteryHoroscope
+// PostgreSQL表结构定义
+type LotteryHoroscope struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Uuid          int64                  `protobuf:"varint,1,opt,name=uuid,proto3" json:"uuid,omitempty"`                                                                                                  //{ "origin":"uuid" }
+	BeenDrawnList []byte                 `protobuf:"bytes,2,opt,name=been_drawn_list,json=beenDrawnList,proto3" json:"been_drawn_list,omitempty" gorm:"type:jsonb;column:been_drawn_list;serializer:json"` //{ "json":"type:jsonb;column:been_drawn_list;serializer:json", "origin":"been_drawn_list" }
+	TurnCount     int32                  `protobuf:"varint,3,opt,name=turn_count,json=turnCount,proto3" json:"turn_count,omitempty"`                                                                       //{ "origin":"turn_count" }
+	ActId         int32                  `protobuf:"varint,4,opt,name=act_id,json=actId,proto3" json:"act_id,omitempty"`                                                                                   //{ "origin":"act_id" }
+	Level         int32                  `protobuf:"varint,5,opt,name=level,proto3" json:"level,omitempty"`                                                                                                //{ "origin":"level" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LotteryHoroscope) Reset() {
+	*x = LotteryHoroscope{}
+	mi := &file_pg_tables_proto_msgTypes[43]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LotteryHoroscope) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LotteryHoroscope) ProtoMessage() {}
+
+func (x *LotteryHoroscope) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[43]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LotteryHoroscope.ProtoReflect.Descriptor instead.
+func (*LotteryHoroscope) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{43}
+}
+
+func (x *LotteryHoroscope) GetUuid() int64 {
+	if x != nil {
+		return x.Uuid
+	}
+	return 0
+}
+
+func (x *LotteryHoroscope) GetBeenDrawnList() []byte {
+	if x != nil {
+		return x.BeenDrawnList
+	}
+	return nil
+}
+
+func (x *LotteryHoroscope) GetTurnCount() int32 {
+	if x != nil {
+		return x.TurnCount
+	}
+	return 0
+}
+
+func (x *LotteryHoroscope) GetActId() int32 {
+	if x != nil {
+		return x.ActId
+	}
+	return 0
+}
+
+func (x *LotteryHoroscope) GetLevel() int32 {
+	if x != nil {
+		return x.Level
+	}
+	return 0
+}
+
+// LuckyDraw
+// PostgreSQL表结构定义
+type LuckyDraw struct {
+	state                  protoimpl.MessageState `protogen:"open.v1"`
+	Uuid                   int64                  `protobuf:"varint,1,opt,name=uuid,proto3" json:"uuid,omitempty"`                                                                                                                                         //{ "origin":"uuid" }
+	ActId                  int32                  `protobuf:"varint,2,opt,name=act_id,json=actId,proto3" json:"act_id,omitempty"`                                                                                                                          //{ "origin":"act_id" }
+	Level                  int32                  `protobuf:"varint,3,opt,name=level,proto3" json:"level,omitempty"`                                                                                                                                       //{ "origin":"level" }
+	LuckValue              int32                  `protobuf:"varint,4,opt,name=luck_value,json=luckValue,proto3" json:"luck_value,omitempty"`                                                                                                              //{ "origin":"luck_value" }
+	LastFreeTime           int64                  `protobuf:"varint,5,opt,name=last_free_time,json=lastFreeTime,proto3" json:"last_free_time,omitempty"`                                                                                                   //{ "origin":"last_free_time" }
+	DrawCount              int32                  `protobuf:"varint,6,opt,name=draw_count,json=drawCount,proto3" json:"draw_count,omitempty"`                                                                                                              //{ "origin":"draw_count" }
+	DrawCountRewardRecords []byte                 `protobuf:"bytes,7,opt,name=draw_count_reward_records,json=drawCountRewardRecords,proto3" json:"draw_count_reward_records,omitempty" gorm:"type:jsonb;column:draw_count_reward_records;serializer:json"` //{ "json":"type:jsonb;column:draw_count_reward_records;serializer:json", "origin":"draw_count_reward_records" }
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
+}
+
+func (x *LuckyDraw) Reset() {
+	*x = LuckyDraw{}
+	mi := &file_pg_tables_proto_msgTypes[44]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LuckyDraw) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LuckyDraw) ProtoMessage() {}
+
+func (x *LuckyDraw) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[44]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LuckyDraw.ProtoReflect.Descriptor instead.
+func (*LuckyDraw) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{44}
+}
+
+func (x *LuckyDraw) GetUuid() int64 {
+	if x != nil {
+		return x.Uuid
+	}
+	return 0
+}
+
+func (x *LuckyDraw) GetActId() int32 {
+	if x != nil {
+		return x.ActId
+	}
+	return 0
+}
+
+func (x *LuckyDraw) GetLevel() int32 {
+	if x != nil {
+		return x.Level
+	}
+	return 0
+}
+
+func (x *LuckyDraw) GetLuckValue() int32 {
+	if x != nil {
+		return x.LuckValue
+	}
+	return 0
+}
+
+func (x *LuckyDraw) GetLastFreeTime() int64 {
+	if x != nil {
+		return x.LastFreeTime
+	}
+	return 0
+}
+
+func (x *LuckyDraw) GetDrawCount() int32 {
+	if x != nil {
+		return x.DrawCount
+	}
+	return 0
+}
+
+func (x *LuckyDraw) GetDrawCountRewardRecords() []byte {
+	if x != nil {
+		return x.DrawCountRewardRecords
+	}
+	return nil
+}
+
+// GradedFund
+// PostgreSQL表结构定义
+type GradedFund struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Level         int32                  `protobuf:"varint,1,opt,name=level,proto3" json:"level,omitempty"`                                                            //{ "origin":"level" }
+	GotStatus     []byte                 `protobuf:"bytes,2,opt,name=GotStatus,proto3" json:"GotStatus,omitempty" gorm:"type:jsonb;column:got_status;serializer:json"` //{ "json":"type:jsonb;column:got_status;serializer:json", "origin":"GotStatus" }
+	UnlockFlag    int32                  `protobuf:"varint,3,opt,name=unlock_flag,json=unlockFlag,proto3" json:"unlock_flag,omitempty"`                                //{ "origin":"unlock_flag" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GradedFund) Reset() {
+	*x = GradedFund{}
+	mi := &file_pg_tables_proto_msgTypes[45]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GradedFund) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GradedFund) ProtoMessage() {}
+
+func (x *GradedFund) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[45]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GradedFund.ProtoReflect.Descriptor instead.
+func (*GradedFund) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{45}
+}
+
+func (x *GradedFund) GetLevel() int32 {
+	if x != nil {
+		return x.Level
+	}
+	return 0
+}
+
+func (x *GradedFund) GetGotStatus() []byte {
+	if x != nil {
+		return x.GotStatus
+	}
+	return nil
+}
+
+func (x *GradedFund) GetUnlockFlag() int32 {
+	if x != nil {
+		return x.UnlockFlag
+	}
+	return 0
+}
+
+// LevelGift
+// PostgreSQL表结构定义
+type LevelGift struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	PurchaseRecord []byte                 `protobuf:"bytes,1,opt,name=purchase_record,json=purchaseRecord,proto3" json:"purchase_record,omitempty" gorm:"type:jsonb;column:purchase_record;serializer:json"` //{ "json":"type:jsonb;column:purchase_record;serializer:json", "origin":"purchase_record" }
+	MaxStage       int32                  `protobuf:"varint,2,opt,name=max_stage,json=maxStage,proto3" json:"max_stage,omitempty"`                                                                           //{ "origin":"max_stage" }
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *LevelGift) Reset() {
+	*x = LevelGift{}
+	mi := &file_pg_tables_proto_msgTypes[46]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LevelGift) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LevelGift) ProtoMessage() {}
+
+func (x *LevelGift) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[46]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LevelGift.ProtoReflect.Descriptor instead.
+func (*LevelGift) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{46}
+}
+
+func (x *LevelGift) GetPurchaseRecord() []byte {
+	if x != nil {
+		return x.PurchaseRecord
+	}
+	return nil
+}
+
+func (x *LevelGift) GetMaxStage() int32 {
+	if x != nil {
+		return x.MaxStage
+	}
+	return 0
+}
+
+// DailyRechargeRewardGotStatus
+// PostgreSQL表结构定义
+type DailyRechargeRewardGotStatus struct {
+	state                   protoimpl.MessageState `protogen:"open.v1"`
+	CurrentDayNo            int32                  `protobuf:"varint,1,opt,name=current_day_no,json=currentDayNo,proto3" json:"current_day_no,omitempty"`                                                                                                       //{ "origin":"current_day_no" }
+	CurrentDiamondNum       int32                  `protobuf:"varint,2,opt,name=current_diamond_num,json=currentDiamondNum,proto3" json:"current_diamond_num,omitempty"`                                                                                        //{ "origin":"current_diamond_num" }
+	AccumulativeDaysGotList []byte                 `protobuf:"bytes,3,opt,name=accumulative_days_got_list,json=accumulativeDaysGotList,proto3" json:"accumulative_days_got_list,omitempty" gorm:"type:jsonb;column:accumulative_days_got_list;serializer:json"` //{ "json":"type:jsonb;column:accumulative_days_got_list;serializer:json", "origin":"accumulative_days_got_list" }
+	DiamondLevelGetStatus   []byte                 `protobuf:"bytes,4,opt,name=diamond_level_get_status,json=diamondLevelGetStatus,proto3" json:"diamond_level_get_status,omitempty" gorm:"type:jsonb;column:diamond_level_get_status;serializer:json"`         //{ "json":"type:jsonb;column:diamond_level_get_status;serializer:json", "origin":"diamond_level_get_status" }
+	CurrentDayTime          int64                  `protobuf:"varint,5,opt,name=current_day_time,json=currentDayTime,proto3" json:"current_day_time,omitempty"`                                                                                                 //{ "origin":"current_day_time" }
+	unknownFields           protoimpl.UnknownFields
+	sizeCache               protoimpl.SizeCache
+}
+
+func (x *DailyRechargeRewardGotStatus) Reset() {
+	*x = DailyRechargeRewardGotStatus{}
+	mi := &file_pg_tables_proto_msgTypes[47]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DailyRechargeRewardGotStatus) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DailyRechargeRewardGotStatus) ProtoMessage() {}
+
+func (x *DailyRechargeRewardGotStatus) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[47]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DailyRechargeRewardGotStatus.ProtoReflect.Descriptor instead.
+func (*DailyRechargeRewardGotStatus) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{47}
+}
+
+func (x *DailyRechargeRewardGotStatus) GetCurrentDayNo() int32 {
+	if x != nil {
+		return x.CurrentDayNo
+	}
+	return 0
+}
+
+func (x *DailyRechargeRewardGotStatus) GetCurrentDiamondNum() int32 {
+	if x != nil {
+		return x.CurrentDiamondNum
+	}
+	return 0
+}
+
+func (x *DailyRechargeRewardGotStatus) GetAccumulativeDaysGotList() []byte {
+	if x != nil {
+		return x.AccumulativeDaysGotList
+	}
+	return nil
+}
+
+func (x *DailyRechargeRewardGotStatus) GetDiamondLevelGetStatus() []byte {
+	if x != nil {
+		return x.DiamondLevelGetStatus
+	}
+	return nil
+}
+
+func (x *DailyRechargeRewardGotStatus) GetCurrentDayTime() int64 {
+	if x != nil {
+		return x.CurrentDayTime
+	}
+	return 0
+}
+
+// DailyRecharge
+// PostgreSQL表结构定义
+type DailyRecharge struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Uuid          int64                  `protobuf:"varint,1,opt,name=uuid,proto3" json:"uuid,omitempty"`                                                                                           //{ "origin":"uuid" }
+	RewardStatus  []byte                 `protobuf:"bytes,2,opt,name=reward_status,json=rewardStatus,proto3" json:"reward_status,omitempty" gorm:"type:jsonb;column:reward_status;serializer:json"` //{ "json":"type:jsonb;column:reward_status;serializer:json", "origin":"reward_status" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DailyRecharge) Reset() {
+	*x = DailyRecharge{}
+	mi := &file_pg_tables_proto_msgTypes[48]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DailyRecharge) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DailyRecharge) ProtoMessage() {}
+
+func (x *DailyRecharge) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[48]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DailyRecharge.ProtoReflect.Descriptor instead.
+func (*DailyRecharge) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{48}
+}
+
+func (x *DailyRecharge) GetUuid() int64 {
+	if x != nil {
+		return x.Uuid
+	}
+	return 0
+}
+
+func (x *DailyRecharge) GetRewardStatus() []byte {
+	if x != nil {
+		return x.RewardStatus
+	}
+	return nil
+}
+
+// CumulativeRecharge
+// PostgreSQL表结构定义
+type CumulativeRecharge struct {
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	CurrentRechargeNum int32                  `protobuf:"varint,1,opt,name=current_recharge_num,json=currentRechargeNum,proto3" json:"current_recharge_num,omitempty"`               //{ "origin":"current_recharge_num" }
+	GotList            []byte                 `protobuf:"bytes,2,opt,name=got_list,json=gotList,proto3" json:"got_list,omitempty" gorm:"type:jsonb;column:got_list;serializer:json"` //{ "json":"type:jsonb;column:got_list;serializer:json", "origin":"got_list" }
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *CumulativeRecharge) Reset() {
+	*x = CumulativeRecharge{}
+	mi := &file_pg_tables_proto_msgTypes[49]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CumulativeRecharge) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CumulativeRecharge) ProtoMessage() {}
+
+func (x *CumulativeRecharge) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[49]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CumulativeRecharge.ProtoReflect.Descriptor instead.
+func (*CumulativeRecharge) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{49}
+}
+
+func (x *CumulativeRecharge) GetCurrentRechargeNum() int32 {
+	if x != nil {
+		return x.CurrentRechargeNum
+	}
+	return 0
+}
+
+func (x *CumulativeRecharge) GetGotList() []byte {
+	if x != nil {
+		return x.GotList
+	}
+	return nil
+}
+
+// ActivityInfo
+// PostgreSQL表结构定义
+type ActivityInfo struct {
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	LotteryHoroscope   []byte                 `protobuf:"bytes,1,opt,name=lottery_horoscope,json=lotteryHoroscope,proto3" json:"lottery_horoscope,omitempty" gorm:"type:jsonb;column:lottery_horoscope;serializer:json"`         //{ "json":"type:jsonb;column:lottery_horoscope;serializer:json", "origin":"lottery_horoscope" }
+	LuckyDraw          []byte                 `protobuf:"bytes,2,opt,name=lucky_draw,json=luckyDraw,proto3" json:"lucky_draw,omitempty" gorm:"type:jsonb;column:lucky_draw;serializer:json"`                                     //{ "json":"type:jsonb;column:lucky_draw;serializer:json", "origin":"lucky_draw" }
+	GradedFund         []byte                 `protobuf:"bytes,3,opt,name=graded_fund,json=gradedFund,proto3" json:"graded_fund,omitempty" gorm:"type:jsonb;column:graded_fund;serializer:json"`                                 //{ "json":"type:jsonb;column:graded_fund;serializer:json", "origin":"graded_fund" }
+	DailyRecharge      []byte                 `protobuf:"bytes,4,opt,name=daily_recharge,json=dailyRecharge,proto3" json:"daily_recharge,omitempty" gorm:"type:jsonb;column:daily_recharge;serializer:json"`                     //{ "json":"type:jsonb;column:daily_recharge;serializer:json", "origin":"daily_recharge" }
+	LevelGift          []byte                 `protobuf:"bytes,5,opt,name=level_gift,json=levelGift,proto3" json:"level_gift,omitempty" gorm:"type:jsonb;column:level_gift;serializer:json"`                                     //{ "json":"type:jsonb;column:level_gift;serializer:json", "origin":"level_gift" }
+	CumulativeRecharge []byte                 `protobuf:"bytes,6,opt,name=cumulative_recharge,json=cumulativeRecharge,proto3" json:"cumulative_recharge,omitempty" gorm:"type:jsonb;column:cumulative_recharge;serializer:json"` //{ "json":"type:jsonb;column:cumulative_recharge;serializer:json", "origin":"cumulative_recharge" }
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *ActivityInfo) Reset() {
+	*x = ActivityInfo{}
+	mi := &file_pg_tables_proto_msgTypes[50]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ActivityInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ActivityInfo) ProtoMessage() {}
+
+func (x *ActivityInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[50]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ActivityInfo.ProtoReflect.Descriptor instead.
+func (*ActivityInfo) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{50}
+}
+
+func (x *ActivityInfo) GetLotteryHoroscope() []byte {
+	if x != nil {
+		return x.LotteryHoroscope
+	}
+	return nil
+}
+
+func (x *ActivityInfo) GetLuckyDraw() []byte {
+	if x != nil {
+		return x.LuckyDraw
+	}
+	return nil
+}
+
+func (x *ActivityInfo) GetGradedFund() []byte {
+	if x != nil {
+		return x.GradedFund
+	}
+	return nil
+}
+
+func (x *ActivityInfo) GetDailyRecharge() []byte {
+	if x != nil {
+		return x.DailyRecharge
+	}
+	return nil
+}
+
+func (x *ActivityInfo) GetLevelGift() []byte {
+	if x != nil {
+		return x.LevelGift
+	}
+	return nil
+}
+
+func (x *ActivityInfo) GetCumulativeRecharge() []byte {
+	if x != nil {
+		return x.CumulativeRecharge
+	}
+	return nil
+}
+
+// Mail
+// PostgreSQL表结构定义
+type Mail struct {
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	Id               int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                                                                       //{ "origin":"id" }
+	Cid              int32                  `protobuf:"varint,2,opt,name=cid,proto3" json:"cid,omitempty"`                                                                     //{ "origin":"cid" }
+	Title            string                 `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`                                                                  //{ "origin":"title" }
+	Sender           string                 `protobuf:"bytes,4,opt,name=sender,proto3" json:"sender,omitempty"`                                                                //{ "origin":"sender" }
+	Content          string                 `protobuf:"bytes,5,opt,name=content,proto3" json:"content,omitempty"`                                                              //{ "origin":"content" }
+	Attachments      []byte                 `protobuf:"bytes,6,opt,name=attachments,proto3" json:"attachments,omitempty" gorm:"type:jsonb;column:attachments;serializer:json"` //{ "json":"type:jsonb;column:attachments;serializer:json", "origin":"attachments" }
+	Status           int32                  `protobuf:"varint,7,opt,name=status,proto3" json:"status,omitempty"`                                                               //{ "origin":"status" }
+	Types            int32                  `protobuf:"varint,8,opt,name=types,proto3" json:"types,omitempty"`                                                                 //{ "origin":"types" }
+	SendingTimestamp int64                  `protobuf:"varint,9,opt,name=sending_timestamp,json=sendingTimestamp,proto3" json:"sending_timestamp,omitempty"`                   //{ "origin":"sending_timestamp" }
+	LastSend         int64                  `protobuf:"varint,10,opt,name=last_send,json=lastSend,proto3" json:"last_send,omitempty"`                                          //{ "origin":"last_send" }
+	From             int64                  `protobuf:"varint,11,opt,name=from,proto3" json:"from,omitempty"`                                                                  //{ "origin":"from" }
+	ExpiredTime      int64                  `protobuf:"varint,12,opt,name=expired_time,json=expiredTime,proto3" json:"expired_time,omitempty"`                                 //{ "origin":"expired_time" }
+	DeleteTime       int64                  `protobuf:"varint,13,opt,name=delete_time,json=deleteTime,proto3" json:"delete_time,omitempty"`                                    //{ "origin":"delete_time" }
+	CreatedAt        int64                  `protobuf:"varint,14,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                                       //{ "origin":"created_at" }
+	Extend           string                 `protobuf:"bytes,15,opt,name=extend,proto3" json:"extend,omitempty"`                                                               //{ "origin":"extend" }
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *Mail) Reset() {
+	*x = Mail{}
+	mi := &file_pg_tables_proto_msgTypes[51]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Mail) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Mail) ProtoMessage() {}
+
+func (x *Mail) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[51]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Mail.ProtoReflect.Descriptor instead.
+func (*Mail) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{51}
+}
+
+func (x *Mail) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Mail) GetCid() int32 {
+	if x != nil {
+		return x.Cid
+	}
+	return 0
+}
+
+func (x *Mail) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+func (x *Mail) GetSender() string {
+	if x != nil {
+		return x.Sender
+	}
+	return ""
+}
+
+func (x *Mail) GetContent() string {
+	if x != nil {
+		return x.Content
+	}
+	return ""
+}
+
+func (x *Mail) GetAttachments() []byte {
+	if x != nil {
+		return x.Attachments
+	}
+	return nil
+}
+
+func (x *Mail) GetStatus() int32 {
+	if x != nil {
+		return x.Status
+	}
+	return 0
+}
+
+func (x *Mail) GetTypes() int32 {
+	if x != nil {
+		return x.Types
+	}
+	return 0
+}
+
+func (x *Mail) GetSendingTimestamp() int64 {
+	if x != nil {
+		return x.SendingTimestamp
+	}
+	return 0
+}
+
+func (x *Mail) GetLastSend() int64 {
+	if x != nil {
+		return x.LastSend
+	}
+	return 0
+}
+
+func (x *Mail) GetFrom() int64 {
+	if x != nil {
+		return x.From
+	}
+	return 0
+}
+
+func (x *Mail) GetExpiredTime() int64 {
+	if x != nil {
+		return x.ExpiredTime
+	}
+	return 0
+}
+
+func (x *Mail) GetDeleteTime() int64 {
+	if x != nil {
+		return x.DeleteTime
+	}
+	return 0
+}
+
+func (x *Mail) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+func (x *Mail) GetExtend() string {
+	if x != nil {
+		return x.Extend
+	}
+	return ""
+}
+
+// MailLog
+// PostgreSQL表结构定义
+type MailLog struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	MailId        int64                  `protobuf:"varint,1,opt,name=mail_id,json=mailId,proto3" json:"mail_id,omitempty"`             //{ "origin":"mail_id" }
+	HasAtt        bool                   `protobuf:"varint,2,opt,name=has_att,json=hasAtt,proto3" json:"has_att,omitempty"`             //{ "origin":"has_att" }
+	Status        int32                  `protobuf:"varint,3,opt,name=status,proto3" json:"status,omitempty"`                           //{ "origin":"status" }
+	OriginTime    int64                  `protobuf:"varint,4,opt,name=origin_time,json=originTime,proto3" json:"origin_time,omitempty"` //{ "origin":"origin_time" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MailLog) Reset() {
+	*x = MailLog{}
+	mi := &file_pg_tables_proto_msgTypes[52]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MailLog) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MailLog) ProtoMessage() {}
+
+func (x *MailLog) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[52]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MailLog.ProtoReflect.Descriptor instead.
+func (*MailLog) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{52}
+}
+
+func (x *MailLog) GetMailId() int64 {
+	if x != nil {
+		return x.MailId
+	}
+	return 0
+}
+
+func (x *MailLog) GetHasAtt() bool {
+	if x != nil {
+		return x.HasAtt
+	}
+	return false
+}
+
+func (x *MailLog) GetStatus() int32 {
+	if x != nil {
+		return x.Status
+	}
+	return 0
+}
+
+func (x *MailLog) GetOriginTime() int64 {
+	if x != nil {
+		return x.OriginTime
+	}
+	return 0
+}
+
+// MailInfo
+// PostgreSQL表结构定义
+type MailInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Mail          []byte                 `protobuf:"bytes,1,opt,name=mail,proto3" json:"mail,omitempty" gorm:"type:jsonb;column:mail;serializer:json"`                          //{ "json":"type:jsonb;column:mail;serializer:json", "origin":"mail" }
+	MailLog       []byte                 `protobuf:"bytes,2,opt,name=mail_log,json=mailLog,proto3" json:"mail_log,omitempty" gorm:"type:jsonb;column:mail_log;serializer:json"` //{ "json":"type:jsonb;column:mail_log;serializer:json", "origin":"mail_log" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MailInfo) Reset() {
+	*x = MailInfo{}
+	mi := &file_pg_tables_proto_msgTypes[53]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MailInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MailInfo) ProtoMessage() {}
+
+func (x *MailInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[53]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MailInfo.ProtoReflect.Descriptor instead.
+func (*MailInfo) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{53}
+}
+
+func (x *MailInfo) GetMail() []byte {
+	if x != nil {
+		return x.Mail
+	}
+	return nil
+}
+
+func (x *MailInfo) GetMailLog() []byte {
+	if x != nil {
+		return x.MailLog
+	}
+	return nil
+}
+
+// PostgreSQL表结构定义
+type FuncOpen struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UnlockList    []byte                 `protobuf:"bytes,1,opt,name=unlock_list,json=unlockList,proto3" json:"unlock_list,omitempty" gorm:"type:jsonb;column:unlock_list;serializer:json"` //{ "json":"type:jsonb;column:unlock_list;serializer:json", "origin":"unlock_list" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FuncOpen) Reset() {
+	*x = FuncOpen{}
+	mi := &file_pg_tables_proto_msgTypes[54]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FuncOpen) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FuncOpen) ProtoMessage() {}
+
+func (x *FuncOpen) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[54]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FuncOpen.ProtoReflect.Descriptor instead.
+func (*FuncOpen) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{54}
+}
+
+func (x *FuncOpen) GetUnlockList() []byte {
+	if x != nil {
+		return x.UnlockList
+	}
+	return nil
+}
+
+// MonsterCollectItem
+// PostgreSQL表结构定义
+type MonsterCollectItem struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                                      //{ "origin":"id" }
+	CollectTime   int64                  `protobuf:"varint,2,opt,name=collect_time,json=collectTime,proto3" json:"collect_time,omitempty"` //{ "origin":"collect_time" }
+	IsGot         bool                   `protobuf:"varint,3,opt,name=is_got,json=isGot,proto3" json:"is_got,omitempty"`                   //{ "origin":"is_got" }
+	GotTime       int64                  `protobuf:"varint,4,opt,name=got_time,json=gotTime,proto3" json:"got_time,omitempty"`             //{ "origin":"got_time" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MonsterCollectItem) Reset() {
+	*x = MonsterCollectItem{}
+	mi := &file_pg_tables_proto_msgTypes[55]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MonsterCollectItem) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MonsterCollectItem) ProtoMessage() {}
+
+func (x *MonsterCollectItem) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[55]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MonsterCollectItem.ProtoReflect.Descriptor instead.
+func (*MonsterCollectItem) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{55}
+}
+
+func (x *MonsterCollectItem) GetId() int32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *MonsterCollectItem) GetCollectTime() int64 {
+	if x != nil {
+		return x.CollectTime
+	}
+	return 0
+}
+
+func (x *MonsterCollectItem) GetIsGot() bool {
+	if x != nil {
+		return x.IsGot
+	}
+	return false
+}
+
+func (x *MonsterCollectItem) GetGotTime() int64 {
+	if x != nil {
+		return x.GotTime
+	}
+	return 0
+}
+
+// MonsterCollect
+// PostgreSQL表结构定义
+type MonsterCollect struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CollectList   []byte                 `protobuf:"bytes,1,opt,name=collect_list,json=collectList,proto3" json:"collect_list,omitempty" gorm:"type:jsonb;column:collect_list;serializer:json"` //{ "json":"type:jsonb;column:collect_list;serializer:json", "origin":"collect_list" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MonsterCollect) Reset() {
+	*x = MonsterCollect{}
+	mi := &file_pg_tables_proto_msgTypes[56]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MonsterCollect) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MonsterCollect) ProtoMessage() {}
+
+func (x *MonsterCollect) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[56]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MonsterCollect.ProtoReflect.Descriptor instead.
+func (*MonsterCollect) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{56}
+}
+
+func (x *MonsterCollect) GetCollectList() []byte {
+	if x != nil {
+		return x.CollectList
+	}
+	return nil
+}
+
+// RoleOpRecord
+// PostgreSQL表结构定义
+type RoleOpRecord struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ChangeCount   int32                  `protobuf:"varint,1,opt,name=change_count,json=changeCount,proto3" json:"change_count,omitempty"` //{ "origin":"change_count" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RoleOpRecord) Reset() {
+	*x = RoleOpRecord{}
+	mi := &file_pg_tables_proto_msgTypes[57]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RoleOpRecord) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RoleOpRecord) ProtoMessage() {}
+
+func (x *RoleOpRecord) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[57]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RoleOpRecord.ProtoReflect.Descriptor instead.
+func (*RoleOpRecord) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{57}
+}
+
+func (x *RoleOpRecord) GetChangeCount() int32 {
+	if x != nil {
+		return x.ChangeCount
+	}
+	return 0
+}
+
+// PostgreSQL表结构定义
+type BattlePass struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Level         int32                  `protobuf:"varint,1,opt,name=level,proto3" json:"level,omitempty"`                                                                             //{ "origin":"level" }
+	Exp           int32                  `protobuf:"varint,2,opt,name=exp,proto3" json:"exp,omitempty"`                                                                                 //{ "origin":"exp" }
+	Grade         int32                  `protobuf:"varint,3,opt,name=grade,proto3" json:"grade,omitempty"`                                                                             //{ "origin":"grade" }
+	GotStatus     []byte                 `protobuf:"bytes,4,opt,name=got_status,json=gotStatus,proto3" json:"got_status,omitempty" gorm:"type:jsonb;column:got_status;serializer:json"` //{ "json":"type:jsonb;column:got_status;serializer:json", "origin":"got_status" }
+	Uuid          int64                  `protobuf:"varint,5,opt,name=uuid,proto3" json:"uuid,omitempty"`                                                                               //{ "origin":"uuid" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BattlePass) Reset() {
+	*x = BattlePass{}
+	mi := &file_pg_tables_proto_msgTypes[58]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BattlePass) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BattlePass) ProtoMessage() {}
+
+func (x *BattlePass) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[58]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BattlePass.ProtoReflect.Descriptor instead.
+func (*BattlePass) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{58}
+}
+
+func (x *BattlePass) GetLevel() int32 {
+	if x != nil {
+		return x.Level
+	}
+	return 0
+}
+
+func (x *BattlePass) GetExp() int32 {
+	if x != nil {
+		return x.Exp
+	}
+	return 0
+}
+
+func (x *BattlePass) GetGrade() int32 {
+	if x != nil {
+		return x.Grade
+	}
+	return 0
+}
+
+func (x *BattlePass) GetGotStatus() []byte {
+	if x != nil {
+		return x.GotStatus
+	}
+	return nil
+}
+
+func (x *BattlePass) GetUuid() int64 {
+	if x != nil {
+		return x.Uuid
+	}
+	return 0
+}
+
+// VipChargeLog
+// PostgreSQL表结构定义
+type VipChargeLog struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ConfigId      int32                  `protobuf:"varint,1,opt,name=config_id,json=configId,proto3" json:"config_id,omitempty"`               //{ "origin":"config_id" }
+	ExpireTime    int64                  `protobuf:"varint,2,opt,name=expire_time,json=expireTime,proto3" json:"expire_time,omitempty"`         //{ "origin":"expire_time" }
+	MailReward    int64                  `protobuf:"varint,3,opt,name=mail_reward,json=mailReward,proto3" json:"mail_reward,omitempty"`         //{ "origin":"mail_reward" }
+	BuyTime       int64                  `protobuf:"varint,4,opt,name=buy_time,json=buyTime,proto3" json:"buy_time,omitempty"`                  //{ "origin":"buy_time" }
+	ExtraPeriodic string                 `protobuf:"bytes,5,opt,name=extra_periodic,json=extraPeriodic,proto3" json:"extra_periodic,omitempty"` //{ "origin":"extra_periodic" }
+	CreatedAt     int64                  `protobuf:"varint,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`            //{ "origin":"created_at" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *VipChargeLog) Reset() {
+	*x = VipChargeLog{}
+	mi := &file_pg_tables_proto_msgTypes[59]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *VipChargeLog) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VipChargeLog) ProtoMessage() {}
+
+func (x *VipChargeLog) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[59]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VipChargeLog.ProtoReflect.Descriptor instead.
+func (*VipChargeLog) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{59}
+}
+
+func (x *VipChargeLog) GetConfigId() int32 {
+	if x != nil {
+		return x.ConfigId
+	}
+	return 0
+}
+
+func (x *VipChargeLog) GetExpireTime() int64 {
+	if x != nil {
+		return x.ExpireTime
+	}
+	return 0
+}
+
+func (x *VipChargeLog) GetMailReward() int64 {
+	if x != nil {
+		return x.MailReward
+	}
+	return 0
+}
+
+func (x *VipChargeLog) GetBuyTime() int64 {
+	if x != nil {
+		return x.BuyTime
+	}
+	return 0
+}
+
+func (x *VipChargeLog) GetExtraPeriodic() string {
+	if x != nil {
+		return x.ExtraPeriodic
+	}
+	return ""
+}
+
+func (x *VipChargeLog) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+// LogInfo
+// PostgreSQL表结构定义
+type LogInfo struct {
+	state                  protoimpl.MessageState `protogen:"open.v1"`
+	QuestionnaireRewardLog []byte                 `protobuf:"bytes,1,opt,name=questionnaire_reward_log,json=questionnaireRewardLog,proto3" json:"questionnaire_reward_log,omitempty" gorm:"type:jsonb;column:questionnaire_reward_log;serializer:json"` //{ "json":"type:jsonb;column:questionnaire_reward_log;serializer:json", "origin":"questionnaire_reward_log" }
+	DrawGachaLog           []byte                 `protobuf:"bytes,2,opt,name=draw_gacha_log,json=drawGachaLog,proto3" json:"draw_gacha_log,omitempty" gorm:"type:jsonb;column:draw_gacha_log;serializer:json"`                                         //{ "json":"type:jsonb;column:draw_gacha_log;serializer:json", "origin":"draw_gacha_log" }
+	VipChargeLog           []byte                 `protobuf:"bytes,3,opt,name=vip_charge_log,json=vipChargeLog,proto3" json:"vip_charge_log,omitempty" gorm:"type:jsonb;column:vip_charge_log;serializer:json"`                                         //{ "json":"type:jsonb;column:vip_charge_log;serializer:json", "origin":"vip_charge_log" }
+	AdViewLog              []byte                 `protobuf:"bytes,4,opt,name=ad_view_log,json=adViewLog,proto3" json:"ad_view_log,omitempty" gorm:"type:jsonb;column:ad_view_log;serializer:json"`                                                     //{ "json":"type:jsonb;column:ad_view_log;serializer:json", "origin":"ad_view_log" }
+	RedeemCodeLog          []byte                 `protobuf:"bytes,5,opt,name=redeem_code_log,json=redeemCodeLog,proto3" json:"redeem_code_log,omitempty" gorm:"type:jsonb;column:redeem_code_log;serializer:json"`                                     //{ "json":"type:jsonb;column:redeem_code_log;serializer:json", "origin":"redeem_code_log" }
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
+}
+
+func (x *LogInfo) Reset() {
+	*x = LogInfo{}
+	mi := &file_pg_tables_proto_msgTypes[60]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LogInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LogInfo) ProtoMessage() {}
+
+func (x *LogInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[60]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LogInfo.ProtoReflect.Descriptor instead.
+func (*LogInfo) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{60}
+}
+
+func (x *LogInfo) GetQuestionnaireRewardLog() []byte {
+	if x != nil {
+		return x.QuestionnaireRewardLog
+	}
+	return nil
+}
+
+func (x *LogInfo) GetDrawGachaLog() []byte {
+	if x != nil {
+		return x.DrawGachaLog
+	}
+	return nil
+}
+
+func (x *LogInfo) GetVipChargeLog() []byte {
+	if x != nil {
+		return x.VipChargeLog
+	}
+	return nil
+}
+
+func (x *LogInfo) GetAdViewLog() []byte {
+	if x != nil {
+		return x.AdViewLog
+	}
+	return nil
+}
+
+func (x *LogInfo) GetRedeemCodeLog() []byte {
+	if x != nil {
+		return x.RedeemCodeLog
+	}
+	return nil
+}
+
+// PostgreSQL表结构定义
+type QuestionnaireRewardLog struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	QuizId        string                 `protobuf:"bytes,1,opt,name=quiz_id,json=quizId,proto3" json:"quiz_id,omitempty"`                                      //{ "origin":"quiz_id" }
+	Status        int32                  `protobuf:"varint,2,opt,name=status,proto3" json:"status,omitempty"`                                                   //{ "origin":"status" }
+	Rewards       []byte                 `protobuf:"bytes,3,opt,name=rewards,proto3" json:"rewards,omitempty" gorm:"type:jsonb;column:rewards;serializer:json"` //{ "json":"type:jsonb;column:rewards;serializer:json", "origin":"rewards" }
+	CreatedAt     int64                  `protobuf:"varint,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                            //{ "origin":"created_at" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *QuestionnaireRewardLog) Reset() {
+	*x = QuestionnaireRewardLog{}
+	mi := &file_pg_tables_proto_msgTypes[61]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *QuestionnaireRewardLog) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QuestionnaireRewardLog) ProtoMessage() {}
+
+func (x *QuestionnaireRewardLog) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[61]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use QuestionnaireRewardLog.ProtoReflect.Descriptor instead.
+func (*QuestionnaireRewardLog) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{61}
+}
+
+func (x *QuestionnaireRewardLog) GetQuizId() string {
+	if x != nil {
+		return x.QuizId
+	}
+	return ""
+}
+
+func (x *QuestionnaireRewardLog) GetStatus() int32 {
+	if x != nil {
+		return x.Status
+	}
+	return 0
+}
+
+func (x *QuestionnaireRewardLog) GetRewards() []byte {
+	if x != nil {
+		return x.Rewards
+	}
+	return nil
+}
+
+func (x *QuestionnaireRewardLog) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+// FeedbackLog
+// PostgreSQL表结构定义
+type FeedbackLog struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Content       string                 `protobuf:"bytes,1,opt,name=content,proto3" json:"content,omitempty"`                                                  //{ "origin":"content" }
+	Rewards       []byte                 `protobuf:"bytes,2,opt,name=rewards,proto3" json:"rewards,omitempty" gorm:"type:jsonb;column:rewards;serializer:json"` //{ "json":"type:jsonb;column:rewards;serializer:json", "origin":"rewards" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FeedbackLog) Reset() {
+	*x = FeedbackLog{}
+	mi := &file_pg_tables_proto_msgTypes[62]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FeedbackLog) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FeedbackLog) ProtoMessage() {}
+
+func (x *FeedbackLog) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[62]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FeedbackLog.ProtoReflect.Descriptor instead.
+func (*FeedbackLog) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{62}
+}
+
+func (x *FeedbackLog) GetContent() string {
+	if x != nil {
+		return x.Content
+	}
+	return ""
+}
+
+func (x *FeedbackLog) GetRewards() []byte {
+	if x != nil {
+		return x.Rewards
+	}
+	return nil
+}
+
+// FeedbackLogInfo
+// PostgreSQL表结构定义
+type FeedbackLogInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	FeedbackLog   []byte                 `protobuf:"bytes,1,opt,name=feedback_log,json=feedbackLog,proto3" json:"feedback_log,omitempty" gorm:"type:jsonb;column:feedback_log;serializer:json"` //{ "json":"type:jsonb;column:feedback_log;serializer:json", "origin":"feedback_log" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FeedbackLogInfo) Reset() {
+	*x = FeedbackLogInfo{}
+	mi := &file_pg_tables_proto_msgTypes[63]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FeedbackLogInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FeedbackLogInfo) ProtoMessage() {}
+
+func (x *FeedbackLogInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[63]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FeedbackLogInfo.ProtoReflect.Descriptor instead.
+func (*FeedbackLogInfo) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{63}
+}
+
+func (x *FeedbackLogInfo) GetFeedbackLog() []byte {
+	if x != nil {
+		return x.FeedbackLog
+	}
+	return nil
+}
+
+// PostgreSQL表结构定义
+type Uav struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ConfigType    int32                  `protobuf:"varint,1,opt,name=config_type,json=configType,proto3" json:"config_type,omitempty"` //{ "origin":"config_type" }
+	ConfigId      int32                  `protobuf:"varint,2,opt,name=config_id,json=configId,proto3" json:"config_id,omitempty"`       //{ "origin":"config_id" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Uav) Reset() {
+	*x = Uav{}
+	mi := &file_pg_tables_proto_msgTypes[64]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Uav) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Uav) ProtoMessage() {}
+
+func (x *Uav) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[64]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Uav.ProtoReflect.Descriptor instead.
+func (*Uav) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{64}
+}
+
+func (x *Uav) GetConfigType() int32 {
+	if x != nil {
+		return x.ConfigType
+	}
+	return 0
+}
+
+func (x *Uav) GetConfigId() int32 {
+	if x != nil {
+		return x.ConfigId
+	}
+	return 0
+}
+
+// UavFormation
+// PostgreSQL表结构定义
+type UavFormation struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Formation     []byte                 `protobuf:"bytes,1,opt,name=formation,proto3" json:"formation,omitempty" gorm:"type:jsonb;column:formation;serializer:json"` //{ "json":"type:jsonb;column:formation;serializer:json", "origin":"formation" }
+	IsEdit        bool                   `protobuf:"varint,2,opt,name=is_edit,json=isEdit,proto3" json:"is_edit,omitempty"`                                           //{ "origin":"is_edit" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UavFormation) Reset() {
+	*x = UavFormation{}
+	mi := &file_pg_tables_proto_msgTypes[65]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UavFormation) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UavFormation) ProtoMessage() {}
+
+func (x *UavFormation) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[65]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UavFormation.ProtoReflect.Descriptor instead.
+func (*UavFormation) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{65}
+}
+
+func (x *UavFormation) GetFormation() []byte {
+	if x != nil {
+		return x.Formation
+	}
+	return nil
+}
+
+func (x *UavFormation) GetIsEdit() bool {
+	if x != nil {
+		return x.IsEdit
+	}
+	return false
+}
+
+// UavSlotItem
+// PostgreSQL表结构定义
+type UavSlotItem struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PresetId      int32                  `protobuf:"varint,1,opt,name=preset_id,json=presetId,proto3" json:"preset_id,omitempty"`    //{ "origin":"preset_id" }
+	SlotId        int32                  `protobuf:"varint,2,opt,name=slot_id,json=slotId,proto3" json:"slot_id,omitempty"`          //{ "origin":"slot_id" }
+	PosId         int32                  `protobuf:"varint,3,opt,name=pos_id,json=posId,proto3" json:"pos_id,omitempty"`             //{ "origin":"pos_id" }
+	SkillCid      int32                  `protobuf:"varint,4,opt,name=skill_cid,json=skillCid,proto3" json:"skill_cid,omitempty"`    //{ "origin":"skill_cid" }
+	SkillType     int32                  `protobuf:"varint,5,opt,name=skill_type,json=skillType,proto3" json:"skill_type,omitempty"` //{ "origin":"skill_type" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UavSlotItem) Reset() {
+	*x = UavSlotItem{}
+	mi := &file_pg_tables_proto_msgTypes[66]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UavSlotItem) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UavSlotItem) ProtoMessage() {}
+
+func (x *UavSlotItem) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[66]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UavSlotItem.ProtoReflect.Descriptor instead.
+func (*UavSlotItem) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{66}
+}
+
+func (x *UavSlotItem) GetPresetId() int32 {
+	if x != nil {
+		return x.PresetId
+	}
+	return 0
+}
+
+func (x *UavSlotItem) GetSlotId() int32 {
+	if x != nil {
+		return x.SlotId
+	}
+	return 0
+}
+
+func (x *UavSlotItem) GetPosId() int32 {
+	if x != nil {
+		return x.PosId
+	}
+	return 0
+}
+
+func (x *UavSlotItem) GetSkillCid() int32 {
+	if x != nil {
+		return x.SkillCid
+	}
+	return 0
+}
+
+func (x *UavSlotItem) GetSkillType() int32 {
+	if x != nil {
+		return x.SkillType
+	}
+	return 0
+}
+
+// UavSlots
+// PostgreSQL表结构定义
+type UavSlots struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Preset        int32                  `protobuf:"varint,1,opt,name=preset,proto3" json:"preset,omitempty"`                                             //{ "origin":"preset" }
+	Slots         []byte                 `protobuf:"bytes,2,opt,name=slots,proto3" json:"slots,omitempty" gorm:"type:jsonb;column:slots;serializer:json"` //{ "json":"type:jsonb;column:slots;serializer:json", "origin":"slots" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UavSlots) Reset() {
+	*x = UavSlots{}
+	mi := &file_pg_tables_proto_msgTypes[67]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UavSlots) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UavSlots) ProtoMessage() {}
+
+func (x *UavSlots) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[67]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UavSlots.ProtoReflect.Descriptor instead.
+func (*UavSlots) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{67}
+}
+
+func (x *UavSlots) GetPreset() int32 {
+	if x != nil {
+		return x.Preset
+	}
+	return 0
+}
+
+func (x *UavSlots) GetSlots() []byte {
+	if x != nil {
+		return x.Slots
+	}
+	return nil
+}
+
+// UavInfo
+// PostgreSQL表结构定义
+type UavInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Uav           []byte                 `protobuf:"bytes,1,opt,name=uav,proto3" json:"uav,omitempty" gorm:"type:jsonb;column:uav;serializer:json"`                                                 //{ "json":"type:jsonb;column:uav;serializer:json", "origin":"uav" }
+	UavFormation  []byte                 `protobuf:"bytes,2,opt,name=uav_formation,json=uavFormation,proto3" json:"uav_formation,omitempty" gorm:"type:jsonb;column:uav_formation;serializer:json"` //{ "json":"type:jsonb;column:uav_formation;serializer:json", "origin":"uav_formation" }
+	UavSlots      []byte                 `protobuf:"bytes,3,opt,name=uav_slots,json=uavSlots,proto3" json:"uav_slots,omitempty" gorm:"type:jsonb;column:uav_slots;serializer:json"`                 //{ "json":"type:jsonb;column:uav_slots;serializer:json", "origin":"uav_slots" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UavInfo) Reset() {
+	*x = UavInfo{}
+	mi := &file_pg_tables_proto_msgTypes[68]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UavInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UavInfo) ProtoMessage() {}
+
+func (x *UavInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[68]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UavInfo.ProtoReflect.Descriptor instead.
+func (*UavInfo) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{68}
+}
+
+func (x *UavInfo) GetUav() []byte {
+	if x != nil {
+		return x.Uav
+	}
+	return nil
+}
+
+func (x *UavInfo) GetUavFormation() []byte {
+	if x != nil {
+		return x.UavFormation
+	}
+	return nil
+}
+
+func (x *UavInfo) GetUavSlots() []byte {
+	if x != nil {
+		return x.UavSlots
+	}
+	return nil
+}
+
+// PostgreSQL表结构定义
+type WeaponSkinWear struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	WearId        int64                  `protobuf:"varint,1,opt,name=wear_id,json=wearId,proto3" json:"wear_id,omitempty"` //{ "origin":"wear_id" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WeaponSkinWear) Reset() {
+	*x = WeaponSkinWear{}
+	mi := &file_pg_tables_proto_msgTypes[69]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WeaponSkinWear) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WeaponSkinWear) ProtoMessage() {}
+
+func (x *WeaponSkinWear) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[69]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WeaponSkinWear.ProtoReflect.Descriptor instead.
+func (*WeaponSkinWear) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{69}
+}
+
+func (x *WeaponSkinWear) GetWearId() int64 {
+	if x != nil {
+		return x.WearId
+	}
+	return 0
+}
+
+// WeaponSkin
+// PostgreSQL表结构定义
+type WeaponSkin struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ConfigId      int32                  `protobuf:"varint,1,opt,name=config_id,json=configId,proto3" json:"config_id,omitempty"` //{ "origin":"config_id" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WeaponSkin) Reset() {
+	*x = WeaponSkin{}
+	mi := &file_pg_tables_proto_msgTypes[70]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WeaponSkin) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WeaponSkin) ProtoMessage() {}
+
+func (x *WeaponSkin) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[70]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WeaponSkin.ProtoReflect.Descriptor instead.
+func (*WeaponSkin) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{70}
+}
+
+func (x *WeaponSkin) GetConfigId() int32 {
+	if x != nil {
+		return x.ConfigId
+	}
+	return 0
+}
+
+// WeaponInfo
+// PostgreSQL表结构定义
+type WeaponInfo struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	WeaponSkinWear []byte                 `protobuf:"bytes,1,opt,name=weapon_skin_wear,json=weaponSkinWear,proto3" json:"weapon_skin_wear,omitempty" gorm:"type:jsonb;column:weapon_skin_wear;serializer:json"` //{ "json":"type:jsonb;column:weapon_skin_wear;serializer:json", "origin":"weapon_skin_wear" }
+	WeaponSkin     []byte                 `protobuf:"bytes,2,opt,name=weapon_skin,json=weaponSkin,proto3" json:"weapon_skin,omitempty" gorm:"type:jsonb;column:weapon_skin;serializer:json"`                    //{ "json":"type:jsonb;column:weapon_skin;serializer:json", "origin":"weapon_skin" }
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *WeaponInfo) Reset() {
+	*x = WeaponInfo{}
+	mi := &file_pg_tables_proto_msgTypes[71]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WeaponInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WeaponInfo) ProtoMessage() {}
+
+func (x *WeaponInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[71]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WeaponInfo.ProtoReflect.Descriptor instead.
+func (*WeaponInfo) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{71}
+}
+
+func (x *WeaponInfo) GetWeaponSkinWear() []byte {
+	if x != nil {
+		return x.WeaponSkinWear
+	}
+	return nil
+}
+
+func (x *WeaponInfo) GetWeaponSkin() []byte {
+	if x != nil {
+		return x.WeaponSkin
+	}
+	return nil
+}
+
+// PostgreSQL表结构定义
+type AfkEarnings struct {
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	CombatCid        int32                  `protobuf:"varint,1,opt,name=combat_cid,json=combatCid,proto3" json:"combat_cid,omitempty"`                                                                   //{ "origin":"combat_cid" }
+	PassTime         int64                  `protobuf:"varint,2,opt,name=pass_time,json=passTime,proto3" json:"pass_time,omitempty"`                                                                      //{ "origin":"pass_time" }
+	LastReceivedTime int64                  `protobuf:"varint,3,opt,name=last_received_time,json=lastReceivedTime,proto3" json:"last_received_time,omitempty"`                                            //{ "origin":"last_received_time" }
+	LastLeftItem     []byte                 `protobuf:"bytes,4,opt,name=last_left_item,json=lastLeftItem,proto3" json:"last_left_item,omitempty" gorm:"type:jsonb;column:last_left_item;serializer:json"` //{ "json":"type:jsonb;column:last_left_item;serializer:json", "origin":"last_left_item" }
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *AfkEarnings) Reset() {
+	*x = AfkEarnings{}
+	mi := &file_pg_tables_proto_msgTypes[72]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AfkEarnings) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AfkEarnings) ProtoMessage() {}
+
+func (x *AfkEarnings) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[72]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AfkEarnings.ProtoReflect.Descriptor instead.
+func (*AfkEarnings) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{72}
+}
+
+func (x *AfkEarnings) GetCombatCid() int32 {
+	if x != nil {
+		return x.CombatCid
+	}
+	return 0
+}
+
+func (x *AfkEarnings) GetPassTime() int64 {
+	if x != nil {
+		return x.PassTime
+	}
+	return 0
+}
+
+func (x *AfkEarnings) GetLastReceivedTime() int64 {
+	if x != nil {
+		return x.LastReceivedTime
+	}
+	return 0
+}
+
+func (x *AfkEarnings) GetLastLeftItem() []byte {
+	if x != nil {
+		return x.LastLeftItem
+	}
+	return nil
+}
+
+// BadgeRedPoint
+// PostgreSQL表结构定义
+type BadgeRedPoint struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`        //{ "origin":"key" }
+	Expire        int64                  `protobuf:"varint,2,opt,name=expire,proto3" json:"expire,omitempty"` //{ "origin":"expire" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BadgeRedPoint) Reset() {
+	*x = BadgeRedPoint{}
+	mi := &file_pg_tables_proto_msgTypes[73]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BadgeRedPoint) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BadgeRedPoint) ProtoMessage() {}
+
+func (x *BadgeRedPoint) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[73]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BadgeRedPoint.ProtoReflect.Descriptor instead.
+func (*BadgeRedPoint) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{73}
+}
+
+func (x *BadgeRedPoint) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *BadgeRedPoint) GetExpire() int64 {
+	if x != nil {
+		return x.Expire
+	}
+	return 0
+}
+
+// BadgeInfo
+// PostgreSQL表结构定义
+type BadgeInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RedPointList  []byte                 `protobuf:"bytes,1,opt,name=red_point_list,json=redPointList,proto3" json:"red_point_list,omitempty" gorm:"type:jsonb;column:red_point_list;serializer:json"` //{ "json":"type:jsonb;column:red_point_list;serializer:json", "origin":"red_point_list" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BadgeInfo) Reset() {
+	*x = BadgeInfo{}
+	mi := &file_pg_tables_proto_msgTypes[74]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BadgeInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BadgeInfo) ProtoMessage() {}
+
+func (x *BadgeInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[74]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BadgeInfo.ProtoReflect.Descriptor instead.
+func (*BadgeInfo) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{74}
+}
+
+func (x *BadgeInfo) GetRedPointList() []byte {
+	if x != nil {
+		return x.RedPointList
+	}
+	return nil
+}
+
+// RenovationLaboratory
+// PostgreSQL表结构定义
+type RenovationLaboratory struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	UnlockedSkillId []byte                 `protobuf:"bytes,1,opt,name=unlocked_skill_id,json=unlockedSkillId,proto3" json:"unlocked_skill_id,omitempty" gorm:"type:jsonb;column:unlocked_skill_id;serializer:json"` //{ "json":"type:jsonb;column:unlocked_skill_id;serializer:json", "origin":"unlocked_skill_id" }
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *RenovationLaboratory) Reset() {
+	*x = RenovationLaboratory{}
+	mi := &file_pg_tables_proto_msgTypes[75]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RenovationLaboratory) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RenovationLaboratory) ProtoMessage() {}
+
+func (x *RenovationLaboratory) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[75]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RenovationLaboratory.ProtoReflect.Descriptor instead.
+func (*RenovationLaboratory) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{75}
+}
+
+func (x *RenovationLaboratory) GetUnlockedSkillId() []byte {
+	if x != nil {
+		return x.UnlockedSkillId
+	}
+	return nil
+}
+
+// MttCbtTicketReward
+// PostgreSQL表结构定义
+type MttCbtTicketReward struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TicketNum     int32                  `protobuf:"varint,1,opt,name=ticket_num,json=ticketNum,proto3" json:"ticket_num,omitempty"` //{ "origin":"ticket_num" }
+	CreatedAt     int64                  `protobuf:"varint,2,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"` //{ "origin":"created_at" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MttCbtTicketReward) Reset() {
+	*x = MttCbtTicketReward{}
+	mi := &file_pg_tables_proto_msgTypes[76]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MttCbtTicketReward) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MttCbtTicketReward) ProtoMessage() {}
+
+func (x *MttCbtTicketReward) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[76]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MttCbtTicketReward.ProtoReflect.Descriptor instead.
+func (*MttCbtTicketReward) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{76}
+}
+
+func (x *MttCbtTicketReward) GetTicketNum() int32 {
+	if x != nil {
+		return x.TicketNum
+	}
+	return 0
+}
+
+func (x *MttCbtTicketReward) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+// RedeemCodeLog
+// PostgreSQL表结构定义
+type RedeemCodeLog struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ConfigId      int32                  `protobuf:"varint,1,opt,name=config_id,json=configId,proto3" json:"config_id,omitempty"`    //{ "origin":"config_id" }
+	CreatedAt     int64                  `protobuf:"varint,2,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"` //{ "origin":"created_at" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RedeemCodeLog) Reset() {
+	*x = RedeemCodeLog{}
+	mi := &file_pg_tables_proto_msgTypes[77]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RedeemCodeLog) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RedeemCodeLog) ProtoMessage() {}
+
+func (x *RedeemCodeLog) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[77]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RedeemCodeLog.ProtoReflect.Descriptor instead.
+func (*RedeemCodeLog) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{77}
+}
+
+func (x *RedeemCodeLog) GetConfigId() int32 {
+	if x != nil {
+		return x.ConfigId
+	}
+	return 0
+}
+
+func (x *RedeemCodeLog) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+// AdViewLog
+// PostgreSQL表结构定义
+type AdViewLog struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ConfigId      int32                  `protobuf:"varint,1,opt,name=config_id,json=configId,proto3" json:"config_id,omitempty"`    //{ "origin":"config_id" }
+	Req           string                 `protobuf:"bytes,2,opt,name=req,proto3" json:"req,omitempty"`                               //{ "origin":"req" }
+	CreatedAt     int64                  `protobuf:"varint,3,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"` //{ "origin":"created_at" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdViewLog) Reset() {
+	*x = AdViewLog{}
+	mi := &file_pg_tables_proto_msgTypes[78]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdViewLog) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdViewLog) ProtoMessage() {}
+
+func (x *AdViewLog) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[78]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdViewLog.ProtoReflect.Descriptor instead.
+func (*AdViewLog) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{78}
+}
+
+func (x *AdViewLog) GetConfigId() int32 {
+	if x != nil {
+		return x.ConfigId
+	}
+	return 0
+}
+
+func (x *AdViewLog) GetReq() string {
+	if x != nil {
+		return x.Req
+	}
+	return ""
+}
+
+func (x *AdViewLog) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+// CombatAntiCheating
+// PostgreSQL表结构定义
+type CombatAntiCheating struct {
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	Cid              int32                  `protobuf:"varint,1,opt,name=cid,proto3" json:"cid,omitempty"`                                                       //{ "origin":"cid" }
+	AntiType         int32                  `protobuf:"varint,2,opt,name=anti_type,json=antiType,proto3" json:"anti_type,omitempty"`                             //{ "origin":"anti_type" }
+	CostTime         int64                  `protobuf:"varint,3,opt,name=cost_time,json=costTime,proto3" json:"cost_time,omitempty"`                             //{ "origin":"cost_time" }
+	Power            int64                  `protobuf:"varint,4,opt,name=power,proto3" json:"power,omitempty"`                                                   //{ "origin":"power" }
+	AllowMaxDamage   int64                  `protobuf:"varint,5,opt,name=allow_max_damage,json=allowMaxDamage,proto3" json:"allow_max_damage,omitempty"`         //{ "origin":"allow_max_damage" }
+	ClientMaxDamage  int64                  `protobuf:"varint,6,opt,name=client_max_damage,json=clientMaxDamage,proto3" json:"client_max_damage,omitempty"`      //{ "origin":"client_max_damage" }
+	CidAllowMaxPower int64                  `protobuf:"varint,7,opt,name=cid_allow_max_power,json=cidAllowMaxPower,proto3" json:"cid_allow_max_power,omitempty"` //{ "origin":"cid_allow_max_power" }
+	OccurTm          int64                  `protobuf:"varint,8,opt,name=occur_tm,json=occurTm,proto3" json:"occur_tm,omitempty"`                                //{ "origin":"occur_tm" }
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *CombatAntiCheating) Reset() {
+	*x = CombatAntiCheating{}
+	mi := &file_pg_tables_proto_msgTypes[79]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CombatAntiCheating) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CombatAntiCheating) ProtoMessage() {}
+
+func (x *CombatAntiCheating) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[79]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CombatAntiCheating.ProtoReflect.Descriptor instead.
+func (*CombatAntiCheating) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{79}
+}
+
+func (x *CombatAntiCheating) GetCid() int32 {
+	if x != nil {
+		return x.Cid
+	}
+	return 0
+}
+
+func (x *CombatAntiCheating) GetAntiType() int32 {
+	if x != nil {
+		return x.AntiType
+	}
+	return 0
+}
+
+func (x *CombatAntiCheating) GetCostTime() int64 {
+	if x != nil {
+		return x.CostTime
+	}
+	return 0
+}
+
+func (x *CombatAntiCheating) GetPower() int64 {
+	if x != nil {
+		return x.Power
+	}
+	return 0
+}
+
+func (x *CombatAntiCheating) GetAllowMaxDamage() int64 {
+	if x != nil {
+		return x.AllowMaxDamage
+	}
+	return 0
+}
+
+func (x *CombatAntiCheating) GetClientMaxDamage() int64 {
+	if x != nil {
+		return x.ClientMaxDamage
+	}
+	return 0
+}
+
+func (x *CombatAntiCheating) GetCidAllowMaxPower() int64 {
+	if x != nil {
+		return x.CidAllowMaxPower
+	}
+	return 0
+}
+
+func (x *CombatAntiCheating) GetOccurTm() int64 {
+	if x != nil {
+		return x.OccurTm
+	}
+	return 0
+}
+
+// AntiCheatingInfo
+// PostgreSQL表结构定义
+type AntiCheatingInfo struct {
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	AntiCheatingList []byte                 `protobuf:"bytes,1,opt,name=anti_cheating_list,json=antiCheatingList,proto3" json:"anti_cheating_list,omitempty" gorm:"type:jsonb;column:anti_cheating_list;serializer:json"` //{ "json":"type:jsonb;column:anti_cheating_list;serializer:json", "origin":"anti_cheating_list" }
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *AntiCheatingInfo) Reset() {
+	*x = AntiCheatingInfo{}
+	mi := &file_pg_tables_proto_msgTypes[80]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AntiCheatingInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AntiCheatingInfo) ProtoMessage() {}
+
+func (x *AntiCheatingInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[80]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AntiCheatingInfo.ProtoReflect.Descriptor instead.
+func (*AntiCheatingInfo) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{80}
+}
+
+func (x *AntiCheatingInfo) GetAntiCheatingList() []byte {
+	if x != nil {
+		return x.AntiCheatingList
+	}
+	return nil
+}
+
+// PostgreSQL表结构定义
+type RoleBaseInfo struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	Rid            uint64                 `protobuf:"varint,1,opt,name=rid,proto3" json:"rid,omitempty"`                                                //{ "origin":"rid" }
+	ServerId       string                 `protobuf:"bytes,2,opt,name=server_id,json=serverId,proto3" json:"server_id,omitempty"`                       //{ "origin":"server_id" }
+	AccountId      int64                  `protobuf:"varint,3,opt,name=account_id,json=accountId,proto3" json:"account_id,omitempty"`                   //{ "origin":"account_id" }
+	SocialId       int32                  `protobuf:"varint,4,opt,name=social_id,json=socialId,proto3" json:"social_id,omitempty"`                      //{ "origin":"social_id" }
+	InitServerId   string                 `protobuf:"bytes,5,opt,name=init_server_id,json=initServerId,proto3" json:"init_server_id,omitempty"`         //{ "origin":"init_server_id" }
+	Account        string                 `protobuf:"bytes,6,opt,name=account,proto3" json:"account,omitempty"`                                         //{ "origin":"account" }
+	NickName       string                 `protobuf:"bytes,8,opt,name=nick_name,json=nickName,proto3" json:"nick_name,omitempty"`                       //{ "origin":"nick_name" }
+	Avatar         string                 `protobuf:"bytes,9,opt,name=avatar,proto3" json:"avatar,omitempty"`                                           //{ "origin":"avatar" }
+	Level          int64                  `protobuf:"varint,10,opt,name=level,proto3" json:"level,omitempty"`                                           //{ "origin":"level" }
+	LastLoginTime  int64                  `protobuf:"varint,11,opt,name=last_login_time,json=lastLoginTime,proto3" json:"last_login_time,omitempty"`    //{ "origin":"last_login_time" }
+	LastLogoutTime int64                  `protobuf:"varint,12,opt,name=last_logout_time,json=lastLogoutTime,proto3" json:"last_logout_time,omitempty"` //{ "origin":"last_logout_time" }
+	Power          int64                  `protobuf:"varint,13,opt,name=power,proto3" json:"power,omitempty"`                                           //{ "origin":"power" }
+	Sex            int32                  `protobuf:"varint,14,opt,name=sex,proto3" json:"sex,omitempty"`                                               //{ "origin":"sex" }
+	CreatedAt      int64                  `protobuf:"varint,15,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                  //{ "origin":"created_at" }
+	UpdatedAt      int64                  `protobuf:"varint,16,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                  //{ "origin":"updated_at" }
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *RoleBaseInfo) Reset() {
+	*x = RoleBaseInfo{}
+	mi := &file_pg_tables_proto_msgTypes[81]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RoleBaseInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RoleBaseInfo) ProtoMessage() {}
+
+func (x *RoleBaseInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[81]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RoleBaseInfo.ProtoReflect.Descriptor instead.
+func (*RoleBaseInfo) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{81}
+}
+
+func (x *RoleBaseInfo) GetRid() uint64 {
+	if x != nil {
+		return x.Rid
+	}
+	return 0
+}
+
+func (x *RoleBaseInfo) GetServerId() string {
+	if x != nil {
+		return x.ServerId
+	}
+	return ""
+}
+
+func (x *RoleBaseInfo) GetAccountId() int64 {
+	if x != nil {
+		return x.AccountId
+	}
+	return 0
+}
+
+func (x *RoleBaseInfo) GetSocialId() int32 {
+	if x != nil {
+		return x.SocialId
+	}
+	return 0
+}
+
+func (x *RoleBaseInfo) GetInitServerId() string {
+	if x != nil {
+		return x.InitServerId
+	}
+	return ""
+}
+
+func (x *RoleBaseInfo) GetAccount() string {
+	if x != nil {
+		return x.Account
+	}
+	return ""
+}
+
+func (x *RoleBaseInfo) GetNickName() string {
+	if x != nil {
+		return x.NickName
+	}
+	return ""
+}
+
+func (x *RoleBaseInfo) GetAvatar() string {
+	if x != nil {
+		return x.Avatar
+	}
+	return ""
+}
+
+func (x *RoleBaseInfo) GetLevel() int64 {
+	if x != nil {
+		return x.Level
+	}
+	return 0
+}
+
+func (x *RoleBaseInfo) GetLastLoginTime() int64 {
+	if x != nil {
+		return x.LastLoginTime
+	}
+	return 0
+}
+
+func (x *RoleBaseInfo) GetLastLogoutTime() int64 {
+	if x != nil {
+		return x.LastLogoutTime
+	}
+	return 0
+}
+
+func (x *RoleBaseInfo) GetPower() int64 {
+	if x != nil {
+		return x.Power
+	}
+	return 0
+}
+
+func (x *RoleBaseInfo) GetSex() int32 {
+	if x != nil {
+		return x.Sex
+	}
+	return 0
+}
+
+func (x *RoleBaseInfo) GetCreatedAt() int64 {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return 0
+}
+
+func (x *RoleBaseInfo) GetUpdatedAt() int64 {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return 0
+}
+
+// ItemInfo
+// PostgreSQL表结构定义
+type ItemInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Items         []byte                 `protobuf:"bytes,100,opt,name=items,proto3" json:"items,omitempty" gorm:"type:jsonb;column:items;serializer:json"` //{ "json":"type:jsonb;column:items;serializer:json", "origin":"items" }
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ItemInfo) Reset() {
+	*x = ItemInfo{}
+	mi := &file_pg_tables_proto_msgTypes[82]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ItemInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ItemInfo) ProtoMessage() {}
+
+func (x *ItemInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_pg_tables_proto_msgTypes[82]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ItemInfo.ProtoReflect.Descriptor instead.
+func (*ItemInfo) Descriptor() ([]byte, []int) {
+	return file_pg_tables_proto_rawDescGZIP(), []int{82}
+}
+
+func (x *ItemInfo) GetItems() []byte {
+	if x != nil {
+		return x.Items
+	}
+	return nil
+}
+
 var File_pg_tables_proto protoreflect.FileDescriptor
 
 const file_pg_tables_proto_rawDesc = "" +
@@ -125,7 +5577,451 @@ const file_pg_tables_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\xe8\a \x01(\x03R\tcreatedAt\x12\x1e\n" +
 	"\n" +
-	"updated_at\x18\xe9\a \x01(\x03R\tupdatedAtB\x1aZ\x18gs/pbtest/internal/pgsqlb\x06proto3"
+	"updated_at\x18\xe9\a \x01(\x03R\tupdatedAt\"c\n" +
+	"\x04Item\x12\x1b\n" +
+	"\tconfig_id\x18\x01 \x01(\x05R\bconfigId\x12\x12\n" +
+	"\x04type\x18\x02 \x01(\x05R\x04type\x12\x18\n" +
+	"\asubtype\x18\x03 \x01(\x05R\asubtype\x12\x10\n" +
+	"\x03num\x18\x04 \x01(\x03R\x03num\"D\n" +
+	"\n" +
+	"RewardItem\x12\x10\n" +
+	"\x03cid\x18\x01 \x01(\x05R\x03cid\x12\x12\n" +
+	"\x04type\x18\x02 \x01(\x05R\x04type\x12\x10\n" +
+	"\x03num\x18\x03 \x01(\x03R\x03num\"\xcb\x01\n" +
+	"\x11RoleItemChangeDto\x12\x10\n" +
+	"\x03cid\x18\x01 \x01(\x05R\x03cid\x12\x17\n" +
+	"\arole_id\x18\x02 \x01(\x03R\x06roleId\x12\x10\n" +
+	"\x03num\x18\x03 \x01(\x03R\x03num\x12\x12\n" +
+	"\x04type\x18\x04 \x01(\x05R\x04type\x12\x10\n" +
+	"\x03inc\x18\x05 \x01(\bR\x03inc\x12\x16\n" +
+	"\x06before\x18\x06 \x01(\x03R\x06before\x12\x14\n" +
+	"\x05after\x18\a \x01(\x03R\x05after\x12%\n" +
+	"\x0eequip_snapshot\x18\b \x01(\fR\requipSnapshot\"\xa3\x01\n" +
+	"\tEquipAttr\x12\x19\n" +
+	"\battr_cid\x18\x01 \x01(\x05R\aattrCid\x12 \n" +
+	"\fattr_coe_cid\x18\x02 \x01(\x05R\n" +
+	"attrCoeCid\x12\x1b\n" +
+	"\tattr_type\x18\x03 \x01(\x05R\battrType\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x04 \x01(\x03R\tcreatedAt\x12\x1d\n" +
+	"\n" +
+	"updated_at\x18\x05 \x01(\x03R\tupdatedAt\"R\n" +
+	"\x11EquipAttrSnapshot\x12\x10\n" +
+	"\x03cid\x18\x01 \x01(\x05R\x03cid\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\x02R\x05value\x12\x15\n" +
+	"\x06e_type\x18\x03 \x01(\x05R\x05eType\"R\n" +
+	"\rEquipSnapshot\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1b\n" +
+	"\tforge_cid\x18\x03 \x01(\x05R\bforgeCid\x12\x14\n" +
+	"\x05attrs\x18\x04 \x01(\fR\x05attrs\".\n" +
+	"\vEnhanceInfo\x12\x1f\n" +
+	"\venhance_cid\x18\x01 \x01(\fR\n" +
+	"enhanceCid\"\xcd\x01\n" +
+	"\tEquipment\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x19\n" +
+	"\bhas_wore\x18\x02 \x01(\bR\ahasWore\x12\x1b\n" +
+	"\tconfig_id\x18\x03 \x01(\x05R\bconfigId\x12\x1b\n" +
+	"\tforge_cid\x18\x04 \x01(\x05R\bforgeCid\x12\x1d\n" +
+	"\n" +
+	"has_locked\x18\x05 \x01(\bR\thasLocked\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x06 \x01(\x03R\tcreatedAt\x12\x1d\n" +
+	"\n" +
+	"equip_attr\x18\a \x01(\fR\tequipAttr\"P\n" +
+	"\rEquipmentInfo\x12\x1c\n" +
+	"\tequipment\x18\x01 \x01(\fR\tequipment\x12!\n" +
+	"\fenhance_info\x18\x02 \x01(\fR\venhanceInfo\"/\n" +
+	"\vGemSlotList\x12 \n" +
+	"\fgem_cid_list\x18\x01 \x01(\fR\n" +
+	"gemCidList\"-\n" +
+	"\x0eGemPresetInfos\x12\x1b\n" +
+	"\tslot_list\x18\x01 \x01(\fR\bslotList\">\n" +
+	"\aGemSlot\x12\x16\n" +
+	"\x06preset\x18\x01 \x01(\x05R\x06preset\x12\x1b\n" +
+	"\tgem_infos\x18\x02 \x01(\fR\bgemInfos\"E\n" +
+	"\aGemLock\x12\x1b\n" +
+	"\tconfig_id\x18\x01 \x01(\x05R\bconfigId\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x02 \x01(\x03R\tcreatedAt\"?\n" +
+	"\aGemInfo\x12\x19\n" +
+	"\bgem_slot\x18\x01 \x01(\fR\agemSlot\x12\x19\n" +
+	"\bgem_lock\x18\x02 \x01(\fR\agemLock\"d\n" +
+	"\aFashion\x12\x19\n" +
+	"\bhas_wore\x18\x01 \x01(\bR\ahasWore\x12\x1f\n" +
+	"\vconfig_type\x18\x02 \x01(\x05R\n" +
+	"configType\x12\x1d\n" +
+	"\n" +
+	"star_level\x18\x03 \x01(\x05R\tstarLevel\"3\n" +
+	"\x14FashionSlotSkillList\x12\x1b\n" +
+	"\tskill_ids\x18\x01 \x01(\fR\bskillIds\"2\n" +
+	"\x13FashionSkillTabInfo\x12\x1b\n" +
+	"\tslot_list\x18\x01 \x01(\fR\bslotList\">\n" +
+	"\x14FashionSkillTabInfos\x12&\n" +
+	"\x0fskill_tab_infos\x18\x01 \x01(\fR\rskillTabInfos\"Z\n" +
+	"\x10FashionSkillSlot\x12\x16\n" +
+	"\x06preset\x18\x01 \x01(\x05R\x06preset\x12.\n" +
+	"\x13fashion_skill_infos\x18\x02 \x01(\fR\x11fashionSkillInfos\"U\n" +
+	"\vFashionInfo\x12\x18\n" +
+	"\afashion\x18\x01 \x01(\fR\afashion\x12,\n" +
+	"\x12fashion_skill_slot\x18\x02 \x01(\fR\x10fashionSkillSlot\"8\n" +
+	"\x05Skill\x12\x1b\n" +
+	"\tconfig_id\x18\x01 \x01(\x05R\bconfigId\x12\x12\n" +
+	"\x04type\x18\x02 \x01(\x05R\x04type\"b\n" +
+	"\vActiveSkill\x12\x1b\n" +
+	"\tskill_cid\x18\x01 \x01(\x05R\bskillCid\x12\x1b\n" +
+	"\tlevel_cid\x18\x02 \x01(\x05R\blevelCid\x12\x19\n" +
+	"\bstar_cid\x18\x03 \x01(\x05R\astarCid\".\n" +
+	"\rActSkillInfos\x12\x1d\n" +
+	"\n" +
+	"skill_info\x18\x01 \x01(\fR\tskillInfo\"Q\n" +
+	"\x0fActiveSkillSlot\x12\x16\n" +
+	"\x06preset\x18\x01 \x01(\x05R\x06preset\x12&\n" +
+	"\x0fact_skill_infos\x18\x02 \x01(\fR\ractSkillInfos\"p\n" +
+	"\tSkillInfo\x12\x14\n" +
+	"\x05skill\x18\x01 \x01(\fR\x05skill\x12!\n" +
+	"\factive_skill\x18\x02 \x01(\fR\vactiveSkill\x12*\n" +
+	"\x11active_skill_slot\x18\x03 \x01(\fR\x0factiveSkillSlot\"o\n" +
+	"\tCombating\x12\x10\n" +
+	"\x03cid\x18\x01 \x01(\x05R\x03cid\x12\x1d\n" +
+	"\n" +
+	"combat_uid\x18\x02 \x01(\tR\tcombatUid\x12\x12\n" +
+	"\x04info\x18\x03 \x01(\tR\x04info\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x04 \x01(\x03R\tcreatedAt\"\xe9\x01\n" +
+	"\vCombatLevel\x12\x10\n" +
+	"\x03cid\x18\x01 \x01(\x05R\x03cid\x12\x14\n" +
+	"\x05score\x18\x02 \x01(\x05R\x05score\x12\x1b\n" +
+	"\tbest_time\x18\x03 \x01(\x05R\bbestTime\x12!\n" +
+	"\fbest_defense\x18\x04 \x01(\x05R\vbestDefense\x12\x17\n" +
+	"\abest_lv\x18\x05 \x01(\x05R\x06bestLv\x12\x1b\n" +
+	"\tbest_wave\x18\x06 \x01(\x05R\bbestWave\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\a \x01(\x03R\tcreatedAt\x12\x1d\n" +
+	"\n" +
+	"updated_at\x18\b \x01(\x03R\tupdatedAt\"F\n" +
+	"\fCombatReward\x12\x10\n" +
+	"\x03cid\x18\x01 \x01(\x05R\x03cid\x12$\n" +
+	"\x0egot_score_list\x18\x02 \x01(\fR\fgotScoreList\"e\n" +
+	"\vCombatSweep\x12\x10\n" +
+	"\x03cid\x18\x01 \x01(\x05R\x03cid\x12%\n" +
+	"\x0ewith_privilege\x18\x02 \x01(\bR\rwithPrivilege\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x03 \x01(\x03R\tcreatedAt\"\xbc\x04\n" +
+	"\tCombatLog\x12\x1d\n" +
+	"\n" +
+	"combat_uid\x18\x01 \x01(\tR\tcombatUid\x12(\n" +
+	"\x10max_combat_level\x18\x02 \x01(\x05R\x0emaxCombatLevel\x12\x1d\n" +
+	"\n" +
+	"equip_info\x18\x03 \x01(\tR\tequipInfo\x12#\n" +
+	"\rinlaying_gems\x18\x04 \x01(\tR\finlayingGems\x12\x1f\n" +
+	"\vspirit_info\x18\x05 \x01(\tR\n" +
+	"spiritInfo\x12!\n" +
+	"\fcombat_score\x18\x06 \x01(\x05R\vcombatScore\x12\x1d\n" +
+	"\n" +
+	"combat_cid\x18\a \x01(\x05R\tcombatCid\x12\x18\n" +
+	"\arewards\x18\b \x01(\fR\arewards\x12#\n" +
+	"\rskill_choices\x18\t \x01(\fR\fskillChoices\x12%\n" +
+	"\x0ekilled_enemies\x18\n" +
+	" \x01(\fR\rkilledEnemies\x12\x1f\n" +
+	"\vdefend_time\x18\v \x01(\x05R\n" +
+	"defendTime\x12+\n" +
+	"\x11defend_percentage\x18\f \x01(\x05R\x10defendPercentage\x12,\n" +
+	"\x12has_double_rewards\x18\r \x01(\bR\x10hasDoubleRewards\x12*\n" +
+	"\x11spirit_fire_count\x18\x0e \x01(\x05R\x0fspiritFireCount\x12\x12\n" +
+	"\x04info\x18\x0f \x01(\tR\x04info\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x10 \x01(\x03R\tcreatedAt\"8\n" +
+	"$CombatLevelFirstCompleteRewardRecord\x12\x10\n" +
+	"\x03cid\x18\x01 \x01(\fR\x03cid\"\x92\x02\n" +
+	"\x0fBattleLevelInfo\x12\x1c\n" +
+	"\tcombating\x18\x01 \x01(\fR\tcombating\x12!\n" +
+	"\fcombat_level\x18\x02 \x01(\fR\vcombatLevel\x12#\n" +
+	"\rcombat_reward\x18\x03 \x01(\fR\fcombatReward\x12!\n" +
+	"\fcombat_sweep\x18\x04 \x01(\fR\vcombatSweep\x12\x1d\n" +
+	"\n" +
+	"combat_log\x18\x05 \x01(\fR\tcombatLog\x12W\n" +
+	")combat_level_first_complete_reward_record\x18\x06 \x01(\fR$combatLevelFirstCompleteRewardRecord\"\x96\x01\n" +
+	"\x04Task\x12\x12\n" +
+	"\x04type\x18\x01 \x01(\x05R\x04type\x12\x1a\n" +
+	"\bsubgroup\x18\x02 \x01(\x05R\bsubgroup\x12\x1a\n" +
+	"\bprogress\x18\x03 \x01(\x05R\bprogress\x12!\n" +
+	"\freward_slice\x18\x04 \x01(\fR\vrewardSlice\x12\x1f\n" +
+	"\vlast_update\x18\x05 \x01(\x03R\n" +
+	"lastUpdate\"\x1e\n" +
+	"\bTaskInfo\x12\x12\n" +
+	"\x04task\x18\x01 \x01(\fR\x04task\"\xa9\x02\n" +
+	"\fPaymentOrder\x12\x19\n" +
+	"\border_id\x18\x01 \x01(\x03R\aorderId\x12\x19\n" +
+	"\bgift_cid\x18\x02 \x01(\x05R\agiftCid\x12\x14\n" +
+	"\x05param\x18\x03 \x01(\tR\x05param\x12\x18\n" +
+	"\achannel\x18\x04 \x01(\tR\achannel\x12\x16\n" +
+	"\x06status\x18\x05 \x01(\x05R\x06status\x12\x17\n" +
+	"\aerr_msg\x18\x06 \x01(\tR\x06errMsg\x12\x14\n" +
+	"\x05scene\x18\a \x01(\x05R\x05scene\x12\x16\n" +
+	"\x06amount\x18\b \x01(\x03R\x06amount\x12\x18\n" +
+	"\arewards\x18\t \x01(\fR\arewards\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\n" +
+	" \x01(\x03R\tcreatedAt\x12\x1b\n" +
+	"\tfinish_at\x18\v \x01(\x03R\bfinishAt\"7\n" +
+	"\x10PaymentOrderInfo\x12#\n" +
+	"\rpayment_order\x18\x01 \x01(\fR\fpaymentOrder\"\xb1\x01\n" +
+	"\x14ShopGoodsPurchaseLog\x12\x1b\n" +
+	"\tconfig_id\x18\x01 \x01(\x05R\bconfigId\x12\x10\n" +
+	"\x03num\x18\x02 \x01(\x05R\x03num\x12*\n" +
+	"\x11recharge_order_id\x18\x03 \x01(\x05R\x0frechargeOrderId\x12\x1f\n" +
+	"\vhas_storage\x18\x04 \x01(\bR\n" +
+	"hasStorage\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x05 \x01(\x03R\tcreatedAt\"g\n" +
+	"\fStorageGoods\x12\x1b\n" +
+	"\tconfig_id\x18\x01 \x01(\x05R\bconfigId\x12\x10\n" +
+	"\x03num\x18\x02 \x01(\x05R\x03num\x12(\n" +
+	"\x10pre_storage_time\x18\x03 \x01(\x03R\x0epreStorageTime\"\x85\x01\n" +
+	"\x1bDiamondShopGoodsPurchaseLog\x12\x1b\n" +
+	"\tconfig_id\x18\x01 \x01(\x05R\bconfigId\x12*\n" +
+	"\x11recharge_order_id\x18\x02 \x01(\x03R\x0frechargeOrderId\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x03 \x01(\x03R\tcreatedAt\"\xbb\x01\n" +
+	"\x0fGiftPurchaseLog\x12\x1b\n" +
+	"\tconfig_id\x18\x01 \x01(\x05R\bconfigId\x12\x1b\n" +
+	"\tgift_type\x18\x02 \x01(\x05R\bgiftType\x12*\n" +
+	"\x11recharge_order_id\x18\x03 \x01(\x05R\x0frechargeOrderId\x12#\n" +
+	"\rreward_status\x18\x04 \x01(\fR\frewardStatus\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x05 \x01(\x03R\tcreatedAt\"\xdd\x01\n" +
+	"\rShopGoodsInfo\x125\n" +
+	"\x17shop_goods_purchase_log\x18\x01 \x01(\fR\x14shopGoodsPurchaseLog\x12#\n" +
+	"\rstorage_goods\x18\x02 \x01(\fR\fstorageGoods\x12D\n" +
+	"\x1fdiamond_shop_goods_purchase_log\x18\x03 \x01(\fR\x1bdiamondShopGoodsPurchaseLog\x12*\n" +
+	"\x11gift_purchase_log\x18\x04 \x01(\fR\x0fgiftPurchaseLog\"\x87\x04\n" +
+	"\fDrawGachaLog\x12\x1b\n" +
+	"\tconfig_id\x18\x01 \x01(\x05R\bconfigId\x12\x14\n" +
+	"\x05count\x18\x02 \x01(\x03R\x05count\x12J\n" +
+	"\"minimum_guarantee_loop_plan1_count\x18\x03 \x01(\x03R\x1eminimumGuaranteeLoopPlan1Count\x127\n" +
+	"\x18current_loop_plan1_count\x18\x04 \x01(\x03R\x15currentLoopPlan1Count\x12J\n" +
+	"\"minimum_guarantee_loop_plan2_count\x18\x05 \x01(\x03R\x1eminimumGuaranteeLoopPlan2Count\x127\n" +
+	"\x18current_loop_plan2_count\x18\x06 \x01(\x03R\x15currentLoopPlan2Count\x12Q\n" +
+	"&once_limit_minimum_guarantee_loop_plan\x18\a \x01(\x03R!onceLimitMinimumGuaranteeLoopPlan\x12/\n" +
+	"\x14once_limit_get_count\x18\b \x01(\x05R\x11onceLimitGetCount\x12\x17\n" +
+	"\ais_init\x18\t \x01(\bR\x06isInit\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\n" +
+	" \x01(\x03R\tcreatedAt\"\x9a\x01\n" +
+	"\x10LotteryHoroscope\x12\x12\n" +
+	"\x04uuid\x18\x01 \x01(\x03R\x04uuid\x12&\n" +
+	"\x0fbeen_drawn_list\x18\x02 \x01(\fR\rbeenDrawnList\x12\x1d\n" +
+	"\n" +
+	"turn_count\x18\x03 \x01(\x05R\tturnCount\x12\x15\n" +
+	"\x06act_id\x18\x04 \x01(\x05R\x05actId\x12\x14\n" +
+	"\x05level\x18\x05 \x01(\x05R\x05level\"\xeb\x01\n" +
+	"\tLuckyDraw\x12\x12\n" +
+	"\x04uuid\x18\x01 \x01(\x03R\x04uuid\x12\x15\n" +
+	"\x06act_id\x18\x02 \x01(\x05R\x05actId\x12\x14\n" +
+	"\x05level\x18\x03 \x01(\x05R\x05level\x12\x1d\n" +
+	"\n" +
+	"luck_value\x18\x04 \x01(\x05R\tluckValue\x12$\n" +
+	"\x0elast_free_time\x18\x05 \x01(\x03R\flastFreeTime\x12\x1d\n" +
+	"\n" +
+	"draw_count\x18\x06 \x01(\x05R\tdrawCount\x129\n" +
+	"\x19draw_count_reward_records\x18\a \x01(\fR\x16drawCountRewardRecords\"a\n" +
+	"\n" +
+	"GradedFund\x12\x14\n" +
+	"\x05level\x18\x01 \x01(\x05R\x05level\x12\x1c\n" +
+	"\tGotStatus\x18\x02 \x01(\fR\tGotStatus\x12\x1f\n" +
+	"\vunlock_flag\x18\x03 \x01(\x05R\n" +
+	"unlockFlag\"Q\n" +
+	"\tLevelGift\x12'\n" +
+	"\x0fpurchase_record\x18\x01 \x01(\fR\x0epurchaseRecord\x12\x1b\n" +
+	"\tmax_stage\x18\x02 \x01(\x05R\bmaxStage\"\x94\x02\n" +
+	"\x1cDailyRechargeRewardGotStatus\x12$\n" +
+	"\x0ecurrent_day_no\x18\x01 \x01(\x05R\fcurrentDayNo\x12.\n" +
+	"\x13current_diamond_num\x18\x02 \x01(\x05R\x11currentDiamondNum\x12;\n" +
+	"\x1aaccumulative_days_got_list\x18\x03 \x01(\fR\x17accumulativeDaysGotList\x127\n" +
+	"\x18diamond_level_get_status\x18\x04 \x01(\fR\x15diamondLevelGetStatus\x12(\n" +
+	"\x10current_day_time\x18\x05 \x01(\x03R\x0ecurrentDayTime\"H\n" +
+	"\rDailyRecharge\x12\x12\n" +
+	"\x04uuid\x18\x01 \x01(\x03R\x04uuid\x12#\n" +
+	"\rreward_status\x18\x02 \x01(\fR\frewardStatus\"a\n" +
+	"\x12CumulativeRecharge\x120\n" +
+	"\x14current_recharge_num\x18\x01 \x01(\x05R\x12currentRechargeNum\x12\x19\n" +
+	"\bgot_list\x18\x02 \x01(\fR\agotList\"\xf2\x01\n" +
+	"\fActivityInfo\x12+\n" +
+	"\x11lottery_horoscope\x18\x01 \x01(\fR\x10lotteryHoroscope\x12\x1d\n" +
+	"\n" +
+	"lucky_draw\x18\x02 \x01(\fR\tluckyDraw\x12\x1f\n" +
+	"\vgraded_fund\x18\x03 \x01(\fR\n" +
+	"gradedFund\x12%\n" +
+	"\x0edaily_recharge\x18\x04 \x01(\fR\rdailyRecharge\x12\x1d\n" +
+	"\n" +
+	"level_gift\x18\x05 \x01(\fR\tlevelGift\x12/\n" +
+	"\x13cumulative_recharge\x18\x06 \x01(\fR\x12cumulativeRecharge\"\x99\x03\n" +
+	"\x04Mail\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x10\n" +
+	"\x03cid\x18\x02 \x01(\x05R\x03cid\x12\x14\n" +
+	"\x05title\x18\x03 \x01(\tR\x05title\x12\x16\n" +
+	"\x06sender\x18\x04 \x01(\tR\x06sender\x12\x18\n" +
+	"\acontent\x18\x05 \x01(\tR\acontent\x12 \n" +
+	"\vattachments\x18\x06 \x01(\fR\vattachments\x12\x16\n" +
+	"\x06status\x18\a \x01(\x05R\x06status\x12\x14\n" +
+	"\x05types\x18\b \x01(\x05R\x05types\x12+\n" +
+	"\x11sending_timestamp\x18\t \x01(\x03R\x10sendingTimestamp\x12\x1b\n" +
+	"\tlast_send\x18\n" +
+	" \x01(\x03R\blastSend\x12\x12\n" +
+	"\x04from\x18\v \x01(\x03R\x04from\x12!\n" +
+	"\fexpired_time\x18\f \x01(\x03R\vexpiredTime\x12\x1f\n" +
+	"\vdelete_time\x18\r \x01(\x03R\n" +
+	"deleteTime\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x0e \x01(\x03R\tcreatedAt\x12\x16\n" +
+	"\x06extend\x18\x0f \x01(\tR\x06extend\"t\n" +
+	"\aMailLog\x12\x17\n" +
+	"\amail_id\x18\x01 \x01(\x03R\x06mailId\x12\x17\n" +
+	"\ahas_att\x18\x02 \x01(\bR\x06hasAtt\x12\x16\n" +
+	"\x06status\x18\x03 \x01(\x05R\x06status\x12\x1f\n" +
+	"\vorigin_time\x18\x04 \x01(\x03R\n" +
+	"originTime\"9\n" +
+	"\bMailInfo\x12\x12\n" +
+	"\x04mail\x18\x01 \x01(\fR\x04mail\x12\x19\n" +
+	"\bmail_log\x18\x02 \x01(\fR\amailLog\"+\n" +
+	"\bFuncOpen\x12\x1f\n" +
+	"\vunlock_list\x18\x01 \x01(\fR\n" +
+	"unlockList\"y\n" +
+	"\x12MonsterCollectItem\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x05R\x02id\x12!\n" +
+	"\fcollect_time\x18\x02 \x01(\x03R\vcollectTime\x12\x15\n" +
+	"\x06is_got\x18\x03 \x01(\bR\x05isGot\x12\x19\n" +
+	"\bgot_time\x18\x04 \x01(\x03R\agotTime\"3\n" +
+	"\x0eMonsterCollect\x12!\n" +
+	"\fcollect_list\x18\x01 \x01(\fR\vcollectList\"1\n" +
+	"\fRoleOpRecord\x12!\n" +
+	"\fchange_count\x18\x01 \x01(\x05R\vchangeCount\"}\n" +
+	"\n" +
+	"BattlePass\x12\x14\n" +
+	"\x05level\x18\x01 \x01(\x05R\x05level\x12\x10\n" +
+	"\x03exp\x18\x02 \x01(\x05R\x03exp\x12\x14\n" +
+	"\x05grade\x18\x03 \x01(\x05R\x05grade\x12\x1d\n" +
+	"\n" +
+	"got_status\x18\x04 \x01(\fR\tgotStatus\x12\x12\n" +
+	"\x04uuid\x18\x05 \x01(\x03R\x04uuid\"\xce\x01\n" +
+	"\fVipChargeLog\x12\x1b\n" +
+	"\tconfig_id\x18\x01 \x01(\x05R\bconfigId\x12\x1f\n" +
+	"\vexpire_time\x18\x02 \x01(\x03R\n" +
+	"expireTime\x12\x1f\n" +
+	"\vmail_reward\x18\x03 \x01(\x03R\n" +
+	"mailReward\x12\x19\n" +
+	"\bbuy_time\x18\x04 \x01(\x03R\abuyTime\x12%\n" +
+	"\x0eextra_periodic\x18\x05 \x01(\tR\rextraPeriodic\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x06 \x01(\x03R\tcreatedAt\"\xd7\x01\n" +
+	"\aLogInfo\x128\n" +
+	"\x18questionnaire_reward_log\x18\x01 \x01(\fR\x16questionnaireRewardLog\x12$\n" +
+	"\x0edraw_gacha_log\x18\x02 \x01(\fR\fdrawGachaLog\x12$\n" +
+	"\x0evip_charge_log\x18\x03 \x01(\fR\fvipChargeLog\x12\x1e\n" +
+	"\vad_view_log\x18\x04 \x01(\fR\tadViewLog\x12&\n" +
+	"\x0fredeem_code_log\x18\x05 \x01(\fR\rredeemCodeLog\"\x82\x01\n" +
+	"\x16QuestionnaireRewardLog\x12\x17\n" +
+	"\aquiz_id\x18\x01 \x01(\tR\x06quizId\x12\x16\n" +
+	"\x06status\x18\x02 \x01(\x05R\x06status\x12\x18\n" +
+	"\arewards\x18\x03 \x01(\fR\arewards\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x04 \x01(\x03R\tcreatedAt\"A\n" +
+	"\vFeedbackLog\x12\x18\n" +
+	"\acontent\x18\x01 \x01(\tR\acontent\x12\x18\n" +
+	"\arewards\x18\x02 \x01(\fR\arewards\"4\n" +
+	"\x0fFeedbackLogInfo\x12!\n" +
+	"\ffeedback_log\x18\x01 \x01(\fR\vfeedbackLog\"C\n" +
+	"\x03Uav\x12\x1f\n" +
+	"\vconfig_type\x18\x01 \x01(\x05R\n" +
+	"configType\x12\x1b\n" +
+	"\tconfig_id\x18\x02 \x01(\x05R\bconfigId\"E\n" +
+	"\fUavFormation\x12\x1c\n" +
+	"\tformation\x18\x01 \x01(\fR\tformation\x12\x17\n" +
+	"\ais_edit\x18\x02 \x01(\bR\x06isEdit\"\x96\x01\n" +
+	"\vUavSlotItem\x12\x1b\n" +
+	"\tpreset_id\x18\x01 \x01(\x05R\bpresetId\x12\x17\n" +
+	"\aslot_id\x18\x02 \x01(\x05R\x06slotId\x12\x15\n" +
+	"\x06pos_id\x18\x03 \x01(\x05R\x05posId\x12\x1b\n" +
+	"\tskill_cid\x18\x04 \x01(\x05R\bskillCid\x12\x1d\n" +
+	"\n" +
+	"skill_type\x18\x05 \x01(\x05R\tskillType\"8\n" +
+	"\bUavSlots\x12\x16\n" +
+	"\x06preset\x18\x01 \x01(\x05R\x06preset\x12\x14\n" +
+	"\x05slots\x18\x02 \x01(\fR\x05slots\"]\n" +
+	"\aUavInfo\x12\x10\n" +
+	"\x03uav\x18\x01 \x01(\fR\x03uav\x12#\n" +
+	"\ruav_formation\x18\x02 \x01(\fR\fuavFormation\x12\x1b\n" +
+	"\tuav_slots\x18\x03 \x01(\fR\buavSlots\")\n" +
+	"\x0eWeaponSkinWear\x12\x17\n" +
+	"\awear_id\x18\x01 \x01(\x03R\x06wearId\")\n" +
+	"\n" +
+	"WeaponSkin\x12\x1b\n" +
+	"\tconfig_id\x18\x01 \x01(\x05R\bconfigId\"W\n" +
+	"\n" +
+	"WeaponInfo\x12(\n" +
+	"\x10weapon_skin_wear\x18\x01 \x01(\fR\x0eweaponSkinWear\x12\x1f\n" +
+	"\vweapon_skin\x18\x02 \x01(\fR\n" +
+	"weaponSkin\"\x9d\x01\n" +
+	"\vAfkEarnings\x12\x1d\n" +
+	"\n" +
+	"combat_cid\x18\x01 \x01(\x05R\tcombatCid\x12\x1b\n" +
+	"\tpass_time\x18\x02 \x01(\x03R\bpassTime\x12,\n" +
+	"\x12last_received_time\x18\x03 \x01(\x03R\x10lastReceivedTime\x12$\n" +
+	"\x0elast_left_item\x18\x04 \x01(\fR\flastLeftItem\"9\n" +
+	"\rBadgeRedPoint\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x16\n" +
+	"\x06expire\x18\x02 \x01(\x03R\x06expire\"1\n" +
+	"\tBadgeInfo\x12$\n" +
+	"\x0ered_point_list\x18\x01 \x01(\fR\fredPointList\"B\n" +
+	"\x14RenovationLaboratory\x12*\n" +
+	"\x11unlocked_skill_id\x18\x01 \x01(\fR\x0funlockedSkillId\"R\n" +
+	"\x12MttCbtTicketReward\x12\x1d\n" +
+	"\n" +
+	"ticket_num\x18\x01 \x01(\x05R\tticketNum\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x02 \x01(\x03R\tcreatedAt\"K\n" +
+	"\rRedeemCodeLog\x12\x1b\n" +
+	"\tconfig_id\x18\x01 \x01(\x05R\bconfigId\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x02 \x01(\x03R\tcreatedAt\"Y\n" +
+	"\tAdViewLog\x12\x1b\n" +
+	"\tconfig_id\x18\x01 \x01(\x05R\bconfigId\x12\x10\n" +
+	"\x03req\x18\x02 \x01(\tR\x03req\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x03 \x01(\x03R\tcreatedAt\"\x96\x02\n" +
+	"\x12CombatAntiCheating\x12\x10\n" +
+	"\x03cid\x18\x01 \x01(\x05R\x03cid\x12\x1b\n" +
+	"\tanti_type\x18\x02 \x01(\x05R\bantiType\x12\x1b\n" +
+	"\tcost_time\x18\x03 \x01(\x03R\bcostTime\x12\x14\n" +
+	"\x05power\x18\x04 \x01(\x03R\x05power\x12(\n" +
+	"\x10allow_max_damage\x18\x05 \x01(\x03R\x0eallowMaxDamage\x12*\n" +
+	"\x11client_max_damage\x18\x06 \x01(\x03R\x0fclientMaxDamage\x12-\n" +
+	"\x13cid_allow_max_power\x18\a \x01(\x03R\x10cidAllowMaxPower\x12\x19\n" +
+	"\boccur_tm\x18\b \x01(\x03R\aoccurTm\"@\n" +
+	"\x10AntiCheatingInfo\x12,\n" +
+	"\x12anti_cheating_list\x18\x01 \x01(\fR\x10antiCheatingList\"\xbc\x03\n" +
+	"\fRoleBaseInfo\x12\x10\n" +
+	"\x03rid\x18\x01 \x01(\x04R\x03rid\x12\x1b\n" +
+	"\tserver_id\x18\x02 \x01(\tR\bserverId\x12\x1d\n" +
+	"\n" +
+	"account_id\x18\x03 \x01(\x03R\taccountId\x12\x1b\n" +
+	"\tsocial_id\x18\x04 \x01(\x05R\bsocialId\x12$\n" +
+	"\x0einit_server_id\x18\x05 \x01(\tR\finitServerId\x12\x18\n" +
+	"\aaccount\x18\x06 \x01(\tR\aaccount\x12\x1b\n" +
+	"\tnick_name\x18\b \x01(\tR\bnickName\x12\x16\n" +
+	"\x06avatar\x18\t \x01(\tR\x06avatar\x12\x14\n" +
+	"\x05level\x18\n" +
+	" \x01(\x03R\x05level\x12&\n" +
+	"\x0flast_login_time\x18\v \x01(\x03R\rlastLoginTime\x12(\n" +
+	"\x10last_logout_time\x18\f \x01(\x03R\x0elastLogoutTime\x12\x14\n" +
+	"\x05power\x18\r \x01(\x03R\x05power\x12\x10\n" +
+	"\x03sex\x18\x0e \x01(\x05R\x03sex\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\x0f \x01(\x03R\tcreatedAt\x12\x1d\n" +
+	"\n" +
+	"updated_at\x18\x10 \x01(\x03R\tupdatedAt\" \n" +
+	"\bItemInfo\x12\x14\n" +
+	"\x05items\x18d \x01(\fR\x05itemsB\x1aZ\x18gs/pbtest/internal/pgsqlb\x06proto3"
 
 var (
 	file_pg_tables_proto_rawDescOnce sync.Once
@@ -139,9 +6035,91 @@ func file_pg_tables_proto_rawDescGZIP() []byte {
 	return file_pg_tables_proto_rawDescData
 }
 
-var file_pg_tables_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_pg_tables_proto_msgTypes = make([]protoimpl.MessageInfo, 83)
 var file_pg_tables_proto_goTypes = []any{
-	(*Player)(nil), // 0: pgsql.Player
+	(*Player)(nil),                               // 0: pgsql.Player
+	(*Item)(nil),                                 // 1: pgsql.Item
+	(*RewardItem)(nil),                           // 2: pgsql.RewardItem
+	(*RoleItemChangeDto)(nil),                    // 3: pgsql.RoleItemChangeDto
+	(*EquipAttr)(nil),                            // 4: pgsql.EquipAttr
+	(*EquipAttrSnapshot)(nil),                    // 5: pgsql.EquipAttrSnapshot
+	(*EquipSnapshot)(nil),                        // 6: pgsql.EquipSnapshot
+	(*EnhanceInfo)(nil),                          // 7: pgsql.EnhanceInfo
+	(*Equipment)(nil),                            // 8: pgsql.Equipment
+	(*EquipmentInfo)(nil),                        // 9: pgsql.EquipmentInfo
+	(*GemSlotList)(nil),                          // 10: pgsql.GemSlotList
+	(*GemPresetInfos)(nil),                       // 11: pgsql.GemPresetInfos
+	(*GemSlot)(nil),                              // 12: pgsql.GemSlot
+	(*GemLock)(nil),                              // 13: pgsql.GemLock
+	(*GemInfo)(nil),                              // 14: pgsql.GemInfo
+	(*Fashion)(nil),                              // 15: pgsql.Fashion
+	(*FashionSlotSkillList)(nil),                 // 16: pgsql.FashionSlotSkillList
+	(*FashionSkillTabInfo)(nil),                  // 17: pgsql.FashionSkillTabInfo
+	(*FashionSkillTabInfos)(nil),                 // 18: pgsql.FashionSkillTabInfos
+	(*FashionSkillSlot)(nil),                     // 19: pgsql.FashionSkillSlot
+	(*FashionInfo)(nil),                          // 20: pgsql.FashionInfo
+	(*Skill)(nil),                                // 21: pgsql.Skill
+	(*ActiveSkill)(nil),                          // 22: pgsql.ActiveSkill
+	(*ActSkillInfos)(nil),                        // 23: pgsql.ActSkillInfos
+	(*ActiveSkillSlot)(nil),                      // 24: pgsql.ActiveSkillSlot
+	(*SkillInfo)(nil),                            // 25: pgsql.SkillInfo
+	(*Combating)(nil),                            // 26: pgsql.Combating
+	(*CombatLevel)(nil),                          // 27: pgsql.CombatLevel
+	(*CombatReward)(nil),                         // 28: pgsql.CombatReward
+	(*CombatSweep)(nil),                          // 29: pgsql.CombatSweep
+	(*CombatLog)(nil),                            // 30: pgsql.CombatLog
+	(*CombatLevelFirstCompleteRewardRecord)(nil), // 31: pgsql.CombatLevelFirstCompleteRewardRecord
+	(*BattleLevelInfo)(nil),                      // 32: pgsql.BattleLevelInfo
+	(*Task)(nil),                                 // 33: pgsql.Task
+	(*TaskInfo)(nil),                             // 34: pgsql.TaskInfo
+	(*PaymentOrder)(nil),                         // 35: pgsql.PaymentOrder
+	(*PaymentOrderInfo)(nil),                     // 36: pgsql.PaymentOrderInfo
+	(*ShopGoodsPurchaseLog)(nil),                 // 37: pgsql.ShopGoodsPurchaseLog
+	(*StorageGoods)(nil),                         // 38: pgsql.StorageGoods
+	(*DiamondShopGoodsPurchaseLog)(nil),          // 39: pgsql.DiamondShopGoodsPurchaseLog
+	(*GiftPurchaseLog)(nil),                      // 40: pgsql.GiftPurchaseLog
+	(*ShopGoodsInfo)(nil),                        // 41: pgsql.ShopGoodsInfo
+	(*DrawGachaLog)(nil),                         // 42: pgsql.DrawGachaLog
+	(*LotteryHoroscope)(nil),                     // 43: pgsql.LotteryHoroscope
+	(*LuckyDraw)(nil),                            // 44: pgsql.LuckyDraw
+	(*GradedFund)(nil),                           // 45: pgsql.GradedFund
+	(*LevelGift)(nil),                            // 46: pgsql.LevelGift
+	(*DailyRechargeRewardGotStatus)(nil),         // 47: pgsql.DailyRechargeRewardGotStatus
+	(*DailyRecharge)(nil),                        // 48: pgsql.DailyRecharge
+	(*CumulativeRecharge)(nil),                   // 49: pgsql.CumulativeRecharge
+	(*ActivityInfo)(nil),                         // 50: pgsql.ActivityInfo
+	(*Mail)(nil),                                 // 51: pgsql.Mail
+	(*MailLog)(nil),                              // 52: pgsql.MailLog
+	(*MailInfo)(nil),                             // 53: pgsql.MailInfo
+	(*FuncOpen)(nil),                             // 54: pgsql.FuncOpen
+	(*MonsterCollectItem)(nil),                   // 55: pgsql.MonsterCollectItem
+	(*MonsterCollect)(nil),                       // 56: pgsql.MonsterCollect
+	(*RoleOpRecord)(nil),                         // 57: pgsql.RoleOpRecord
+	(*BattlePass)(nil),                           // 58: pgsql.BattlePass
+	(*VipChargeLog)(nil),                         // 59: pgsql.VipChargeLog
+	(*LogInfo)(nil),                              // 60: pgsql.LogInfo
+	(*QuestionnaireRewardLog)(nil),               // 61: pgsql.QuestionnaireRewardLog
+	(*FeedbackLog)(nil),                          // 62: pgsql.FeedbackLog
+	(*FeedbackLogInfo)(nil),                      // 63: pgsql.FeedbackLogInfo
+	(*Uav)(nil),                                  // 64: pgsql.Uav
+	(*UavFormation)(nil),                         // 65: pgsql.UavFormation
+	(*UavSlotItem)(nil),                          // 66: pgsql.UavSlotItem
+	(*UavSlots)(nil),                             // 67: pgsql.UavSlots
+	(*UavInfo)(nil),                              // 68: pgsql.UavInfo
+	(*WeaponSkinWear)(nil),                       // 69: pgsql.WeaponSkinWear
+	(*WeaponSkin)(nil),                           // 70: pgsql.WeaponSkin
+	(*WeaponInfo)(nil),                           // 71: pgsql.WeaponInfo
+	(*AfkEarnings)(nil),                          // 72: pgsql.AfkEarnings
+	(*BadgeRedPoint)(nil),                        // 73: pgsql.BadgeRedPoint
+	(*BadgeInfo)(nil),                            // 74: pgsql.BadgeInfo
+	(*RenovationLaboratory)(nil),                 // 75: pgsql.RenovationLaboratory
+	(*MttCbtTicketReward)(nil),                   // 76: pgsql.MttCbtTicketReward
+	(*RedeemCodeLog)(nil),                        // 77: pgsql.RedeemCodeLog
+	(*AdViewLog)(nil),                            // 78: pgsql.AdViewLog
+	(*CombatAntiCheating)(nil),                   // 79: pgsql.CombatAntiCheating
+	(*AntiCheatingInfo)(nil),                     // 80: pgsql.AntiCheatingInfo
+	(*RoleBaseInfo)(nil),                         // 81: pgsql.RoleBaseInfo
+	(*ItemInfo)(nil),                             // 82: pgsql.ItemInfo
 }
 var file_pg_tables_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -162,7 +6140,7 @@ func file_pg_tables_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pg_tables_proto_rawDesc), len(file_pg_tables_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   1,
+			NumMessages:   83,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package pbtest;
+
+import "orm.option.proto";
+
+option go_package = "gs/pbtest";
+
+// oneof_tags 演示（EX-SC-006，非表消息，供 -mode=tag 验证）。
+message TagExample {
+  string with_tags = 1 [(orm.tags) = "json:\"withTags\""];
+
+  oneof one_of {
+    option (orm.oneof_tags) = "json:\"oneOf\"";
+    string a = 5 [(orm.tags) = "json:\"A\""];
+    int32 b = 6 [(orm.tags) = "json:\"b\""];
+  }
+}

@@ -17,6 +17,9 @@ protoc \
   -I options -I ${PROTO_INPUT_DIR} \
   ${PROTO_INPUT_DIR}/*.proto
 
+# 业务 .pb.go 追加 orm.tags / oneof_tags
+protoc-gen-go-orm -mode=tag -pb-go-dir=${OUT_BASE_DIR}
+
 # 生成 mysql 数据库 .pb.go 文件
 protoc \
   --go_out=paths=source_relative:${OUT_MYSQL_BASE_DIR} \

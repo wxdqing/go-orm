@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package pbtest;
+
+import "orm.option.proto";
+
+option go_package = "gs/pbtest";
+
+enum CoveragePlayerEnum {
+  CoveragePlayerEnum_None = 0;
+  CoveragePlayerEnum_Test1 = 1;
+  CoveragePlayerEnum_Test2 = 2;
+}
+
+message FieldsHero {
+  int64 id = 1;
+  int32 cid = 2;
+  int32 hero_level = 3;
+}
+
+message FieldsBaseModel {
+  int64 created_at = 1 [(orm.tags) = "gorm:\"autoCreateTime;<-:create\" json:\"createdAt\""];
+  int64 updated_at = 2 [(orm.tags) = "gorm:\"autoUpdateTime\" json:\"updatedAt\""];
+}
+
+// FIELDS 模式 + blob/json + skip_set_default（EX-SC-001/003/004）。
+message FieldsPlayer {
+  option (orm.table) = true;
+  option (orm.node_type) = "game";
+  option (orm.table_store_mode) = TABLE_STORE_MODE_FIELDS;
+
+  int64 id = 1 [(orm.primary_key) = true];
+  string name = 2 [(orm.index) = true];
+  int32 level = 3;
+  int64 exp = 4;
+  repeated FieldsHero heros = 5 [(orm.tags) = "gorm:\"type:blob\""];
+  map<string, int32> settings = 7;
+  CoveragePlayerEnum player_enum = 9;
+  FieldsBaseModel skip_me = 10 [(orm.tags) = "-", (orm.skip_set_default) = true];
+}

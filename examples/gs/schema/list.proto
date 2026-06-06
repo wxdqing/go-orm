@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package pbtest;
+
+import "orm.option.proto";
+
+option go_package = "gs/pbtest";
+
+// 复合主键 + composite_index（EX-SC-002）。
+message Lister {
+  option (orm.table) = true;
+  option (orm.node_type) = "social";
+  option (orm.table_store_mode) = TABLE_STORE_MODE_PAYLOAD;
+  option (orm.composite_index) = "idx_lister_rid_id(rid,id)";
+
+  int64 rid = 1 [(orm.primary_key) = true, (orm.index) = true];
+  int64 id = 2 [(orm.primary_key) = true];
+  bytes data = 3;
+}

@@ -30,11 +30,11 @@ const (
 // PostgreSQL表结构定义
 type VersionedPlayer struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`            //{    "origin":"id" }
-	Version       int64                  `protobuf:"varint,28,opt,name=version,proto3" json:"version,omitempty"` //{    "origin":"version" }
-	Data          []byte                 `protobuf:"bytes,999,opt,name=data,proto3" json:"data,omitempty"`
-	CreatedAt     int64                  `protobuf:"varint,1000,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     int64                  `protobuf:"varint,1001,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primary_key;column:id;autoIncrement:false"` //{ "pk":"primary_key;column:id;autoIncrement:false", "origin":"id" }
+	Version       int64                  `protobuf:"varint,28,opt,name=version,proto3" json:"version,omitempty"`                                       //{ "origin":"version" }
+	Data          []byte                 `protobuf:"bytes,999,opt,name=data,proto3" json:"data,omitempty" gorm:"column:data;type:bytea"`
+	CreatedAt     int64                  `protobuf:"varint,1000,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;autoCreateTime;<-:create"`
+	UpdatedAt     int64                  `protobuf:"varint,1001,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;autoUpdateTime"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }

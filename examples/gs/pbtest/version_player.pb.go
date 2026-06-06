@@ -103,13 +103,13 @@ var File_version_player_proto protoreflect.FileDescriptor
 
 const file_version_player_proto_rawDesc = "" +
 	"\n" +
-	"\x14version_player.proto\x12\x06pbtest\x1a\x10orm.option.proto\"\x92\x01\n" +
+	"\x14version_player.proto\x12\x06pbtest\x1a\x10orm.option.proto\"\x96\x01\n" +
 	"\x0fVersionedPlayer\x12\x15\n" +
 	"\x02id\x18\x01 \x01(\x03B\x05\xa0\x84\x9e\x03\x01R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
 	"\x05level\x18\x03 \x01(\x05R\x05level\x12\x16\n" +
 	"\x06avatar\x18\x04 \x01(\tR\x06avatar\x12\x18\n" +
-	"\aversion\x18\x1c \x01(\x03R\aversion:\f\xf0\xa7\x1d\x01\xfa\xa7\x1d\x04gameB\vZ\tgs/pbtestb\x06proto3"
+	"\aversion\x18\x1c \x01(\x03R\aversion:\x10\xf0\xa7\x1d\x01\xfa\xa7\x1d\x04game\x80\xa8\x1d\x00B\vZ\tgs/pbtestb\x06proto3"
 
 var (
 	file_version_player_proto_rawDescOnce sync.Once

@@ -98,6 +98,7 @@ func (r *Redis) Get(ctx context.Context, value proto.Message) error {
 	if err != nil {
 		return err
 	}
+	proto.Reset(value)
 	if err := proto.Unmarshal(b, value); err != nil {
 		return err
 	}

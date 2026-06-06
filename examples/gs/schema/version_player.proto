@@ -10,6 +10,7 @@ import "orm.option.proto";
 message VersionedPlayer {
   option (orm.table) = true;
   option (orm.node_type) = "game";
+  option (orm.table_store_mode) = TABLE_STORE_MODE_PAYLOAD;
   int64 id = 1[
     (orm.primary_key) = true
   ];
