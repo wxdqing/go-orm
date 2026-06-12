@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/wxdqing/go-orm/orm/driverapi"
-	logger "git.wxdqing.com/sprout/logger.git"
+	logger "gitee.com/wxdqing/logger.git"
 )
 
 // MySQL 基于 GORM 的 MySQL 实现。

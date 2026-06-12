@@ -8,7 +8,7 @@ import (
 	"github.com/wxdqing/go-orm/orm"
 	"github.com/wxdqing/go-orm/orm/drivers"
 	"gs/pbtest"
-	logger "git.wxdqing.com/sprout/logger.git"
+	logger "gitee.com/wxdqing/logger.git"
 )
 
 func playerShardIndex(id int64) int {

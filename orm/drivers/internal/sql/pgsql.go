@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/wxdqing/go-orm/orm/driverapi"
-	logger "git.wxdqing.com/sprout/logger.git"
+	logger "gitee.com/wxdqing/logger.git"
 )
 
 // Pgsql 基于 GORM 的 PostgreSQL 实现。

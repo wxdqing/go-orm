@@ -10,7 +10,7 @@ import (
 	"github.com/wxdqing/go-orm/orm/driverapi"
 	"github.com/wxdqing/go-orm/orm/drivers/internal/codec"
 	"github.com/wxdqing/go-orm/orm/drivers/internal/meta"
-	logger "git.wxdqing.com/sprout/logger.git"
+	logger "gitee.com/wxdqing/logger.git"
 	"google.golang.org/protobuf/proto"
 	"gorm.io/gorm"
 )

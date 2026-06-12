@@ -4,7 +4,7 @@ go 1.26.3
 
 require (
 	github.com/wxdqing/go-orm v0.0.0-00010101000000-000000000000
-	git.wxdqing.com/sprout/logger.git v0.2.0-alpha.2
+	gitee.com/wxdqing/logger.git v0.0.0-20260607044921-ce5e5f28f04a
 	github.com/wxdqing/protoc-gen-go-orm v0.0.0-00010101000000-000000000000
 	google.golang.org/protobuf v1.36.11
 )
@@ -41,6 +41,6 @@ require (
 
 replace (
 	github.com/wxdqing/go-orm => ../..
-	git.wxdqing.com/sprout/logger.git => ../../../../sprout/sprout/logger
+	gitee.com/wxdqing/logger.git => ../../../logger
 	github.com/wxdqing/protoc-gen-go-orm => ../../../protoc-gen-go-orm
 )

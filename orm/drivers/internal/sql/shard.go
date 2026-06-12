@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/wxdqing/go-orm/orm"
-	logger "git.wxdqing.com/sprout/logger.git"
+	logger "gitee.com/wxdqing/logger.git"
 	"google.golang.org/protobuf/proto"
 	"gorm.io/gorm"
 )

@@ -9,7 +9,7 @@ import (
 
 	"github.com/wxdqing/go-orm/orm"
 	"github.com/wxdqing/go-orm/orm/drivers/internal/meta"
-	logger "git.wxdqing.com/sprout/logger.git"
+	logger "gitee.com/wxdqing/logger.git"
 	"github.com/mohae/deepcopy"
 	"github.com/tencentyun/tcaplusdb-go-sdk/pb/protocol/cmd"
 	"github.com/tencentyun/tcaplusdb-go-sdk/pb/protocol/option"

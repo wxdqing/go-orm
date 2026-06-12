@@ -12,7 +12,7 @@ import (
 
 	"github.com/wxdqing/go-orm/orm"
 	"github.com/wxdqing/go-orm/orm/drivers"
-	logger "git.wxdqing.com/sprout/logger.git"
+	logger "gitee.com/wxdqing/logger.git"
 )
 
 func tcaplusBeforeAll(t *testing.T) {

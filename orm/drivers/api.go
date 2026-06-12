@@ -10,7 +10,7 @@ import (
 	"github.com/wxdqing/go-orm/orm/drivers/internal/nop"
 	"github.com/wxdqing/go-orm/orm/drivers/internal/sql"
 	"github.com/wxdqing/go-orm/orm/drivers/internal/tcaplus"
-	logger "git.wxdqing.com/sprout/logger.git"
+	logger "gitee.com/wxdqing/logger.git"
 	tcapluspb "github.com/tencentyun/tcaplusdb-go-sdk/pb"
 	"google.golang.org/protobuf/proto"
 	"gorm.io/gorm"

@@ -3,7 +3,7 @@ package orm
 import (
 	"testing"
 
-	logger "git.wxdqing.com/sprout/logger.git"
+	logger "gitee.com/wxdqing/logger.git"
 )
 
 func TestDecodeMapToStructWithShardAndStartup(t *testing.T) {

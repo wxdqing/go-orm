@@ -2,7 +2,7 @@ package drivers
 
 import (
 	"github.com/wxdqing/go-orm/orm"
-	logger "git.wxdqing.com/sprout/logger.git"
+	logger "gitee.com/wxdqing/logger.git"
 	"testing"
 )
 

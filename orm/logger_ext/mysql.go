@@ -1,7 +1,7 @@
 package logger_ext
 
 import (
-	logger "git.wxdqing.com/sprout/logger.git"
+	logger "gitee.com/wxdqing/logger.git"
 	dblog "gorm.io/gorm/logger"
 	"log"
 	"time"

@@ -1,7 +1,7 @@
 package orm
 
 import (
-	logger "git.wxdqing.com/sprout/logger.git"
+	logger "gitee.com/wxdqing/logger.git"
 	"github.com/mitchellh/mapstructure"
 )
 

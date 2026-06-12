@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	logger "git.wxdqing.com/sprout/logger.git"
+	logger "gitee.com/wxdqing/logger.git"
 )
 
 func TestMain(m *testing.M) {

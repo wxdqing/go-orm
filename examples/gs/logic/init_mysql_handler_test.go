@@ -9,7 +9,7 @@ import (
 	"github.com/wxdqing/go-orm/orm/drivers"
 	"gs/pbtest"
 	"gs/pbtest/metadata"
-	logger "git.wxdqing.com/sprout/logger.git"
+	logger "gitee.com/wxdqing/logger.git"
 )
 
 func beforeAllWithHandlers(t *testing.T) {
