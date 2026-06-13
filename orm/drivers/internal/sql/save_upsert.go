@@ -16,7 +16,7 @@ func gormSaveRecord(sess *gorm.DB, dbObj interface{}) error {
 	if len(pkMap) == 0 {
 		return orm.ErrNoPrimaryKeySpecified
 	}
-	if sess.Dialector.Name() != "postgres" || len(pkMap) <= 1 {
+	if sess.Dialector.Name() != "postgres" {
 		return sess.Save(dbObj).Error
 	}
 	var count int64
