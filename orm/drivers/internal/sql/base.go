@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"strings"
 
 	"github.com/wxdqing/go-orm/orm"
 	"github.com/wxdqing/go-orm/orm/driverapi"
@@ -244,26 +245,6 @@ func (g *gormBase) CloseDB(ctx context.Context) error {
 	return firstErr
 }
 
-func (g *gormBase) Count(tb proto.Message) (int64, error) {
-	meta := meta.GetMetaByValue(tb)
-	if meta == nil {
-		return 0, orm.ErrNotTableRecord
-	}
-	dbObj := meta.NewDbRecordFunc()
-	var count int64
-	sess, sessErr := g.opDB(tb, dbObj)
-	if sessErr != nil {
-		return 0, sessErr
-	}
-	err := sess.Model(dbObj).Count(&count).Error
-	if err != nil {
-		logger.Errorf("gorm count record error,err is [%v]", err)
-		return 0, err
-	}
-	logger.Debugf("GormDriver.Count execute: value [%T] [%v],count is [%d]", tb, tb, count)
-	return count, nil
-}
-
 func (g *gormBase) finishInit(o *driverapi.Options, driver driverapi.Type) error {
 	shardConf := sqlShardConf(o)
 	shardConf.Normalize()
@@ -308,6 +289,38 @@ func (g *gormBase) finishInit(o *driverapi.Options, driver driverapi.Type) error
 				}
 				if err := sess.AutoMigrate(registry); err != nil {
 					return fmt.Errorf("automigrate table %s: %w", tname, err)
+				}
+			}
+		}
+	}
+	return applyExtraMigrationsForTables(dbs, o.Tables)
+}
+
+func applyExtraMigrationsForTables(dbs []*gorm.DB, tables []proto.Message) error {
+	type migrationProvider interface {
+		ExtraMigrations() []string
+	}
+	seen := make(map[string]struct{})
+	for _, registry := range tables {
+		provider, ok := registry.(migrationProvider)
+		if !ok {
+			continue
+		}
+		for _, stmt := range provider.ExtraMigrations() {
+			stmt = strings.TrimSpace(stmt)
+			if stmt == "" {
+				continue
+			}
+			if _, ok := seen[stmt]; ok {
+				continue
+			}
+			seen[stmt] = struct{}{}
+			for _, sdb := range dbs {
+				if sdb == nil {
+					continue
+				}
+				if err := sdb.Exec(stmt).Error; err != nil {
+					return fmt.Errorf("extra migration: %w", err)
 				}
 			}
 		}

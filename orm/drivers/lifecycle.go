@@ -12,7 +12,7 @@ import (
 	"github.com/wxdqing/go-orm/orm/drivers/internal/kv"
 	"github.com/wxdqing/go-orm/orm/drivers/internal/meta"
 	"github.com/wxdqing/go-orm/orm/drivers/internal/nop"
-	"github.com/wxdqing/go-orm/orm/drivers/internal/sql"
+	sqldriver "github.com/wxdqing/go-orm/orm/drivers/internal/sql"
 	"github.com/wxdqing/go-orm/orm/drivers/internal/tcaplus"
 	logger "gitee.com/wxdqing/logger.git"
 	"google.golang.org/protobuf/proto"
@@ -42,6 +42,15 @@ func (c *closedDriver) Find(context.Context, proto.Message) ([]proto.Message, er
 	return nil, orm.ErrDbDriverNotInit
 }
 func (c *closedDriver) Delete(context.Context, proto.Message) error { return orm.ErrDbDriverNotInit }
+func (c *closedDriver) Count(context.Context, proto.Message) (int64, error) {
+	return 0, orm.ErrDbDriverNotInit
+}
+func (c *closedDriver) RunInTx(context.Context, func(context.Context) error) error {
+	return orm.ErrDbDriverNotInit
+}
+func (c *closedDriver) Ping(context.Context) error { return orm.ErrDbDriverNotInit }
+
+var _ driverapi.Driver = (*closedDriver)(nil)
 
 func IsInitialized() bool {
 	lifecycle.mu.Lock()
@@ -179,7 +188,7 @@ func newDriverForType(t DriverType) (Driver, error) {
 	case DriverTypeNop:
 		return nop.New(), nil
 	case DriverTypeMySQL:
-		return sql.NewMySQL(), nil
+		return sqldriver.NewMySQL(), nil
 	case DriverTypeRedis:
 		return kv.NewRedis(), nil
 	case DriverTypeTcaplusDB:
@@ -187,7 +196,7 @@ func newDriverForType(t DriverType) (Driver, error) {
 	case DriverTypeMongoDB:
 		return kv.NewMongo(), nil
 	case DriverTypePostgresSQL:
-		return sql.NewPgsql(), nil
+		return sqldriver.NewPgsql(), nil
 	default:
 		return nil, fmt.Errorf("%w: %s", orm.ErrInvalidDriverOptions, t)
 	}
@@ -209,5 +218,3 @@ func GetMetaByValue(value proto.Message) *meta.TableMetaData {
 func GetTableName(p proto.Message) orm.TableName {
 	return meta.GetTableName(p)
 }
-
-var _ driverapi.Driver = (*closedDriver)(nil)

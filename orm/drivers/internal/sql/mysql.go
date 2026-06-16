@@ -17,6 +17,8 @@ func NewMySQL() driverapi.Driver {
 	return &MySQL{}
 }
 
+var _ driverapi.SQLDriver = (*MySQL)(nil)
+
 func (m *MySQL) InitDB(ctx context.Context, o *driverapi.Options) error {
 	DB, err := openMysqlDB(o.Conf.Mysql)
 	if err != nil {

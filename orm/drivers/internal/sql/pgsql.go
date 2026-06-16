@@ -17,6 +17,8 @@ func NewPgsql() driverapi.Driver {
 	return &Pgsql{}
 }
 
+var _ driverapi.SQLDriver = (*Pgsql)(nil)
+
 func (p *Pgsql) InitDB(ctx context.Context, o *driverapi.Options) error {
 	DB, err := openPgsqlDB(o.Conf.Pgsql)
 	if err != nil {

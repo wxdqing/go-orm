@@ -196,9 +196,13 @@ func (t *Driver) Delete(ctx context.Context, tb proto.Message) error {
 	return nil
 }
 
-func (t *Driver) Count(tb proto.Message) (int64, error) {
+func (t *Driver) Count(ctx context.Context, cond proto.Message) (int64, error) {
 	return 0, orm.ErrNotImplemented
 }
+func (t *Driver) RunInTx(context.Context, func(context.Context) error) error {
+	return orm.ErrNotImplemented
+}
+func (t *Driver) Ping(context.Context) error { return orm.ErrNotImplemented }
 
 func New() driverapi.Driver {
 	return &Driver{}

@@ -21,3 +21,10 @@ func (n *Driver) Find(context.Context, proto.Message) ([]proto.Message, error) {
 	return nil, nil
 }
 func (n *Driver) Delete(context.Context, proto.Message) error { return nil }
+func (n *Driver) Count(context.Context, proto.Message) (int64, error) {
+	return 0, nil
+}
+func (n *Driver) RunInTx(context.Context, func(context.Context) error) error {
+	return nil
+}
+func (n *Driver) Ping(context.Context) error { return nil }

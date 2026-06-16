@@ -11,13 +11,17 @@ import (
 	"github.com/wxdqing/go-orm/orm/drivers/internal/sql"
 	"github.com/wxdqing/go-orm/orm/drivers/internal/tcaplus"
 	logger "gitee.com/wxdqing/logger.git"
+	"github.com/redis/go-redis/v9"
 	tcapluspb "github.com/tencentyun/tcaplusdb-go-sdk/pb"
+	"go.mongodb.org/mongo-driver/mongo"
 	"google.golang.org/protobuf/proto"
 	"gorm.io/gorm"
 )
 
 type (
 	Driver       = driverapi.Driver
+	SQLQuerier   = driverapi.SQLQuerier
+	SQLDriver    = driverapi.SQLDriver
 	DriverType   = driverapi.Type
 	DriverOption func(o *DriverOptions)
 
@@ -172,13 +176,39 @@ func WithHandlerFuncs(funcs ...HandlerFuncs) DriverOption {
 }
 
 func ToGorm() *gorm.DB {
-	switch d := DefaultDbDriver.(type) {
+	return DriverGorm(DefaultDbDriver)
+}
+
+func DriverGorm(d Driver) *gorm.DB {
+	switch x := d.(type) {
 	case *sql.MySQL:
-		return d.GormDB()
+		return x.GormDB()
 	case *sql.Pgsql:
-		return d.GormDB()
+		return x.GormDB()
 	case interface{ GormDB() *gorm.DB }:
-		return d.GormDB()
+		return x.GormDB()
+	}
+	return nil
+}
+
+func ToRedis() *redis.Client {
+	return DriverRedis(DefaultDbDriver)
+}
+
+func DriverRedis(d Driver) *redis.Client {
+	if r, ok := d.(*kv.Redis); ok {
+		return r.Client()
+	}
+	return nil
+}
+
+func ToMongo() *mongo.Client {
+	return DriverMongo(DefaultDbDriver)
+}
+
+func DriverMongo(d Driver) *mongo.Client {
+	if m, ok := d.(*kv.Mongo); ok {
+		return m.Client()
 	}
 	return nil
 }

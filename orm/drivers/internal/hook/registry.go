@@ -208,6 +208,18 @@ func (r *HandlerRegistry) delete(ctx *orm.DriverContext, value proto.Message) (b
 	return false, nil
 }
 
+func (r *HandlerRegistry) count(ctx *orm.DriverContext, cond proto.Message) (int64, bool, error) {
+	for _, h := range r.match(ctx.Op, cond) {
+		if x, ok := h.(orm.CountHandler); ok {
+			n, hr := x.Count(ctx, cond)
+			if hr.Handled {
+				return n, true, hr.Err
+			}
+		}
+	}
+	return 0, false, nil
+}
+
 // HandlerFuncs 函数式处理器，便于快速注册。
 // 回调字段使用 *Fn 后缀，避免与 TableHandler 接口方法同名冲突。
 type HandlerFuncs struct {
@@ -222,6 +234,7 @@ type HandlerFuncs struct {
 	GetFn     func(ctx *orm.DriverContext, value proto.Message) orm.HandleResult
 	FindFn   func(ctx *orm.DriverContext, cond proto.Message) ([]proto.Message, orm.HandleResult)
 	DeleteFn func(ctx *orm.DriverContext, value proto.Message) orm.HandleResult
+	CountFn  func(ctx *orm.DriverContext, cond proto.Message) (int64, orm.HandleResult)
 }
 
 func (f HandlerFuncs) tableName() orm.TableName {
@@ -292,5 +305,12 @@ func (f HandlerFuncs) Delete(ctx *orm.DriverContext, value proto.Message) orm.Ha
 		return f.DeleteFn(ctx, value)
 	}
 	return orm.PassThrough()
+}
+
+func (f HandlerFuncs) Count(ctx *orm.DriverContext, cond proto.Message) (int64, orm.HandleResult) {
+	if f.CountFn != nil {
+		return f.CountFn(ctx, cond)
+	}
+	return 0, orm.PassThrough()
 }
 

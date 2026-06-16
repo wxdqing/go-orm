@@ -95,3 +95,10 @@ func (r *recordingDriver) Find(context.Context, proto.Message) ([]proto.Message,
 	return nil, nil
 }
 func (r *recordingDriver) Delete(context.Context, proto.Message) error { return nil }
+func (r *recordingDriver) Count(context.Context, proto.Message) (int64, error) {
+	return 0, nil
+}
+func (r *recordingDriver) RunInTx(context.Context, func(context.Context) error) error {
+	return nil
+}
+func (r *recordingDriver) Ping(context.Context) error { return nil }

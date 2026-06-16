@@ -20,6 +20,11 @@ func NewRedis() driverapi.Driver {
 	return &Redis{}
 }
 
+// Client returns the underlying go-redis client after InitDB.
+func (r *Redis) Client() *redis.Client {
+	return r.client
+}
+
 func (r *Redis) InitDB(ctx context.Context, o *driverapi.Options) error {
 	c := o.Conf.Redis
 	if c.Host == "" {
@@ -107,6 +112,18 @@ func (r *Redis) Get(ctx context.Context, value proto.Message) error {
 
 func (r *Redis) Find(context.Context, proto.Message) ([]proto.Message, error) {
 	return nil, orm.ErrNotImplemented
+}
+func (r *Redis) Count(context.Context, proto.Message) (int64, error) {
+	return 0, orm.ErrNotImplemented
+}
+func (r *Redis) RunInTx(context.Context, func(context.Context) error) error {
+	return orm.ErrNotImplemented
+}
+func (r *Redis) Ping(ctx context.Context) error {
+	if r.client == nil {
+		return orm.ErrDbDriverNotInit
+	}
+	return r.client.Ping(ctx).Err()
 }
 
 func (r *Redis) Delete(ctx context.Context, value proto.Message) error {

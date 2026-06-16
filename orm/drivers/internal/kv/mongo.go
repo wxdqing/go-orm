@@ -23,6 +23,11 @@ func NewMongo() driverapi.Driver {
 	return &Mongo{}
 }
 
+// Client returns the underlying mongo client after InitDB.
+func (m *Mongo) Client() *mongo.Client {
+	return m.client
+}
+
 func (m *Mongo) InitDB(ctx context.Context, o *driverapi.Options) error {
 	uri := o.Conf.Mongo.URI
 	if uri == "" {
@@ -113,6 +118,18 @@ func (m *Mongo) Get(ctx context.Context, value proto.Message) error {
 
 func (m *Mongo) Find(context.Context, proto.Message) ([]proto.Message, error) {
 	return nil, orm.ErrNotImplemented
+}
+func (m *Mongo) Count(context.Context, proto.Message) (int64, error) {
+	return 0, orm.ErrNotImplemented
+}
+func (m *Mongo) RunInTx(context.Context, func(context.Context) error) error {
+	return orm.ErrNotImplemented
+}
+func (m *Mongo) Ping(ctx context.Context) error {
+	if m.client == nil {
+		return orm.ErrDbDriverNotInit
+	}
+	return m.client.Ping(ctx, nil)
 }
 
 func (m *Mongo) Delete(ctx context.Context, value proto.Message) error {
