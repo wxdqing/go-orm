@@ -51,9 +51,10 @@ type TcaplusConf struct {
 	Signature string
 }
 type RedisConf struct {
-	Host     string
-	Password string
-	Index    int
+	Host     string `mapstructure:"host"`
+	Password string `mapstructure:"password"`
+	Index    int    `mapstructure:"index"`
+	Cluster  bool   `mapstructure:"cluster"`
 }
 
 type MongoConf struct {
