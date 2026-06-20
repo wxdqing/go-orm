@@ -42,5 +42,5 @@ require (
 replace (
 	github.com/wxdqing/go-orm => ../..
 	gitee.com/wxdqing/logger.git => ../../../logger
-	github.com/wxdqing/protoc-gen-go-orm => ./../../../../tools/protoc-gen-go-orm
+	github.com/wxdqing/protoc-gen-go-orm => ./../../../../tools/source/protoc-gen-go-orm
 )

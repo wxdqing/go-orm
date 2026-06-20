@@ -1,7 +1,7 @@
 # orm/examples/gs
 
 GS 业务示例 + **ORM 四库集成**（MySQL / PostgreSQL / Redis / Mongo）。  
-`orm.option.proto` 真源：[protoc-gen-go-orm/options/orm.option.proto](../../../../tools/protoc-gen-go-orm/options/orm.option.proto)（Tcaplus 选项见 tcaplus 生成物，本示例不测）。
+`orm.option.proto` 真源：[protoc-gen-go-orm/options/orm.option.proto](../../../../tools/source/protoc-gen-go-orm/options/orm.option.proto)（Tcaplus 选项见 tcaplus 生成物，本示例不测）。
 
 ## Schema 职责
 
@@ -14,7 +14,7 @@ GS 业务示例 + **ORM 四库集成**（MySQL / PostgreSQL / Redis / Mongo）�
 | `schema/list.proto` | **PAYLOAD**, 复合 PK, **composite_index** |
 | `schema/tables_tags.proto` | `tags`, **oneof_tags**（非表，tag 验证） |
 
-插件侧更全的选项演示见 [protoc-gen-go-orm/examples](../../../../tools/protoc-gen-go-orm/examples/)。
+插件侧更全的选项演示见 [protoc-gen-go-orm/examples](../../../../tools/source/protoc-gen-go-orm/examples/)。
 
 ## 生成
 
