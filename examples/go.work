@@ -4,6 +4,6 @@ use gs
 
 replace github.com/wxdqing/go-orm => ../
 
-replace github.com/wxdqing/protoc-gen-go-orm => ../../protoc-gen-go-orm
+replace github.com/wxdqing/protoc-gen-go-orm => ./../../../tools/protoc-gen-go-orm
 
 replace git.wxdqing.com/sprout/logger.git => ../../../sprout/sprout/logger
