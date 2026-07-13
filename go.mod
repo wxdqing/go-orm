@@ -1,6 +1,6 @@
 module github.com/wxdqing/go-orm
 
-go 1.26.3
+go 1.26.5
 
 require gitee.com/wxdqing/logger.git v0.0.0-20260607044921-ce5e5f28f04a
 
@@ -27,7 +27,7 @@ require (
 	github.com/cucumber/godog v0.14.1
 	github.com/glebarez/sqlite v1.11.0
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826
-	github.com/redis/go-redis/v9 v9.20.1
+	github.com/redis/go-redis/v9 v9.21.0
 	go.mongodb.org/mongo-driver v1.17.4
 	gorm.io/driver/mysql v1.6.0
 	gorm.io/driver/postgres v1.6.0
