@@ -7,11 +7,11 @@ import (
 	"reflect"
 	"strings"
 
+	logger "gitee.com/wxdqing/logger.git"
 	"github.com/wxdqing/go-orm/orm"
 	"github.com/wxdqing/go-orm/orm/driverapi"
 	"github.com/wxdqing/go-orm/orm/drivers/internal/codec"
 	"github.com/wxdqing/go-orm/orm/drivers/internal/meta"
-	logger "gitee.com/wxdqing/logger.git"
 	"google.golang.org/protobuf/proto"
 	"gorm.io/gorm"
 )
@@ -101,9 +101,9 @@ func (g *gormBase) Find(ctx context.Context, cond proto.Message) ([]proto.Messag
 		logger.Errorf("gorm encode record error,err is [%v]", err)
 		return nil, err
 	}
-	idx := dbObj.(orm.IndexProvider).ToIndexMap()
-	if len(idx) == 0 {
-		return nil, orm.ErrNoIndexSpecified
+	idx, err := findIndex(ctx, dbObj.(orm.IndexProvider))
+	if err != nil {
+		return nil, err
 	}
 
 	sess, sessErr := g.opDB(cond, dbObj)
@@ -124,6 +124,14 @@ func (g *gormBase) Find(ctx context.Context, cond proto.Message) ([]proto.Messag
 	}
 	logger.Debugf("GormDriver.Find execute: cond [%T] [%v], count [%d]", cond, cond, len(ret))
 	return ret, nil
+}
+
+func findIndex(ctx context.Context, provider orm.IndexProvider) (map[string]any, error) {
+	idx := provider.ToIndexMap()
+	if len(idx) == 0 && !orm.FullScanAllowed(ctx) {
+		return nil, orm.ErrNoIndexSpecified
+	}
+	return idx, nil
 }
 
 func (g *gormBase) Get(ctx context.Context, record proto.Message) (err error) {
