@@ -48,7 +48,7 @@ func (g *gormBase) Save(ctx context.Context, tb proto.Message) error {
 		logger.Errorf("gorm encode record error,err is [%v]", err)
 		return err
 	}
-	logger.Debugf("GormDriver.Save execute: value [%T] [%v],db obj is [%T]", tb, tb, dbObj)
+	logger.Debugf("GormDriver.Save execute: value_type=%T db_type=%T", tb, dbObj)
 
 	sess, err := g.opDB(tb, dbObj)
 	if err != nil {
@@ -122,7 +122,7 @@ func (g *gormBase) Find(ctx context.Context, cond proto.Message) ([]proto.Messag
 	if err != nil {
 		return nil, err
 	}
-	logger.Debugf("GormDriver.Find execute: cond [%T] [%v], count [%d]", cond, cond, len(ret))
+	logger.Debugf("GormDriver.Find execute: condition_type=%T count=%d", cond, len(ret))
 	return ret, nil
 }
 
@@ -178,7 +178,7 @@ func (g *gormBase) Get(ctx context.Context, record proto.Message) (err error) {
 		logger.Errorf("gorm get record error,err is [%v]", err)
 		return
 	}
-	logger.Debugf("GormDriver.Get execute: value [%T] [%v],db obj is [%T]", record, record, dbObj)
+	logger.Debugf("GormDriver.Get execute: value_type=%T db_type=%T", record, dbObj)
 	return nil
 }
 
@@ -226,7 +226,7 @@ func (g *gormBase) Delete(ctx context.Context, tb proto.Message) error {
 		logger.Errorf("gorm encode record error,err is [%v]", err)
 		return err
 	}
-	logger.Debugf("GormDriver.Delete execute: value [%T] [%v],db obj is [%T]", tb, tb, dbObj)
+	logger.Debugf("GormDriver.Delete execute: value_type=%T db_type=%T", tb, dbObj)
 	sess, sessErr := g.opDB(tb, dbObj)
 	if sessErr != nil {
 		return sessErr

@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/wxdqing/go-orm/orm/driverapi"
 	logger "gitee.com/wxdqing/logger.git"
+	"github.com/wxdqing/go-orm/orm/driverapi"
 )
 
 // MySQL 基于 GORM 的 MySQL 实现。
@@ -28,6 +28,6 @@ func (m *MySQL) InitDB(ctx context.Context, o *driverapi.Options) error {
 	if err := m.finishInit(o, driverapi.TypeMySQL); err != nil {
 		return err
 	}
-	logger.Infof("current use db:  %v shard_mode=%s", o.Conf.Mysql, o.Conf.Mysql.Shard.Mode)
+	logger.Infof("current use db: mysql shard_mode=%s", o.Conf.Mysql.Shard.Mode)
 	return nil
 }

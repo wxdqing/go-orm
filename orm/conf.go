@@ -174,7 +174,7 @@ func DecodeMapToStruct(conf map[string]any, c *Conf) error {
 			logger.Warnf("tcaplus conf is nil,use default conf")
 		}
 	}
-	logger.Infof("db conf load success:%#v", Config)
+	logger.Info("db conf load success")
 	*c = Config
 	return nil
 }

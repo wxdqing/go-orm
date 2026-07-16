@@ -16,6 +16,7 @@ func NewDbLogger(params ...any) dblog.Interface {
 		SlowThreshold:             200 * time.Millisecond,
 		Colorful:                  true,
 		IgnoreRecordNotFoundError: true,
+		ParameterizedQueries:      true,
 		LogLevel:                  logLevel,
 	})
 }
