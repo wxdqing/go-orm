@@ -9,8 +9,8 @@ import (
 	"github.com/wxdqing/go-orm/orm"
 	"github.com/wxdqing/go-orm/orm/driverapi"
 	"github.com/wxdqing/go-orm/testenv"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 // 与 projects/tools/docker/mongo-docker-compose.yml（root/root123 @ 27017）对齐。

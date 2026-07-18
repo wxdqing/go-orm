@@ -10,12 +10,12 @@ import (
 	"fmt"
 	"sync"
 
+	logger "gitee.com/wxdqing/logger.git"
+	"github.com/redis/go-redis/v9"
 	"github.com/wxdqing/go-orm/orm"
 	"github.com/wxdqing/go-orm/orm/driverapi"
 	"github.com/wxdqing/go-orm/orm/drivers"
-	logger "gitee.com/wxdqing/logger.git"
-	"github.com/redis/go-redis/v9"
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 	"gorm.io/gorm"
 )
 

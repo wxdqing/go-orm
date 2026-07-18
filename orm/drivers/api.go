@@ -3,6 +3,9 @@ package drivers
 import (
 	"reflect"
 
+	logger "gitee.com/wxdqing/logger.git"
+	"github.com/redis/go-redis/v9"
+	tcapluspb "github.com/tencentyun/tcaplusdb-go-sdk/pb"
 	"github.com/wxdqing/go-orm/orm"
 	"github.com/wxdqing/go-orm/orm/driverapi"
 	"github.com/wxdqing/go-orm/orm/drivers/internal/hook"
@@ -10,10 +13,7 @@ import (
 	"github.com/wxdqing/go-orm/orm/drivers/internal/nop"
 	"github.com/wxdqing/go-orm/orm/drivers/internal/sql"
 	"github.com/wxdqing/go-orm/orm/drivers/internal/tcaplus"
-	logger "gitee.com/wxdqing/logger.git"
-	"github.com/redis/go-redis/v9"
-	tcapluspb "github.com/tencentyun/tcaplusdb-go-sdk/pb"
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 	"google.golang.org/protobuf/proto"
 	"gorm.io/gorm"
 )
