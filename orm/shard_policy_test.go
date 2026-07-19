@@ -9,6 +9,14 @@ func TestSelectShardIndex_Hash(t *testing.T) {
 	}
 }
 
+func TestSQLShardConfNormalizeDefaultsToHash(t *testing.T) {
+	c := SQLShardConf{}
+	c.Normalize()
+	if c.Policy != ShardPolicyHash {
+		t.Fatalf("default policy = %q, want %q", c.Policy, ShardPolicyHash)
+	}
+}
+
 func TestSelectShardIndex_RoundRobin(t *testing.T) {
 	shardRoundRobinCounter = 0
 	seen := make(map[int]bool)

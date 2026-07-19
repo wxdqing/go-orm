@@ -3,6 +3,7 @@ package dbinit
 import (
 	"context"
 	"errors"
+	"sync"
 	"testing"
 
 	"github.com/alicebob/miniredis/v2"
@@ -14,6 +15,39 @@ func TestOpen_UnsupportedType(t *testing.T) {
 	if !errors.Is(err, orm.ErrInvalidDriverOptions) {
 		t.Fatalf("err = %v", err)
 	}
+}
+
+func TestDBConcurrentPingClose(t *testing.T) {
+	mr, err := miniredis.Run()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer mr.Close()
+	db, err := OpenRedis(context.Background(), &orm.Conf{Redis: orm.RedisConf{Host: mr.Addr()}})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	start := make(chan struct{})
+	var wg sync.WaitGroup
+	for i := 0; i < 8; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			<-start
+			for j := 0; j < 100; j++ {
+				_ = db.Ping(context.Background())
+			}
+		}()
+	}
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		<-start
+		_ = db.Close(context.Background())
+	}()
+	close(start)
+	wg.Wait()
 }
 
 func TestOpen_MissingConf(t *testing.T) {

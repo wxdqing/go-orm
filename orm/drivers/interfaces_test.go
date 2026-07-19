@@ -2,12 +2,10 @@ package drivers
 
 import (
 	"github.com/wxdqing/go-orm/orm"
-	logger "gitee.com/wxdqing/logger.git"
 	"testing"
 )
 
 func TestConfigLoad(t *testing.T) {
-	logger.Init()
 	t.Run("config", func(t *testing.T) {
 		m := map[string]any{
 			"db": map[string]any{
@@ -20,7 +18,7 @@ func TestConfigLoad(t *testing.T) {
 		}
 		c := &orm.Conf{}
 		if err := orm.DecodeMapToStruct(m, c); err != nil {
-			logger.Fatalf("orm decode conf map to struct fail: %s", err.Error())
+			t.Fatal(err)
 		}
 		t.Log(c)
 	})

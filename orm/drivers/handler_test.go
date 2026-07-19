@@ -2,7 +2,9 @@ package drivers
 
 import (
 	"context"
+	"errors"
 	"testing"
+	"time"
 
 	"github.com/wxdqing/go-orm/orm"
 	"github.com/wxdqing/go-orm/orm/driverapi"
@@ -29,6 +31,63 @@ func TestHookDriverSaveHandled(t *testing.T) {
 	}
 	if inner.saveCalled {
 		t.Fatal("inner save should be skipped when handled")
+	}
+}
+
+func TestHookDriverFindReturnsAfterError(t *testing.T) {
+	wantErr := errors.New("after find")
+	reg := &HandlerRegistry{}
+	reg.Register("StringValue", HandlerFuncs{
+		Table: "StringValue",
+		AfterFn: func(*orm.DriverContext, proto.Message, error) error {
+			return wantErr
+		},
+	})
+	driver := hook.Wrap(&recordingDriver{}, string(DriverTypeMySQL), reg)
+
+	_, err := driver.Find(context.Background(), wrapperspb.String("x"))
+	if !errors.Is(err, wantErr) {
+		t.Fatalf("Find() error = %v, want %v", err, wantErr)
+	}
+}
+
+func TestHookDriverCountReturnsAfterError(t *testing.T) {
+	wantErr := errors.New("after count")
+	reg := &HandlerRegistry{}
+	reg.Register("StringValue", HandlerFuncs{
+		Table: "StringValue",
+		AfterFn: func(*orm.DriverContext, proto.Message, error) error {
+			return wantErr
+		},
+	})
+	driver := hook.Wrap(&recordingDriver{}, string(DriverTypeMySQL), reg)
+
+	_, err := driver.Count(context.Background(), wrapperspb.String("x"))
+	if !errors.Is(err, wantErr) {
+		t.Fatalf("Count() error = %v, want %v", err, wantErr)
+	}
+}
+
+func TestHandlerMatchCanRegisterHandler(t *testing.T) {
+	reg := &HandlerRegistry{}
+	reg.Register("StringValue", HandlerFuncs{
+		Table: "StringValue",
+		MatchFn: func(orm.DriverOp, orm.TableName, proto.Message) bool {
+			reg.Register("StringValue", HandlerFuncs{Table: "StringValue"})
+			return true
+		},
+	})
+	driver := hook.Wrap(&recordingDriver{}, string(DriverTypeMySQL), reg)
+	done := make(chan struct{})
+	go func() {
+		_ = driver.Save(context.Background(), wrapperspb.String("x"))
+		close(done)
+	}()
+
+	select {
+	case <-done:
+	case <-time.After(time.Second):
+		t.Fatal("handler Match deadlocked while registering another handler")
 	}
 }
 

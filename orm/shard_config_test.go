@@ -24,6 +24,20 @@ func TestSQLShardConf_Validate_DatabaseRequiresSources(t *testing.T) {
 	}
 }
 
+func TestSQLShardConfValidateDatabaseRejectsUnstablePolicy(t *testing.T) {
+	for _, policy := range []string{ShardPolicyRandom, ShardPolicyRoundRobin} {
+		c := SQLShardConf{
+			Mode:     ShardModeDatabase,
+			KeyField: "id",
+			Policy:   policy,
+			Sources:  []DatabaseShardSource{{Name: "shard0"}, {Name: "shard1"}},
+		}
+		if err := c.Validate(); err == nil {
+			t.Fatalf("Validate() error = nil for database policy %q", policy)
+		}
+	}
+}
+
 func TestSQLShardConf_Validate_NoneOK(t *testing.T) {
 	c := SQLShardConf{Mode: ShardModeNone}
 	if err := c.Validate(); err != nil {
