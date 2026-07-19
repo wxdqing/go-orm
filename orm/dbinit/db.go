@@ -10,7 +10,6 @@ import (
 	"fmt"
 	"sync"
 
-	logger "gitee.com/wxdqing/logger.git"
 	"github.com/redis/go-redis/v9"
 	"github.com/wxdqing/go-orm/orm"
 	"github.com/wxdqing/go-orm/orm/driverapi"
@@ -29,8 +28,9 @@ const (
 // DB holds one initialized connection. Safe for concurrent Ping/Close;
 // accessors return the underlying client which follows its own concurrency rules.
 type DB struct {
+	mu     sync.RWMutex
 	typ    driverapi.Type
-	driver driverapi.Driver
+	driver driverapi.CoreDriver
 }
 
 // Open connects using typ and conf. conf must contain the section for typ
@@ -48,7 +48,7 @@ func Open(ctx context.Context, typ driverapi.Type, conf *orm.Conf) (*DB, error) 
 	if err := driver.InitDB(ensureCtx(ctx), opts); err != nil {
 		return nil, err
 	}
-	logger.Infof("dbinit open completed. driver type: %s", typ)
+	orm.GetLogger().Infof("dbinit open completed. driver type: %s", typ)
 	return &DB{typ: typ, driver: driver}, nil
 }
 
@@ -75,34 +75,50 @@ func (db *DB) Type() driverapi.Type {
 	return db.typ
 }
 
-func (db *DB) Driver() driverapi.Driver {
+func (db *DB) Driver() driverapi.CoreDriver {
 	if db == nil {
 		return nil
 	}
+	db.mu.RLock()
+	defer db.mu.RUnlock()
 	return db.driver
 }
 
 func (db *DB) Gorm() *gorm.DB {
-	return drivers.DriverGorm(db.driver)
+	return drivers.DriverGorm(db.Driver())
 }
 
 func (db *DB) Redis() *redis.Client {
-	return drivers.DriverRedis(db.driver)
+	return drivers.DriverRedis(db.Driver())
 }
 
 func (db *DB) Mongo() *mongo.Client {
-	return drivers.DriverMongo(db.driver)
+	return drivers.DriverMongo(db.Driver())
 }
 
 func (db *DB) Ping(ctx context.Context) error {
-	if db == nil || db.driver == nil {
+	if db == nil {
 		return orm.ErrDbDriverNotInit
 	}
-	return db.driver.Ping(ensureCtx(ctx))
+	db.mu.RLock()
+	defer db.mu.RUnlock()
+	if db.driver == nil {
+		return orm.ErrDbDriverNotInit
+	}
+	pinger, ok := db.driver.(driverapi.Pinger)
+	if !ok {
+		return orm.ErrNotImplemented
+	}
+	return pinger.Ping(ensureCtx(ctx))
 }
 
 func (db *DB) Close(ctx context.Context) error {
-	if db == nil || db.driver == nil {
+	if db == nil {
+		return nil
+	}
+	db.mu.Lock()
+	defer db.mu.Unlock()
+	if db.driver == nil {
 		return nil
 	}
 	err := db.driver.CloseDB(ensureCtx(ctx))
@@ -142,7 +158,7 @@ func (g *Group) Close(ctx context.Context) error {
 	return first
 }
 
-func newDriver(typ driverapi.Type) (driverapi.Driver, error) {
+func newDriver(typ driverapi.Type) (driverapi.CoreDriver, error) {
 	switch typ {
 	case TypeMySQL:
 		return drivers.NewMySQLDriver(), nil

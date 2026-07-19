@@ -2,23 +2,24 @@ package tcaplus
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
+	"github.com/spf13/cast"
+	tcaplus "github.com/tencentyun/tcaplusdb-go-sdk/pb"
+	"github.com/tencentyun/tcaplusdb-go-sdk/pb/protocol/option"
 	"github.com/wxdqing/go-orm/orm"
 	"github.com/wxdqing/go-orm/orm/driverapi"
 	"github.com/wxdqing/go-orm/orm/drivers/internal/codec"
 	"github.com/wxdqing/go-orm/orm/drivers/internal/meta"
-	logger "gitee.com/wxdqing/logger.git"
-	"github.com/spf13/cast"
-	tcaplus "github.com/tencentyun/tcaplusdb-go-sdk/pb"
-	"github.com/tencentyun/tcaplusdb-go-sdk/pb/protocol/option"
 	"google.golang.org/protobuf/proto"
 )
 
 type Driver struct {
-	Cli     *tcaplus.PBClient
-	ZoneId  uint32
-	asyncId uint64
+	Cli         *tcaplus.PBClient
+	ZoneId      uint32
+	asyncId     uint64
+	closeClient func()
 }
 
 func (t *Driver) InitDB(ctx context.Context, o *driverapi.Options) error {
@@ -38,16 +39,22 @@ func (t *Driver) InitDB(ctx context.Context, o *driverapi.Options) error {
 			zoneId: m,
 		})
 	if err != nil {
-		logger.Errorf("tcaplus client dial failed: %#v conf:%#v", err, o.Conf)
+		cli.Close()
+		orm.GetLogger().Errorf("tcaplus client dial failed: %v", err)
 		return err
 	}
 	t.Cli = cli
+	t.closeClient = cli.Close
 	t.ZoneId = zoneId
 	return nil
 }
 
 func (t *Driver) CloseDB(context.Context) error {
+	if t.closeClient != nil {
+		t.closeClient()
+	}
 	t.Cli = nil
+	t.closeClient = nil
 	return nil
 }
 
@@ -59,7 +66,7 @@ func (t *Driver) Save(ctx context.Context, tb proto.Message) error {
 	dbObj := tm.NewDbRecordFunc()
 	err := codec.EncodeRecord(ctx, dbObj, tb)
 	if err != nil {
-		logger.Errorf("tcaplus encode record error,err is [%v]", err)
+		orm.GetLogger().Errorf("tcaplus encode record error,err is [%v]", err)
 		return err
 	}
 
@@ -69,21 +76,20 @@ func (t *Driver) Save(ctx context.Context, tb proto.Message) error {
 
 	// 处理版本控制
 	if _, isVp := dbObj.(orm.VersionProvider); isVp {
-		var curVersion int32 = 1
 		checkObj := tm.NewDbRecordFunc()
 		if err := codec.EncodeRecord(ctx, checkObj, tb); err != nil {
-			logger.Errorf("tcaplus encode record error,err is [%v]", err)
+			orm.GetLogger().Errorf("tcaplus encode record error,err is [%v]", err)
 			return err
 		}
 		resp, getErr := t.SingleGet(checkObj)
+		existingVersion := int32(0)
 		if getErr == nil {
-			curVersion = resp.Version
-		} else if ormErr, ok := getErr.(*orm.OrmError); ok && ormErr.Code == int32(orm.CodeErrTcaplusRecordNotExist) {
-			// 第一次保存，版本号设置为1
-			curVersion = 1
-		} else {
-			logger.Errorf("Driver.Save failed to get existing record: %v  tb:%v", getErr, tb)
-			return getErr
+			existingVersion = resp.Version
+		}
+		curVersion, verErr := versionForSave(getErr, existingVersion)
+		if verErr != nil {
+			orm.GetLogger().Errorf("Driver.Save failed to get existing record: %v type=%T", verErr, tb)
+			return verErr
 		}
 		// 设置当前版本号，并开启自动版本递增检查
 		opt.Versions = []int32{curVersion}
@@ -92,7 +98,7 @@ func (t *Driver) Save(ctx context.Context, tb proto.Message) error {
 
 	_, err = t.Replace(dbObj, opt)
 	if err != nil {
-		logger.Errorf("Driver.Save failed: %v  tb:%v", err, tb)
+		orm.GetLogger().Errorf("Driver.Save failed: %v type=%T", err, tb)
 		return err
 	}
 	return nil
@@ -106,12 +112,12 @@ func (t *Driver) Get(ctx context.Context, tb proto.Message) error {
 	dbObj := tm.NewDbRecordFunc()
 	err := codec.EncodeRecord(ctx, dbObj, tb)
 	if err != nil {
-		logger.Errorf("tcaplus encode record error,err is [%v]", err)
+		orm.GetLogger().Errorf("tcaplus encode record error,err is [%v]", err)
 		return err
 	}
 	resp, err := t.SingleGet(dbObj)
 	if err != nil {
-		if ormErr := err.(*orm.OrmError); ormErr != nil {
+		if ormErr := asOrmError(err); ormErr != nil {
 			if ormErr.Code == int32(orm.CodeErrTcaplusRecordNotExist) {
 				_ = codec.DecodeRecord(ctx, dbObj, tb)
 				return orm.ErrRecordNotFound
@@ -122,7 +128,7 @@ func (t *Driver) Get(ctx context.Context, tb proto.Message) error {
 	}
 	dbObj = resp.Message
 	if err = codec.DecodeRecord(ctx, dbObj, tb); err != nil {
-		logger.Errorf("tcaplus decode record error,err is [%v]", err)
+		orm.GetLogger().Errorf("tcaplus decode record error,err is [%v]", err)
 		return err
 	}
 	return nil
@@ -136,7 +142,7 @@ func (t *Driver) Find(ctx context.Context, cond proto.Message) ([]proto.Message,
 	dbObj := tm.NewDbRecordFunc()
 	err := codec.EncodeRecord(ctx, dbObj, cond)
 	if err != nil {
-		logger.Errorf("tcaplus encode record error,err is [%v]", err)
+		orm.GetLogger().Errorf("tcaplus encode record error,err is [%v]", err)
 		return nil, err
 	}
 
@@ -151,7 +157,7 @@ func (t *Driver) Find(ctx context.Context, cond proto.Message) ([]proto.Message,
 	}
 	resp, err := t.GetByPartKey(dbObj, IndexKeys(idxNames...))
 	if err != nil {
-		if ormErr := err.(*orm.OrmError); ormErr != nil {
+		if ormErr := asOrmError(err); ormErr != nil {
 			if ormErr.Code == int32(orm.CodeErrTcaplusRecordNotExist) {
 				return ret, nil
 			}
@@ -163,7 +169,7 @@ func (t *Driver) Find(ctx context.Context, cond proto.Message) ([]proto.Message,
 		dbVal := response.Message
 		err = codec.DecodeRecord(ctx, dbVal, newVal)
 		if err != nil {
-			logger.Errorf("tcaplus decode record error,err is [%v]", err)
+			orm.GetLogger().Errorf("tcaplus decode record error,err is [%v]", err)
 			return nil, err
 		}
 		ret = append(ret, newVal)
@@ -180,7 +186,7 @@ func (t *Driver) Delete(ctx context.Context, tb proto.Message) error {
 	dbObj := tm.NewDbRecordFunc()
 	err := codec.EncodeRecord(ctx, dbObj, tb)
 	if err != nil {
-		logger.Errorf("tcaplus encode record error,err is [%v]", err)
+		orm.GetLogger().Errorf("tcaplus encode record error,err is [%v]", err)
 		return err
 	}
 
@@ -189,21 +195,40 @@ func (t *Driver) Delete(ctx context.Context, tb proto.Message) error {
 	}
 	_, err = t.SingleDelete(dbObj, opt)
 	if err != nil {
-		logger.Errorf("Driver.Delete tableName:%s, value[%v] err[%v]", meta.GetTableName(tb), tb, err)
-		return orm.ErrNotTableRecord
+		orm.GetLogger().Errorf("Driver.Delete tableName:%s type=%T err[%v]", meta.GetTableName(tb), tb, err)
+		return deleteError(err)
 	}
-	logger.Debugf("Driver.Delete execute: tableName:%s, value[%v]", meta.GetTableName(tb), tb)
+	orm.GetLogger().Debugf("Driver.Delete execute: tableName:%s type=%T", meta.GetTableName(tb), tb)
 	return nil
 }
 
-func (t *Driver) Count(ctx context.Context, cond proto.Message) (int64, error) {
-	return 0, orm.ErrNotImplemented
+func asOrmError(err error) *orm.OrmError {
+	var ormErr *orm.OrmError
+	if errors.As(err, &ormErr) {
+		return ormErr
+	}
+	return nil
 }
-func (t *Driver) RunInTx(context.Context, func(context.Context) error) error {
-	return orm.ErrNotImplemented
-}
-func (t *Driver) Ping(context.Context) error { return orm.ErrNotImplemented }
 
-func New() driverapi.Driver {
+// versionForSave maps SingleGet outcome to the optimistic-lock version for Replace.
+// Wrapped OrmError values are accepted so callers/helpers can annotate the cause.
+func versionForSave(getErr error, existingVersion int32) (int32, error) {
+	if getErr == nil {
+		return existingVersion, nil
+	}
+	if ormErr := asOrmError(getErr); ormErr != nil && ormErr.Code == int32(orm.CodeErrTcaplusRecordNotExist) {
+		return 1, nil
+	}
+	return 0, getErr
+}
+
+func deleteError(err error) error {
+	if ormErr := asOrmError(err); ormErr != nil && ormErr.Code == int32(orm.CodeErrTcaplusRecordNotExist) {
+		return orm.ErrRecordNotFound
+	}
+	return err
+}
+
+func New() driverapi.CoreDriver {
 	return &Driver{}
 }

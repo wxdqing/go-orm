@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/wxdqing/go-orm/orm"
-	logger "gitee.com/wxdqing/logger.git"
 	"google.golang.org/protobuf/proto"
 	"gorm.io/gorm"
 )
@@ -106,6 +105,10 @@ func (r gormShardRouter) session(value proto.Message, baseTable string) (*gorm.D
 	if err != nil {
 		return nil, err
 	}
+	return r.tableSession(db, value, baseTable)
+}
+
+func (r gormShardRouter) tableSession(db *gorm.DB, value proto.Message, baseTable string) (*gorm.DB, error) {
 	if r.mode != orm.ShardModeTable && !r.combinedMode(baseTable) {
 		return db, nil
 	}
@@ -119,7 +122,7 @@ func (r gormShardRouter) session(value proto.Message, baseTable string) (*gorm.D
 		return nil, err
 	}
 	table := orm.ResolveTableName(baseTable, key, *rule)
-	logger.Debugf("gorm shard table route: %s -> %s", baseTable, table)
+	orm.GetLogger().Debugf("gorm shard table route: %s -> %s", baseTable, table)
 	return db.Table(table), nil
 }
 

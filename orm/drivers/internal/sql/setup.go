@@ -9,7 +9,6 @@ import (
 	"github.com/wxdqing/go-orm/orm"
 	"github.com/wxdqing/go-orm/orm/driverapi"
 	"github.com/wxdqing/go-orm/orm/logger_ext"
-	logger "gitee.com/wxdqing/logger.git"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -137,10 +136,13 @@ func openDatabaseShardDBs(driver driverapi.Type, mysqlC orm.MysqlConf, pgsqlC or
 			return nil, fmt.Errorf("unsupported shard driver: %s", driver)
 		}
 		if err != nil {
+			for _, opened := range dbs {
+				_ = closeGormDB(opened)
+			}
 			return nil, fmt.Errorf("open shard source %d (%s): %w", i, src.Name, err)
 		}
 		dbs = append(dbs, db)
-		logger.Infof("orm shard database source ready: index=%d name=%s", i, src.Name)
+		orm.GetLogger().Infof("orm shard database source ready: index=%d name=%s", i, src.Name)
 	}
 	return dbs, nil
 }

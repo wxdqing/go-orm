@@ -8,7 +8,6 @@ import (
 	"github.com/wxdqing/go-orm/orm/driverapi"
 	"github.com/wxdqing/go-orm/orm/drivers/internal/codec"
 	"github.com/wxdqing/go-orm/orm/drivers/internal/meta"
-	logger "gitee.com/wxdqing/logger.git"
 	"google.golang.org/protobuf/proto"
 	"gorm.io/gorm"
 )
@@ -17,12 +16,18 @@ type errRow struct{ err error }
 
 func (e errRow) Scan(dest ...any) error { return e.err }
 
-func (g *gormBase) sqlConn(ctx context.Context) (*sql.DB, error) {
+func (g *gormBase) sqlConn(ctx context.Context) (gorm.ConnPool, error) {
 	if g.DB == nil {
 		return nil, orm.ErrDbDriverNotInit
 	}
 	sess := orm.TxDBFromContext(codec.EnsureCtx(ctx), g.DB)
-	return sess.DB()
+	if sess.Statement != nil && sess.Statement.ConnPool != nil {
+		return sess.Statement.ConnPool, nil
+	}
+	if sess.ConnPool == nil {
+		return nil, orm.ErrDbDriverNotInit
+	}
+	return sess.ConnPool, nil
 }
 
 func (g *gormBase) Exec(ctx context.Context, query string, args ...any) (sql.Result, error) {
@@ -33,7 +38,7 @@ func (g *gormBase) Exec(ctx context.Context, query string, args ...any) (sql.Res
 	return conn.ExecContext(codec.EnsureCtx(ctx), query, args...)
 }
 
-func (g *gormBase) Query(ctx context.Context, query string, args ...any) (*sql.Rows, error) {
+func (g *gormBase) Query(ctx context.Context, query string, args ...any) (driverapi.Rows, error) {
 	conn, err := g.sqlConn(ctx)
 	if err != nil {
 		return nil, err
@@ -53,13 +58,20 @@ func (g *gormBase) RunInTx(ctx context.Context, fn func(ctx context.Context) err
 	if g.DB == nil {
 		return orm.ErrDbDriverNotInit
 	}
+	if g.shard.databaseMode() {
+		return orm.ErrNotImplemented
+	}
+	ctx = codec.EnsureCtx(ctx)
 	return g.DB.WithContext(codec.EnsureCtx(ctx)).Transaction(func(tx *gorm.DB) error {
 		return fn(orm.ContextWithTxDB(ctx, tx))
 	})
 }
 
 func (g *gormBase) Ping(ctx context.Context) error {
-	conn, err := g.sqlConn(ctx)
+	if g.DB == nil {
+		return orm.ErrDbDriverNotInit
+	}
+	conn, err := g.DB.DB()
 	if err != nil {
 		return err
 	}
@@ -73,14 +85,14 @@ func (g *gormBase) Count(ctx context.Context, cond proto.Message) (int64, error)
 	}
 	dbObj := tm.NewDbRecordFunc()
 	if err := codec.EncodeRecord(ctx, dbObj, cond); err != nil {
-		logger.Errorf("gorm encode record error,err is [%v]", err)
+		orm.GetLogger().Errorf("gorm encode record error,err is [%v]", err)
 		return 0, err
 	}
 	var idx map[string]any
 	if ip, ok := dbObj.(orm.IndexProvider); ok {
 		idx = ip.ToIndexMap()
 	}
-	sess, sessErr := g.opDB(cond, dbObj)
+	sess, sessErr := g.opDB(ctx, cond, dbObj)
 	if sessErr != nil {
 		return 0, sessErr
 	}
@@ -90,7 +102,7 @@ func (g *gormBase) Count(ctx context.Context, cond proto.Message) (int64, error)
 	}
 	var count int64
 	if err := sess.Count(&count).Error; err != nil {
-		logger.Errorf("gorm count record error,err is [%v]", err)
+		orm.GetLogger().Errorf("gorm count record error,err is [%v]", err)
 		return 0, err
 	}
 	return count, nil

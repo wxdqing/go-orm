@@ -35,6 +35,13 @@ func (x *OrmError) Error() string {
 	return x.Msg
 }
 
+func (x *OrmError) Unwrap() error {
+	if x == nil {
+		return nil
+	}
+	return x.Cause
+}
+
 func Errorf(code OrmErrorCode, format string, args ...interface{}) error {
 	return newOrmError(code, fmt.Errorf(format, args...))
 }

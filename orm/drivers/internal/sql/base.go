@@ -7,7 +7,6 @@ import (
 	"reflect"
 	"strings"
 
-	logger "gitee.com/wxdqing/logger.git"
 	"github.com/wxdqing/go-orm/orm"
 	"github.com/wxdqing/go-orm/orm/driverapi"
 	"github.com/wxdqing/go-orm/orm/drivers/internal/codec"
@@ -33,8 +32,12 @@ func dbRecordTableName(dbObj proto.Message) string {
 	return string(dbObj.ProtoReflect().Descriptor().Name())
 }
 
-func (g *gormBase) opDB(value proto.Message, dbObj proto.Message) (*gorm.DB, error) {
-	return g.shard.session(value, dbRecordTableName(dbObj))
+func (g *gormBase) opDB(ctx context.Context, value proto.Message, dbObj proto.Message) (*gorm.DB, error) {
+	baseTable := dbRecordTableName(dbObj)
+	if tx := orm.TxDBFromContext(ctx, nil); tx != nil {
+		return g.shard.tableSession(tx, value, baseTable)
+	}
+	return g.shard.session(value, baseTable)
 }
 
 func (g *gormBase) Save(ctx context.Context, tb proto.Message) error {
@@ -45,15 +48,16 @@ func (g *gormBase) Save(ctx context.Context, tb proto.Message) error {
 	dbObj := meta.NewDbRecordFunc()
 	err := codec.EncodeRecord(ctx, dbObj, tb)
 	if err != nil {
-		logger.Errorf("gorm encode record error,err is [%v]", err)
+		orm.GetLogger().Errorf("gorm encode record error,err is [%v]", err)
 		return err
 	}
-	logger.Debugf("GormDriver.Save execute: value_type=%T db_type=%T", tb, dbObj)
+	orm.GetLogger().Debugf("GormDriver.Save execute: value_type=%T db_type=%T", tb, dbObj)
 
-	sess, err := g.opDB(tb, dbObj)
+	sess, err := g.opDB(ctx, tb, dbObj)
 	if err != nil {
 		return err
 	}
+	sess = sess.WithContext(codec.EnsureCtx(ctx))
 	vp, isVp := dbObj.(orm.VersionProvider)
 	if !isVp {
 		return gormSaveRecord(sess, dbObj)
@@ -77,7 +81,7 @@ func (g *gormBase) Save(ctx context.Context, tb proto.Message) error {
 		requestVersion := vp.GetVersion()
 
 		if currentVersion != requestVersion {
-			logger.Errorf("save version mismatch, expected: %d, actual: %d, msg(%T):%v,", requestVersion, currentVersion, tb, pkMap)
+			orm.GetLogger().Errorf("save version mismatch, expected: %d, actual: %d, msg(%T):%v,", requestVersion, currentVersion, tb, pkMap)
 			return orm.ErrVersionMismatched
 		}
 
@@ -98,7 +102,7 @@ func (g *gormBase) Find(ctx context.Context, cond proto.Message) ([]proto.Messag
 	}
 	dbObj := meta.NewDbRecordFunc()
 	if err := codec.EncodeRecord(ctx, dbObj, cond); err != nil {
-		logger.Errorf("gorm encode record error,err is [%v]", err)
+		orm.GetLogger().Errorf("gorm encode record error,err is [%v]", err)
 		return nil, err
 	}
 	idx, err := findIndex(ctx, dbObj.(orm.IndexProvider))
@@ -106,23 +110,23 @@ func (g *gormBase) Find(ctx context.Context, cond proto.Message) ([]proto.Messag
 		return nil, err
 	}
 
-	sess, sessErr := g.opDB(cond, dbObj)
+	sess, sessErr := g.opDB(ctx, cond, dbObj)
 	if sessErr != nil {
 		return nil, sessErr
 	}
 	dbSlice := createSliceOfIdent(dbObj)
-	if err := sess.Model(dbObj).Find(dbSlice, idx).Error; err != nil {
+	if err := sess.WithContext(codec.EnsureCtx(ctx)).Model(dbObj).Find(dbSlice, idx).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, orm.ErrRecordNotFound
 		}
-		logger.Errorf("gorm find records error,err is [%v]", err)
+		orm.GetLogger().Errorf("gorm find records error,err is [%v]", err)
 		return nil, err
 	}
 	ret, err := decodeGormSlice(ctx, meta, dbSlice)
 	if err != nil {
 		return nil, err
 	}
-	logger.Debugf("GormDriver.Find execute: condition_type=%T count=%d", cond, len(ret))
+	orm.GetLogger().Debugf("GormDriver.Find execute: condition_type=%T count=%d", cond, len(ret))
 	return ret, nil
 }
 
@@ -142,19 +146,19 @@ func (g *gormBase) Get(ctx context.Context, record proto.Message) (err error) {
 	dbObj := meta.NewDbRecordFunc()
 	err = codec.EncodeRecord(ctx, dbObj, record)
 	if err != nil {
-		logger.Errorf("gorm encode record error,err is [%v]", err)
+		orm.GetLogger().Errorf("gorm encode record error,err is [%v]", err)
 		return
 	}
 	dest := meta.NewDbRecordFunc()
 	defer func() {
 		if err == nil {
 			if decErr := codec.DecodeRecord(ctx, dest, record); decErr != nil {
-				logger.Errorf("gorm decode record error,err is [%v]", decErr)
+				orm.GetLogger().Errorf("gorm decode record error,err is [%v]", decErr)
 				err = decErr
 			}
 		} else if !errors.Is(err, orm.ErrRecordNotFound) {
 			if decErr := codec.DecodeRecord(ctx, dbObj, record); decErr != nil {
-				logger.Errorf("gorm decode record error,err is [%v]", decErr)
+				orm.GetLogger().Errorf("gorm decode record error,err is [%v]", decErr)
 			}
 		}
 	}()
@@ -164,21 +168,21 @@ func (g *gormBase) Get(ctx context.Context, record proto.Message) (err error) {
 		err = orm.ErrNoPrimaryKeySpecified
 		return
 	}
-	sess, sessErr := g.opDB(record, dbObj)
+	sess, sessErr := g.opDB(ctx, record, dbObj)
 	if sessErr != nil {
 		err = sessErr
 		return
 	}
-	if err = sess.Model(dbObj).
+	if err = sess.WithContext(codec.EnsureCtx(ctx)).Model(dbObj).
 		First(dest, ids).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			err = orm.ErrRecordNotFound
 			return
 		}
-		logger.Errorf("gorm get record error,err is [%v]", err)
+		orm.GetLogger().Errorf("gorm get record error,err is [%v]", err)
 		return
 	}
-	logger.Debugf("GormDriver.Get execute: value_type=%T db_type=%T", record, dbObj)
+	orm.GetLogger().Debugf("GormDriver.Get execute: value_type=%T db_type=%T", record, dbObj)
 	return nil
 }
 
@@ -207,7 +211,7 @@ func decodeGormSlice(ctx context.Context, meta *meta.TableMetaData, dbSlice any)
 		}
 		newVal := meta.NewValueFunc()
 		if err := codec.DecodeRecord(ctx, row, newVal); err != nil {
-			logger.Errorf("gorm decode record error,err is [%v]", err)
+			orm.GetLogger().Errorf("gorm decode record error,err is [%v]", err)
 			return nil, err
 		}
 		ret = append(ret, newVal)
@@ -223,11 +227,11 @@ func (g *gormBase) Delete(ctx context.Context, tb proto.Message) error {
 	dbObj := meta.NewDbRecordFunc()
 	err := codec.EncodeRecord(ctx, dbObj, tb)
 	if err != nil {
-		logger.Errorf("gorm encode record error,err is [%v]", err)
+		orm.GetLogger().Errorf("gorm encode record error,err is [%v]", err)
 		return err
 	}
-	logger.Debugf("GormDriver.Delete execute: value_type=%T db_type=%T", tb, dbObj)
-	sess, sessErr := g.opDB(tb, dbObj)
+	orm.GetLogger().Debugf("GormDriver.Delete execute: value_type=%T db_type=%T", tb, dbObj)
+	sess, sessErr := g.opDB(ctx, tb, dbObj)
 	if sessErr != nil {
 		return sessErr
 	}
@@ -235,7 +239,7 @@ func (g *gormBase) Delete(ctx context.Context, tb proto.Message) error {
 	if len(pk) == 0 {
 		return orm.ErrNoPrimaryKeySpecified
 	}
-	return sess.Model(dbObj).Where(pk).Delete(dbObj).Error
+	return sess.WithContext(codec.EnsureCtx(ctx)).Model(dbObj).Where(pk).Delete(dbObj).Error
 }
 
 func (g *gormBase) CloseDB(ctx context.Context) error {
@@ -253,7 +257,12 @@ func (g *gormBase) CloseDB(ctx context.Context) error {
 	return firstErr
 }
 
-func (g *gormBase) finishInit(o *driverapi.Options, driver driverapi.Type) error {
+func (g *gormBase) finishInit(o *driverapi.Options, driver driverapi.Type) (err error) {
+	defer func() {
+		if err != nil {
+			err = errors.Join(err, g.CloseDB(context.Background()))
+		}
+	}()
 	shardConf := sqlShardConf(o)
 	shardConf.Normalize()
 	if err := shardConf.Validate(); err != nil {
@@ -346,7 +355,7 @@ func initTable(o *driverapi.Options) []any {
 
 func createSliceOfIdent(elem any) any {
 	if elem == nil {
-		logger.Errorf("createSliceOfIdent: elem is nil")
+		orm.GetLogger().Errorf("createSliceOfIdent: elem is nil")
 		return nil
 	}
 	elemType := reflect.TypeOf(elem)

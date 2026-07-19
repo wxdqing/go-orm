@@ -7,15 +7,14 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/wxdqing/go-orm/orm"
-	"github.com/wxdqing/go-orm/orm/drivers/internal/meta"
-	logger "gitee.com/wxdqing/logger.git"
 	"github.com/mohae/deepcopy"
 	"github.com/tencentyun/tcaplusdb-go-sdk/pb/protocol/cmd"
 	"github.com/tencentyun/tcaplusdb-go-sdk/pb/protocol/option"
 	"github.com/tencentyun/tcaplusdb-go-sdk/pb/response"
 	"github.com/tencentyun/tcaplusdb-go-sdk/pb/terror"
 	"github.com/tencentyun/tcaplusdb-go-sdk/pb/traverser"
+	"github.com/wxdqing/go-orm/orm"
+	"github.com/wxdqing/go-orm/orm/drivers/internal/meta"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -57,7 +56,7 @@ func (t *Driver) Operate(cmdType int, requests []proto.Message, options ...Optio
 		if len(requests) > 0 {
 			tbName = meta.GetTableName(requests[0])
 		}
-		logger.Errorf("tcaplus driver table op error: tb=%s, cmd=0x%x, options=%#v, err:%v", tbName, cmdType, options, err)
+		orm.GetLogger().Errorf("tcaplus driver table op error: tb=%s, cmd=0x%x, err:%v", tbName, cmdType, err)
 	}
 	return responses, err
 }
@@ -88,7 +87,7 @@ func addFailCount(opName string, req []proto.Message, err error) {
 	}
 	tblName := meta.GetTableName(req[0])
 	// metrics
-	logger.Warnf("tcaplus op metrics failing: table:%s, opName:%s, err:%v", tblName, opName, err)
+	orm.GetLogger().Warnf("tcaplus op metrics failing: table:%s, opName:%s, err:%v", tblName, opName, err)
 }
 
 func addCostTime(opName string, reqs []proto.Message, startTime time.Time, err error) {
@@ -107,7 +106,7 @@ func addCostTime(opName string, reqs []proto.Message, startTime time.Time, err e
 	}
 	// 用来进行统计处理
 	costTime := time.Since(startTime)
-	logger.Debugf("tcaplus op metrics time-spent: table:%s, opName:%s, result:%s, costTime:%s",
+	orm.GetLogger().Debugf("tcaplus op metrics time-spent: table:%s, opName:%s, result:%s, costTime:%s",
 		tblName, opName, result, costTime)
 }
 
@@ -524,7 +523,7 @@ func (t *Driver) internalOperate(cmdType int, requests []proto.Message, opts *Op
 		if opts.Async {
 			aid := atomic.AddUint64(&t.asyncId, 1)
 			if err := tra.SetAsyncId(aid); err != nil {
-				logger.Errorf("failed to set async id %d: %v", aid, err)
+				orm.GetLogger().Errorf("failed to set async id %d: %v", aid, err)
 			}
 			if err := tra.Start(); err != nil {
 				addFailCount("Travers", requests, err)
@@ -535,13 +534,13 @@ func (t *Driver) internalOperate(cmdType int, requests []proto.Message, opts *Op
 				defer func() {
 					err := tra.Stop()
 					if err != nil {
-						logger.Errorf("failed to stop Traverse: %v", err)
+						orm.GetLogger().Errorf("failed to stop Traverse: %v", err)
 					}
 				}()
 				for {
 					resp, err := t.Cli.RecvResponse()
 					if err != nil {
-						logger.Errorf("RecvResponse failed: %v", err)
+						orm.GetLogger().Errorf("RecvResponse failed: %v", err)
 						continue
 					} else {
 						if resp != nil && resp.GetAsyncId() == aid {
@@ -561,7 +560,7 @@ func (t *Driver) internalOperate(cmdType int, requests []proto.Message, opts *Op
 			defer func() {
 				err := tra.Stop()
 				if err != nil {
-					logger.Errorf("failed to stop Traverse: %v", err)
+					orm.GetLogger().Errorf("failed to stop Traverse: %v", err)
 				}
 			}()
 			resps, err := t.Cli.DoTraverse(tra, 5*time.Minute)
@@ -572,7 +571,7 @@ func (t *Driver) internalOperate(cmdType int, requests []proto.Message, opts *Op
 			for _, resp := range resps {
 				v, err := mergeResponses(req, resp)
 				if err != nil {
-					logger.Errorf("failed to gather responses: %v", err)
+					orm.GetLogger().Errorf("failed to gather responses: %v", err)
 					continue
 				}
 				response = append(response, v...)

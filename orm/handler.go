@@ -57,7 +57,9 @@ type BeforeHandler interface {
 	Before(ctx *DriverContext, value proto.Message) error
 }
 
-// AfterHandler 操作后钩子；仅在默认实现或自定义实现成功后执行。
+// AfterHandler 操作后钩子；在默认实现或自定义实现返回后总会执行。
+// After 收到驱动层 error（成功时为 nil）；若 After 返回非 nil，
+// hook 包装器用 errors.Join 将其与驱动错误一并返回给调用方。
 type AfterHandler interface {
 	TableHandler
 	After(ctx *DriverContext, value proto.Message, err error) error

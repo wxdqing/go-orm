@@ -2,6 +2,7 @@ package drivers
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"sync"
 
@@ -14,7 +15,6 @@ import (
 	"github.com/wxdqing/go-orm/orm/drivers/internal/nop"
 	sqldriver "github.com/wxdqing/go-orm/orm/drivers/internal/sql"
 	"github.com/wxdqing/go-orm/orm/drivers/internal/tcaplus"
-	logger "gitee.com/wxdqing/logger.git"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -22,22 +22,24 @@ var lifecycle struct {
 	mu     sync.Mutex
 	ready  bool
 	typ    DriverType
-	inner  Driver
+	inner  CoreDriver
 	active Driver
 	closed *closedDriver
 }
 
 func init() {
 	lifecycle.closed = &closedDriver{}
-	DefaultDbDriver = lifecycle.closed
+	defaultDriver.set(lifecycle.closed)
 }
 
 type closedDriver struct{}
 
-func (c *closedDriver) InitDB(context.Context, *driverapi.Options) error { return orm.ErrDbDriverNotInit }
-func (c *closedDriver) CloseDB(context.Context) error                { return nil }
-func (c *closedDriver) Save(context.Context, proto.Message) error    { return orm.ErrDbDriverNotInit }
-func (c *closedDriver) Get(context.Context, proto.Message) error     { return orm.ErrDbDriverNotInit }
+func (c *closedDriver) InitDB(context.Context, *driverapi.Options) error {
+	return orm.ErrDbDriverNotInit
+}
+func (c *closedDriver) CloseDB(context.Context) error             { return nil }
+func (c *closedDriver) Save(context.Context, proto.Message) error { return orm.ErrDbDriverNotInit }
+func (c *closedDriver) Get(context.Context, proto.Message) error  { return orm.ErrDbDriverNotInit }
 func (c *closedDriver) Find(context.Context, proto.Message) ([]proto.Message, error) {
 	return nil, orm.ErrDbDriverNotInit
 }
@@ -67,86 +69,109 @@ func CurrentDriverType() DriverType {
 	return lifecycle.typ
 }
 
+// slowInitHook is invoked after options are validated and before InitDB.
+// Tests use it to hold the dial path without holding lifecycle.mu.
+var slowInitHook func()
+
 func TryInit(ctx context.Context, opts ...DriverOption) error {
-	lifecycle.mu.Lock()
-	defer lifecycle.mu.Unlock()
-
-	if lifecycle.ready {
-		if err := closeLocked(ctx); err != nil {
-			return fmt.Errorf("orm re-init close previous: %w", err)
-		}
-	}
-
+	ctx = codec.EnsureCtx(ctx)
 	o, err := buildDriverOptions(opts...)
 	if err != nil {
 		return err
 	}
 
-	inner, err := newDriverForType(o.Type)
-	if err != nil {
-		return err
-	}
-	apiOpts := o.opts()
-	if err := inner.InitDB(codec.EnsureCtx(ctx), apiOpts); err != nil {
-		return err
-	}
+	for {
+		lifecycle.mu.Lock()
+		if lifecycle.ready {
+			prev := detachLocked()
+			lifecycle.mu.Unlock()
+			if err := closePrevious(ctx, prev); err != nil {
+				return fmt.Errorf("orm re-init close previous: %w", err)
+			}
+			continue
+		}
+		lifecycle.mu.Unlock()
 
-	active := hook.Wrap(inner, string(o.Type), o.handlers)
-	lifecycle.ready = true
-	lifecycle.typ = o.Type
-	lifecycle.inner = inner
-	lifecycle.active = active
-	DefaultDbDriver = active
-	logger.Infof("orm init completed. driver type: %s", o.Type)
-	return nil
+		inner, err := newDriverForType(o.Type)
+		if err != nil {
+			return err
+		}
+		if slowInitHook != nil {
+			slowInitHook()
+		}
+		apiOpts := o.opts()
+		if err := inner.InitDB(ctx, apiOpts); err != nil {
+			return errors.Join(err, inner.CloseDB(ctx))
+		}
+
+		lifecycle.mu.Lock()
+		if lifecycle.ready {
+			lifecycle.mu.Unlock()
+			_ = inner.CloseDB(ctx)
+			continue
+		}
+		meta.Init(o.Tables)
+		syncMetaMaps()
+		active := hook.Wrap(inner, string(o.Type), o.handlers)
+		lifecycle.ready = true
+		lifecycle.typ = o.Type
+		lifecycle.inner = inner
+		lifecycle.active = active
+		defaultDriver.set(active)
+		lifecycle.mu.Unlock()
+		orm.GetLogger().Infof("orm init completed. driver type: %s", o.Type)
+		return nil
+	}
 }
 
 func Close(ctx context.Context) error {
+	ctx = codec.EnsureCtx(ctx)
 	lifecycle.mu.Lock()
-	defer lifecycle.mu.Unlock()
-	return closeLocked(codec.EnsureCtx(ctx))
-}
-
-func closeLocked(ctx context.Context) error {
-	if !lifecycle.ready {
-		DefaultDbDriver = lifecycle.closed
+	prev, ok := detachLockedOK()
+	lifecycle.mu.Unlock()
+	if !ok {
 		return nil
 	}
-	var err error
-	if lifecycle.active != nil {
-		err = lifecycle.active.CloseDB(ctx)
-	} else if lifecycle.inner != nil {
-		err = lifecycle.inner.CloseDB(ctx)
+	return closePrevious(ctx, prev)
+}
+
+// detachLockedOK swaps the global driver to closed and clears lifecycle metadata.
+// Caller must hold lifecycle.mu. Waiting for in-flight ops and CloseDB happen
+// outside the lock so other goroutines can observe IsInitialized/Close progress.
+func detachLockedOK() (*activeDriver, bool) {
+	if !lifecycle.ready {
+		defaultDriver.set(lifecycle.closed)
+		return nil, false
 	}
+	prev := detachLocked()
+	return prev, true
+}
+
+func detachLocked() *activeDriver {
+	prev := defaultDriver.replace(lifecycle.closed)
 	lifecycle.ready = false
 	lifecycle.typ = ""
 	lifecycle.inner = nil
 	lifecycle.active = nil
-	DefaultDbDriver = lifecycle.closed
 	meta.Reset()
 	syncMetaMaps()
-	return err
+	return prev
 }
 
 func Ping(ctx context.Context) error {
-	if !IsInitialized() {
-		return orm.ErrDbDriverNotInit
-	}
-	db := ToGorm()
-	if db == nil {
-		return orm.ErrNotImplemented
-	}
-	sqlDB, err := db.DB()
-	if err != nil {
-		return err
-	}
-	return sqlDB.PingContext(codec.EnsureCtx(ctx))
+	return DefaultDbDriver.Ping(codec.EnsureCtx(ctx))
 }
 
 func buildDriverOptions(opts ...DriverOption) (*DriverOptions, error) {
 	o := &DriverOptions{}
 	for _, opt := range opts {
+		if opt == nil {
+			continue
+		}
 		opt(o)
+	}
+	if o.err != nil {
+		return nil, o.err
 	}
 	if o.Type == "" {
 		if o.Conf != nil && o.Conf.Driver != "" {
@@ -158,8 +183,6 @@ func buildDriverOptions(opts ...DriverOption) (*DriverOptions, error) {
 	if err := validateDriverOptions(o); err != nil {
 		return nil, err
 	}
-	meta.Init(o.Tables)
-	syncMetaMaps()
 	return o, nil
 }
 
@@ -183,7 +206,7 @@ func validateDriverOptions(o *DriverOptions) error {
 	}
 }
 
-func newDriverForType(t DriverType) (Driver, error) {
+func newDriverForType(t DriverType) (CoreDriver, error) {
 	switch t {
 	case DriverTypeNop:
 		return nop.New(), nil

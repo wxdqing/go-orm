@@ -37,6 +37,7 @@ var (
 	ErrNotImplemented          = errors.New("not implemented")
 	ErrDbDriverNotInit         = errors.New("db driver not init")
 	ErrDbDriverClosed          = errors.New("db driver closed")
+	ErrDbDriverCloseTimeout    = errors.New("db driver close timed out waiting for in-flight operations")
 	ErrInvalidDriverOptions    = errors.New("invalid driver options")
 	ErrRecordNotFound        = errors.New("record not found")
 	ErrRecordExists          = errors.New("record exists")

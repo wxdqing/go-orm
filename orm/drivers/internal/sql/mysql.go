@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	logger "gitee.com/wxdqing/logger.git"
+	"github.com/wxdqing/go-orm/orm"
 	"github.com/wxdqing/go-orm/orm/driverapi"
 )
 
@@ -13,7 +13,7 @@ type MySQL struct {
 	gormBase
 }
 
-func NewMySQL() driverapi.Driver {
+func NewMySQL() driverapi.CoreDriver {
 	return &MySQL{}
 }
 
@@ -28,6 +28,6 @@ func (m *MySQL) InitDB(ctx context.Context, o *driverapi.Options) error {
 	if err := m.finishInit(o, driverapi.TypeMySQL); err != nil {
 		return err
 	}
-	logger.Infof("current use db: mysql shard_mode=%s", o.Conf.Mysql.Shard.Mode)
+	orm.GetLogger().Infof("current use db: mysql shard_mode=%s", o.Conf.Mysql.Shard.Mode)
 	return nil
 }

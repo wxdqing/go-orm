@@ -55,9 +55,11 @@ func (r *HandlerRegistry) match(op orm.DriverOp, value proto.Message) []orm.Tabl
 	}
 	table := valueTableName(value)
 	r.mu.RLock()
-	defer r.mu.RUnlock()
+	entries := append([]handlerEntry(nil), r.entries...)
+	fallback := append([]handlerEntry(nil), r.fallback...)
+	r.mu.RUnlock()
 	var matched []orm.TableHandler
-	for _, e := range r.entries {
+	for _, e := range entries {
 		if e.table != table {
 			continue
 		}
@@ -65,7 +67,7 @@ func (r *HandlerRegistry) match(op orm.DriverOp, value proto.Message) []orm.Tabl
 			matched = append(matched, e.handler)
 		}
 	}
-	for _, e := range r.fallback {
+	for _, e := range fallback {
 		if e.handler.Match(op, table, value) {
 			matched = append(matched, e.handler)
 		}
@@ -82,9 +84,11 @@ func valueTableName(value proto.Message) orm.TableName {
 
 func (r *HandlerRegistry) matchInitDB() []orm.TableHandler {
 	r.mu.RLock()
-	defer r.mu.RUnlock()
+	entries := append([]handlerEntry(nil), r.entries...)
+	entries = append(entries, r.fallback...)
+	r.mu.RUnlock()
 	var matched []orm.TableHandler
-	for _, e := range append(r.entries, r.fallback...) {
+	for _, e := range entries {
 		if e.handler.Match(orm.OpInitDB, e.table, nil) {
 			matched = append(matched, e.handler)
 		}
@@ -126,9 +130,11 @@ func (r *HandlerRegistry) after(ctx *orm.DriverContext, value proto.Message, err
 
 func (r *HandlerRegistry) matchCloseDB() []orm.TableHandler {
 	r.mu.RLock()
-	defer r.mu.RUnlock()
+	entries := append([]handlerEntry(nil), r.entries...)
+	entries = append(entries, r.fallback...)
+	r.mu.RUnlock()
 	var matched []orm.TableHandler
-	for _, e := range append(r.entries, r.fallback...) {
+	for _, e := range entries {
 		if e.handler.Match(orm.OpCloseDB, e.table, nil) {
 			matched = append(matched, e.handler)
 		}
@@ -223,7 +229,7 @@ func (r *HandlerRegistry) count(ctx *orm.DriverContext, cond proto.Message) (int
 // HandlerFuncs 函数式处理器，便于快速注册。
 // 回调字段使用 *Fn 后缀，避免与 TableHandler 接口方法同名冲突。
 type HandlerFuncs struct {
-	Table string
+	Table   string
 	MatchFn func(op orm.DriverOp, table orm.TableName, value proto.Message) bool
 
 	BeforeFn  func(ctx *orm.DriverContext, value proto.Message) error
@@ -232,9 +238,9 @@ type HandlerFuncs struct {
 	CloseDBFn func(ctx *orm.DriverContext) orm.HandleResult
 	SaveFn    func(ctx *orm.DriverContext, value proto.Message) orm.HandleResult
 	GetFn     func(ctx *orm.DriverContext, value proto.Message) orm.HandleResult
-	FindFn   func(ctx *orm.DriverContext, cond proto.Message) ([]proto.Message, orm.HandleResult)
-	DeleteFn func(ctx *orm.DriverContext, value proto.Message) orm.HandleResult
-	CountFn  func(ctx *orm.DriverContext, cond proto.Message) (int64, orm.HandleResult)
+	FindFn    func(ctx *orm.DriverContext, cond proto.Message) ([]proto.Message, orm.HandleResult)
+	DeleteFn  func(ctx *orm.DriverContext, value proto.Message) orm.HandleResult
+	CountFn   func(ctx *orm.DriverContext, cond proto.Message) (int64, orm.HandleResult)
 }
 
 func (f HandlerFuncs) tableName() orm.TableName {
@@ -313,4 +319,3 @@ func (f HandlerFuncs) Count(ctx *orm.DriverContext, cond proto.Message) (int64, 
 	}
 	return 0, orm.PassThrough()
 }
-

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	logger "gitee.com/wxdqing/logger.git"
+	"github.com/wxdqing/go-orm/orm"
 	"github.com/wxdqing/go-orm/orm/driverapi"
 )
 
@@ -13,7 +13,7 @@ type Pgsql struct {
 	gormBase
 }
 
-func NewPgsql() driverapi.Driver {
+func NewPgsql() driverapi.CoreDriver {
 	return &Pgsql{}
 }
 
@@ -28,6 +28,6 @@ func (p *Pgsql) InitDB(ctx context.Context, o *driverapi.Options) error {
 	if err := p.finishInit(o, driverapi.TypePostgresSQL); err != nil {
 		return err
 	}
-	logger.Infof("current use db: postgres shard_mode=%s", o.Conf.Pgsql.Shard.Mode)
+	orm.GetLogger().Infof("current use db: postgres shard_mode=%s", o.Conf.Pgsql.Shard.Mode)
 	return nil
 }

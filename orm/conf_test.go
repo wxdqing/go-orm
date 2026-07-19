@@ -1,13 +1,11 @@
 package orm
 
 import (
+	"strings"
 	"testing"
-
-	logger "gitee.com/wxdqing/logger.git"
 )
 
 func TestDecodeMapToStructWithShardAndStartup(t *testing.T) {
-	logger.Init()
 	m := map[string]any{
 		"db": map[string]any{
 			"driver": "mysql",
@@ -27,8 +25,8 @@ func TestDecodeMapToStructWithShardAndStartup(t *testing.T) {
 					"key_field": "id",
 					"tables": []map[string]any{
 						{
-							"table":        "player",
-							"shard_count":  4,
+							"table":         "player",
+							"shard_count":   4,
 							"suffix_format": "_%d",
 						},
 					},
@@ -65,5 +63,49 @@ func TestDecodeMapToStructWithShardAndStartup(t *testing.T) {
 	}
 	if len(c.Pgsql.Shard.Sources) != 2 {
 		t.Fatalf("pgsql sources = %d", len(c.Pgsql.Shard.Sources))
+	}
+}
+
+func TestDecodeMapToStructNilUsesDefaults(t *testing.T) {
+	c := &Conf{}
+	if err := DecodeMapToStruct(nil, c); err != nil {
+		t.Fatal(err)
+	}
+	if c.Driver != "mysql" || c.Mysql.Addr == "" || c.Redis.Host == "" {
+		t.Fatalf("nil config did not load defaults: %+v", c)
+	}
+}
+
+func TestDecodeMapToStructCallsAreIndependent(t *testing.T) {
+	first := &Conf{}
+	if err := DecodeMapToStruct(map[string]any{"db": map[string]any{
+		"redis": map[string]any{"host": "redis.internal:6379", "password": "secret"},
+	}}, first); err != nil {
+		t.Fatal(err)
+	}
+	second := &Conf{}
+	if err := DecodeMapToStruct(map[string]any{"db": map[string]any{
+		"driver": "mysql",
+	}}, second); err != nil {
+		t.Fatal(err)
+	}
+	if second.Redis.Host == first.Redis.Host || second.Redis.Password != "" {
+		t.Fatalf("second decode inherited first redis config: %+v", second.Redis)
+	}
+}
+
+func TestDecodeMapToStructReturnsDecodeError(t *testing.T) {
+	c := &Conf{}
+	err := DecodeMapToStruct(map[string]any{"db": map[string]any{
+		"mysql": map[string]any{"max_open": []string{"invalid"}},
+	}}, c)
+	if err == nil || !strings.Contains(err.Error(), "mysql") {
+		t.Fatalf("DecodeMapToStruct() error = %v, want mysql decode error", err)
+	}
+}
+
+func TestDecodeMapToStructRejectsNilTarget(t *testing.T) {
+	if err := DecodeMapToStruct(map[string]any{}, nil); err == nil {
+		t.Fatal("DecodeMapToStruct() error = nil, want invalid target error")
 	}
 }

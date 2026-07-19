@@ -1,9 +1,9 @@
 package drivers
 
 import (
+	"fmt"
 	"reflect"
 
-	logger "gitee.com/wxdqing/logger.git"
 	"github.com/redis/go-redis/v9"
 	tcapluspb "github.com/tencentyun/tcaplusdb-go-sdk/pb"
 	"github.com/wxdqing/go-orm/orm"
@@ -20,8 +20,15 @@ import (
 
 type (
 	Driver       = driverapi.Driver
+	CoreDriver   = driverapi.CoreDriver
+	FullDriver   = driverapi.FullDriver
+	Finder       = driverapi.Finder
+	Counter      = driverapi.Counter
+	Transactor   = driverapi.Transactor
+	Pinger       = driverapi.Pinger
 	SQLQuerier   = driverapi.SQLQuerier
 	SQLDriver    = driverapi.SQLDriver
+	Rows         = driverapi.Rows
 	DriverType   = driverapi.Type
 	DriverOption func(o *DriverOptions)
 
@@ -30,6 +37,7 @@ type (
 		Conf     *orm.Conf
 		Tables   []proto.Message
 		handlers *hook.HandlerRegistry
+		err      error
 	}
 
 	HandlerRegistry = hook.HandlerRegistry
@@ -49,7 +57,9 @@ const (
 	DriverTypePostgresSQL = driverapi.TypePostgresSQL
 )
 
-var DefaultDbDriver Driver
+var DefaultDbDriver Driver = defaultDriver
+
+var defaultDriver = &driverProxy{}
 
 func (o *DriverOptions) opts() *driverapi.Options {
 	if o == nil {
@@ -60,6 +70,10 @@ func (o *DriverOptions) opts() *driverapi.Options {
 
 func WithConfig(conf *orm.Conf) DriverOption {
 	return func(o *DriverOptions) {
+		if conf == nil {
+			o.err = fmt.Errorf("%w: database conf is nil", orm.ErrInvalidDriverOptions)
+			return
+		}
 		o.Conf = conf
 		o.Type = DriverType(conf.Driver)
 	}
@@ -69,7 +83,8 @@ func WithConfigMap(conf map[string]any) DriverOption {
 	return func(o *DriverOptions) {
 		c := &orm.Conf{}
 		if err := orm.DecodeMapToStruct(conf, c); err != nil {
-			logger.Fatalf("orm decode conf map to struct fail: %s", err.Error())
+			o.err = fmt.Errorf("%w: decode config map: %v", orm.ErrInvalidDriverOptions, err)
+			return
 		}
 		o.Conf = c
 		o.Type = DriverType(c.Driver)
@@ -179,7 +194,8 @@ func ToGorm() *gorm.DB {
 	return DriverGorm(DefaultDbDriver)
 }
 
-func DriverGorm(d Driver) *gorm.DB {
+func DriverGorm(d CoreDriver) *gorm.DB {
+	d = unwrapDriver(d)
 	switch x := d.(type) {
 	case *sql.MySQL:
 		return x.GormDB()
@@ -195,7 +211,8 @@ func ToRedis() *redis.Client {
 	return DriverRedis(DefaultDbDriver)
 }
 
-func DriverRedis(d Driver) *redis.Client {
+func DriverRedis(d CoreDriver) *redis.Client {
+	d = unwrapDriver(d)
 	if r, ok := d.(*kv.Redis); ok {
 		return r.Client()
 	}
@@ -206,7 +223,8 @@ func ToMongo() *mongo.Client {
 	return DriverMongo(DefaultDbDriver)
 }
 
-func DriverMongo(d Driver) *mongo.Client {
+func DriverMongo(d CoreDriver) *mongo.Client {
+	d = unwrapDriver(d)
 	if m, ok := d.(*kv.Mongo); ok {
 		return m.Client()
 	}
@@ -214,8 +232,23 @@ func DriverMongo(d Driver) *mongo.Client {
 }
 
 func ToTcaplusClient() *tcapluspb.PBClient {
-	if td, ok := DefaultDbDriver.(*tcaplus.Driver); ok {
+	if td, ok := unwrapDriver(DefaultDbDriver).(*tcaplus.Driver); ok {
 		return td.Cli
+	}
+	return nil
+}
+
+func unwrapDriver(d CoreDriver) CoreDriver {
+	for d != nil {
+		unwrapper, ok := d.(interface{ Unwrap() CoreDriver })
+		if !ok {
+			return d
+		}
+		next := unwrapper.Unwrap()
+		if next == d {
+			return d
+		}
+		d = next
 	}
 	return nil
 }
