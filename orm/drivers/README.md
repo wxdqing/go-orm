@@ -18,4 +18,4 @@ drivers/
     └── nop/            # 空实现驱动
 ```
 
-`driverapi` 包（`orm/driverapi`）定义 `Driver` 接口与 `Options`，供各实现包引用以避免循环依赖。
+`driverapi` 包（`orm/driverapi`）定义共享的 `CoreDriver`、可选能力接口、兼容 `Driver` 与 `Options`，供各实现包引用以避免循环依赖。`DefaultDbDriver` 通过并发安全代理保留完整兼容入口（含 `SQLQuerier` 转发），并对进行中的调用做代际 pin；`Close` 先强制释放遗弃的 Query pin，再锁外等待其他 goroutine 的 pin（忽略关闭方自身 pin）。`TryInit` 的 `InitDB` 在 `lifecycle.mu` 外执行。具体驱动只实现真实支持的能力。
