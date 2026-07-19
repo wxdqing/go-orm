@@ -34,6 +34,9 @@ func (c *SQLShardConf) Validate() error {
 		if len(c.Sources) == 0 {
 			return fmt.Errorf("%w: database shard requires sources", ErrInvalidDriverOptions)
 		}
+		if c.Policy != ShardPolicyHash {
+			return fmt.Errorf("%w: database shard requires hash policy, got %q", ErrInvalidDriverOptions, c.Policy)
+		}
 		return nil
 	default:
 		return fmt.Errorf("%w: unknown shard mode %q", ErrInvalidDriverOptions, c.Mode)

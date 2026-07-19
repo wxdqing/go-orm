@@ -36,11 +36,11 @@ func DefaultGormStartup(driver string) GormStartupConf {
 
 // SQLShardConf SQL 分库 / 分表配置（MySQL、PostgreSQL 共用结构）。
 type SQLShardConf struct {
-	Mode     ShardMode           `json:"mode" mapstructure:"mode"`
-	KeyField string              `json:"key_field" mapstructure:"key_field"` // 默认分片字段，如 id、user_id
-	Policy   string              `json:"policy" mapstructure:"policy"`       // random | round_robin（分库源负载）
-	Sources  []DatabaseShardSource `json:"sources" mapstructure:"sources"`   // 分库数据源列表
-	Tables   []TableShardRule    `json:"tables" mapstructure:"tables"`       // 按表覆盖分片规则
+	Mode     ShardMode             `json:"mode" mapstructure:"mode"`
+	KeyField string                `json:"key_field" mapstructure:"key_field"` // 默认分片字段，如 id、user_id
+	Policy   string                `json:"policy" mapstructure:"policy"`       // database 分片固定使用 hash
+	Sources  []DatabaseShardSource `json:"sources" mapstructure:"sources"`     // 分库数据源列表
+	Tables   []TableShardRule      `json:"tables" mapstructure:"tables"`       // 按表覆盖分片规则
 }
 
 // DatabaseShardSource 分库数据源。
@@ -68,7 +68,7 @@ func (c *SQLShardConf) Normalize() {
 		c.Mode = ShardModeNone
 	}
 	if c.Policy == "" {
-		c.Policy = "random"
+		c.Policy = ShardPolicyHash
 	}
 	for i := range c.Tables {
 		if c.Tables[i].SuffixFormat == "" {

@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/redis/go-redis/v9"
 	"github.com/wxdqing/go-orm/orm"
 	"github.com/wxdqing/go-orm/orm/driverapi"
 	"github.com/wxdqing/go-orm/orm/drivers/internal/codec"
 	"github.com/wxdqing/go-orm/orm/drivers/internal/meta"
-	"github.com/redis/go-redis/v9"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -16,7 +16,7 @@ type Redis struct {
 	client *redis.Client
 }
 
-func NewRedis() driverapi.Driver {
+func NewRedis() driverapi.CoreDriver {
 	return &Redis{}
 }
 
@@ -110,15 +110,6 @@ func (r *Redis) Get(ctx context.Context, value proto.Message) error {
 	return nil
 }
 
-func (r *Redis) Find(context.Context, proto.Message) ([]proto.Message, error) {
-	return nil, orm.ErrNotImplemented
-}
-func (r *Redis) Count(context.Context, proto.Message) (int64, error) {
-	return 0, orm.ErrNotImplemented
-}
-func (r *Redis) RunInTx(context.Context, func(context.Context) error) error {
-	return orm.ErrNotImplemented
-}
 func (r *Redis) Ping(ctx context.Context) error {
 	if r.client == nil {
 		return orm.ErrDbDriverNotInit

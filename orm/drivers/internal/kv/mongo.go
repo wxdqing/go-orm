@@ -19,7 +19,7 @@ type Mongo struct {
 	dbName string
 }
 
-func NewMongo() driverapi.Driver {
+func NewMongo() driverapi.CoreDriver {
 	return &Mongo{}
 }
 
@@ -116,15 +116,6 @@ func (m *Mongo) Get(ctx context.Context, value proto.Message) error {
 	return proto.Unmarshal(doc.Payload, value)
 }
 
-func (m *Mongo) Find(context.Context, proto.Message) ([]proto.Message, error) {
-	return nil, orm.ErrNotImplemented
-}
-func (m *Mongo) Count(context.Context, proto.Message) (int64, error) {
-	return 0, orm.ErrNotImplemented
-}
-func (m *Mongo) RunInTx(context.Context, func(context.Context) error) error {
-	return orm.ErrNotImplemented
-}
 func (m *Mongo) Ping(ctx context.Context) error {
 	if m.client == nil {
 		return orm.ErrDbDriverNotInit
